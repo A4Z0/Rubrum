@@ -1,0 +1,9 @@
+name: Rubrum
+version: '${project.version}'
+description: Reflection of other versions.
+authors: [ A4Z0 ]
+
+main: com.a4z0.rubrum.Rubrum
+load: STARTUP
+database: false
+api-version: 1.13
