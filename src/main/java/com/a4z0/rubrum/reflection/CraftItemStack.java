@@ -28,7 +28,10 @@ public class CraftItemStack {
     * @return a NMS {@link ItemStack}.
     */
 
-    public static Object asNMSCopy(@NotNull ItemStack Item) {
+    public static Object asNMSCopy(ItemStack Item) {
+
+        if(Item == null) return null;
+
         try {
             return A.getMethod("asNMSCopy", ItemStack.class).invoke(A, Item);
         } catch (Error | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
@@ -56,7 +59,10 @@ public class CraftItemStack {
     * @return a NBT object.
     */
 
-    public static Object getNBTItem(@NotNull Object Item) {
+    public static Object getNBTItem(Object Item) {
+
+        if(Item == null) return null;
+
         try {
             return Item.getClass().getMethod(Version.B().D() ? "s" : "getTag").invoke(Item);
         } catch (Error | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {

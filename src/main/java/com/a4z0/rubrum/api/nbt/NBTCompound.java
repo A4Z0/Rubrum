@@ -2,22 +2,34 @@ package com.a4z0.rubrum.api.nbt;
 
 import org.jetbrains.annotations.NotNull;
 
-public class NBTCompound extends Compound {
+import java.util.Map;
 
-    private NBTCompound P;
+public class NBTCompound extends Compound {
 
     /**
     * Construct a {@link NBTCompound}.
     */
 
-    protected NBTCompound() {};
+    protected NBTCompound() {
+
+    };
+
+    /**
+    * Construct a {@link NBTCompound} with the given params.
+    *
+    * @param Map a serialized {@link NBTCompound}.
+    */
+
+    protected NBTCompound(@NotNull Map<String, Object> Map) {
+        this.Remap(Map);
+    };
 
     /**
     * @return a {@link NBTCompound} object.
     */
 
     public Object getCompound() {
-        return this.P.getCompound();
+        return null;
     };
 
     /**
@@ -26,15 +38,7 @@ public class NBTCompound extends Compound {
     * @param Compound a {@link NBTCompound}.
     */
 
-    protected void setCompound(@NotNull Compound Compound) {
-        this.P.setCompound(Compound);
-    };
-
-    /**
-    * @return the parent {@link NBTCompound} of this {@link NBTCompound}.
-    */
-
-    public NBTCompound getParent() {
-        return this.P;
+    public void setCompound(@NotNull Compound Compound) {
+        this.Remap(Compound.serialize());
     };
 };

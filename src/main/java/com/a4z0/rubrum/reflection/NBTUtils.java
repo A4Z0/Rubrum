@@ -32,7 +32,9 @@ public class NBTUtils {
     * @return a {@link Compound}.
     */
 
-    public static @NotNull Compound getCompound(@NotNull Object NBT) {
+    public static Compound getCompound(Object NBT) {
+
+        if(NBT == null) return null;
 
         Map<String, Object> Map = new HashMap<>();
 

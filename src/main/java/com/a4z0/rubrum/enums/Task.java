@@ -34,7 +34,7 @@ public enum Task {
     NBTITEM("NBTItem", () -> {
 
         NBTItem NBT = new NBTItem(new ItemStack(Material.IRON_SWORD));
-        NBT.setCompound((Compound) Task.COMPOUND.B.Run());
+        NBT.setCompound(((Compound) Task.COMPOUND.B.Run()));
 
         return NBT.getItem();
     });
@@ -74,6 +74,7 @@ public enum Task {
         try {
             O = this.B.Run();
         } catch (Throwable e) {
+            e.printStackTrace();
             O = null;
         };
 

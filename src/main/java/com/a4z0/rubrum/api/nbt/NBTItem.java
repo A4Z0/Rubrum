@@ -19,16 +19,11 @@ public class NBTItem extends NBTCompound {
     */
 
     public NBTItem(@NotNull ItemStack Item) {
-
         if(Item.getType().equals(Material.AIR)) {
             throw new IllegalArgumentException("Item type can't be AIR.");
         };
 
         this.A = Item;
-
-        if(this.hasNBTData())  {
-            this.setCompound(NBTUtils.getCompound(this.getCompound()));
-        };
     };
 
     /**
@@ -65,11 +60,6 @@ public class NBTItem extends NBTCompound {
     @Override
     public Object getCompound() {
         return CraftItemStack.getNBTItem(Objects.requireNonNull(CraftItemStack.asNMSCopy(this.A)));
-    };
-
-    @Override
-    public void setCompound(@NotNull Compound Compound) {
-        super.Remap(Compound.serialize());
     };
 
     /**
