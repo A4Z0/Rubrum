@@ -4,6 +4,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
+/**
+* NBT component.
+*/
+
 public class NBTCompound extends Compound {
 
     /**

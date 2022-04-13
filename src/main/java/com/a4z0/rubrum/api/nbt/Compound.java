@@ -5,6 +5,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+
+/**
+* Component container.
+*/
 
 public class Compound implements ConfigurationSerializable, Cloneable {
 
@@ -119,6 +124,27 @@ public class Compound implements ConfigurationSerializable, Cloneable {
     */
 
     public void setLong(@NotNull String ID, long Value) {
+        this.M.put(ID, Value);
+    };
+
+    /**
+    * @param ID Value ID.
+    *
+    * @return a {@link UUID}.
+    */
+
+    public UUID getUUID(@NotNull String ID) {
+        return (UUID) this.M.get(ID);
+    };
+
+    /**
+    * Sets a {@link UUID} in {@link Compound}.
+    *
+    * @param ID Value ID.
+    * @param Value {@link UUID} Value.
+    */
+
+    public void setUUID(@NotNull String ID, @NotNull UUID Value) {
         this.M.put(ID, Value);
     };
 
@@ -266,6 +292,27 @@ public class Compound implements ConfigurationSerializable, Cloneable {
     */
 
     public void setIntArray(@NotNull String ID, int[] Value) {
+        this.M.put(ID, Value);
+    };
+
+    /**
+    * @param ID Value ID.
+    *
+    * @return a {@link Long} Array.
+    */
+
+    public long[] getLongArray(@NotNull String ID) {
+        return (long[]) this.M.get(ID);
+    };
+
+    /**
+    * Sets a {@link Long} Array in {@link Compound}.
+    *
+    * @param ID Value ID.
+    * @param Value {@link Long} Array Value.
+    */
+
+    public void setLongArray(@NotNull String ID, long[] Value) {
         this.M.put(ID, Value);
     };
 

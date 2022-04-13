@@ -8,7 +8,6 @@ public final class Rubrum extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
         if(!Version.S()) {
             this.getLogger().info("Failed to start, running version isn't supported");
             this.getServer().getPluginManager().disablePlugin(this);

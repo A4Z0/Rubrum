@@ -8,6 +8,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+/**
+* NBT component of an {@link ItemStack}.
+*/
+
 public class NBTItem extends NBTCompound {
 
     private final ItemStack A;

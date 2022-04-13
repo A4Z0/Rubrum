@@ -10,22 +10,25 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public enum Task {
 
     COMPOUND("Compound", () -> {
 
         Compound Compound = new Compound();
-        Compound.setMap("Map", new HashMap<>());
 
+        Compound.setMap("Map", new HashMap<>());
         Compound.setInt("Int", 1);
         Compound.setByte("Byte", (byte) 1);
         Compound.setLong("Long", 10000);
         Compound.setFloat("Float", 0.01f);
+        Compound.setUUID("UUID", UUID.randomUUID());
         Compound.setShort("Short", (short) 1.00);
         Compound.setString("String", "One");
         Compound.setDouble("Double", 100.100);
         Compound.setIntArray("IntArray", new int[]{1});
+        Compound.setLongArray("LongArray", new long[1]);
         Compound.setByteArray("ByteArray", new byte[]{1});
 
         return NBTUtils.getCompound(NBTUtils.getNBT(Compound));
@@ -73,8 +76,7 @@ public enum Task {
 
         try {
             O = this.B.Run();
-        } catch (Throwable e) {
-            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
             O = null;
         };
 

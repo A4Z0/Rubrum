@@ -2,6 +2,9 @@ package com.a4z0.rubrum.enums;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public enum Value {
     INT(int.class, 3, "setInt", "a", "getInt", "h", "c"),
     BYTE(byte.class, 1, "setByte", "a", "getByte", "d", "x"),
@@ -13,11 +16,16 @@ public enum Value {
     OBJECT(Object.class, 0, "setByteArray", "a", "getByteArray", "m", "c"),
     BOOLEAN(boolean.class, 0, "setBoolean", "a", "getBoolean", "e", "x"),
     INT_ARRAY(int[].class, 11, "setIntArray", "a", "getIntArray", "n", "c"),
+    LONG_ARRAY(long[].class, 12, "a", "o", "c"),
     BYTE_ARRAY(byte[].class, 7, "setByteArray", "a", "getByteArray", "m", "c");
 
     private final byte B;
     private final Class<?> A;
-    private final String C, D ,E, F, G;
+    private final String C, D, E, F, G;
+
+    Value(@NotNull Class<?> A, int B, @NotNull String D, @NotNull String F, @NotNull String G) {
+        this(A, B, null, D, null, F, G);
+    };
 
     /**
     * Construct a {@link Value} with the given params.
@@ -31,7 +39,7 @@ public enum Value {
     * @param G drastic get field name.
     */
 
-    Value(@NotNull Class<?> A, int B, @NotNull String C, @NotNull String D, @NotNull String E, @NotNull String F, @NotNull String G) {
+    Value(@NotNull Class<?> A, int B, String C, @NotNull String D, String E, @NotNull String F, @NotNull String G) {
         this.A = A;
         this.B = (byte) B;
         this.C = C;
@@ -62,7 +70,7 @@ public enum Value {
     */
 
     public @NotNull String S() {
-        return Version.B().D() ? this.D : this.C;
+        return this.C != null ? (Version.B().D() ? this.D : this.C) : this.D;
     };
 
     /**
@@ -70,7 +78,7 @@ public enum Value {
     */
 
     public @NotNull String G() {
-        return Version.B().D() ? this.F : this.E;
+        return this.E != null ? (Version.B().D() ? this.F : this.E) : this.F;
     };
 
     /**
@@ -88,7 +96,7 @@ public enum Value {
     */
 
     public static @NotNull Value R(Class<?> A) {
-        for(Value V : Value.values()) {
+        for(Value V : Arrays.stream(Value.values()).filter(V -> !(V.C == null && !Version.B().D())).collect(Collectors.toList())) {
             if(V.A().equals(A)) return V;
         };
 
@@ -102,7 +110,7 @@ public enum Value {
     */
 
     public static @NotNull Value R(byte A) {
-        for(Value V : Value.values()) {
+        for(Value V : Arrays.stream(Value.values()).filter(V -> !(V.C == null && !Version.B().D())).collect(Collectors.toList())) {
             if(V.B() == A) return V;
         };
 
