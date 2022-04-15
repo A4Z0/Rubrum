@@ -3,6 +3,13 @@ package com.a4z0.rubrum.enums;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+import java.lang.reflect.Method;
+
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 /*
 * What is the purpose of this?
 * The purpose is to facilitate the creation of plugins for multiple versions.
@@ -65,11 +72,17 @@ public enum Version {
 
     private final boolean A, B;
 
+    /**
+    * Construct a {@link Version}.
+    */
+
     Version() {
         this(false);
     };
 
     /**
+    * Construct a {@link Version} with the given params.
+    *
     * @param A is Two Handed?
     */
 
@@ -78,6 +91,8 @@ public enum Version {
     };
 
     /**
+    * Construct a {@link Version} with the given params.
+    *
     * @param A is Two Handed?
     * @param B is Drastically Changed?
     */
@@ -103,6 +118,16 @@ public enum Version {
         return this.B;
     };
 
+    /**
+    * @param Version a {@link Version}.
+    *
+    * @return true if the given {@link Version} is equal to or newer than this one.
+    */
+
+    public boolean M(@NotNull Version Version) {
+        return Version.ordinal() >= this.ordinal();
+    };
+
       //============================================//
      //               Static Values                //
     //============================================//
@@ -115,7 +140,7 @@ public enum Version {
         return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
     };
 
-    /** Store the Bukkit version. */
+    /** Store the running version. */
     public final static String BUKKIT_VERSION = V();
 
     /**
@@ -131,7 +156,7 @@ public enum Version {
     };
 
     /**
-    * @return the bukkit version in {@link Version}.
+    * @return the bukkit version as a {@link Version}.
     */
 
     public static @NotNull Version B() {
@@ -140,5 +165,39 @@ public enum Version {
         };
 
         return Version.NOT_SUPPORTED;
+    };
+
+    /**
+    * Declares a method as available from a version.
+    */
+
+    @Retention(RUNTIME) @Target({ METHOD })
+    public @interface A {
+
+        /**
+        * @return the available {@link Version}.
+        */
+
+        @NotNull Version V();
+
+    };
+
+    /**
+    * @param C a {@link Class} with the given {@link Method} name.
+    * @param N a {@link Method} name with {@link Version.A}.
+    *
+    * @return true if the {@link Method} can be used.
+    */
+
+    public static boolean U(@NotNull Class<?> C, @NotNull String N) {
+        for(Method M : C.getMethods()) {
+            if(M.getName().equals(N)) {
+                if(M.getAnnotation(A.class) != null) {
+                    return (M.getAnnotation(A.class)).V().M(Version.B());
+                };
+            };
+        };
+
+        return true;
     };
 };

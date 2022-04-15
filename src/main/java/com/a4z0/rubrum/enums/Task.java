@@ -1,45 +1,86 @@
 package com.a4z0.rubrum.enums;
 
-import com.a4z0.rubrum.api.nbt.Compound;
-import com.a4z0.rubrum.api.nbt.NBTItem;
+import com.a4z0.rubrum.api.nbt.*;
 import com.a4z0.rubrum.interfaces.Request;
 import com.a4z0.rubrum.interfaces.Response;
 import com.a4z0.rubrum.reflection.NBTUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public enum Task {
+    NBTCOMPOUND("NBTCompound", () -> {
 
-    COMPOUND("Compound", () -> {
+        NBTCompound NBT = new NBTCompound();
 
-        Compound Compound = new Compound();
+        NBT.setInt("Int", 1);
+        NBT.setByte("Byte", (byte) 1);
+        NBT.setLong("Long", 10000);
+        NBT.setFloat("Float", 0.01f);
+        NBT.setUUID("UUID", UUID.randomUUID());
+        NBT.setShort("Short", (short) 1.00);
+        NBT.setString("String", "One");
+        NBT.setDouble("Double", 100.100);
+        NBT.setIntArray("IntArray", new int[]{1});
+        NBT.setLongArray("LongArray", new long[1]);
+        NBT.setByteArray("ByteArray", new byte[]{1});
 
-        Compound.setMap("Map", new HashMap<>());
-        Compound.setInt("Int", 1);
-        Compound.setByte("Byte", (byte) 1);
-        Compound.setLong("Long", 10000);
-        Compound.setFloat("Float", 0.01f);
-        Compound.setUUID("UUID", UUID.randomUUID());
-        Compound.setShort("Short", (short) 1.00);
-        Compound.setString("String", "One");
-        Compound.setDouble("Double", 100.100);
-        Compound.setIntArray("IntArray", new int[]{1});
-        Compound.setLongArray("LongArray", new long[1]);
-        Compound.setByteArray("ByteArray", new byte[]{1});
-
-        return NBTUtils.getCompound(NBTUtils.getNBT(Compound));
+        return NBTUtils.parseNBT(NBT);
     }),
-
     NBTITEM("NBTItem", () -> {
 
         NBTItem NBT = new NBTItem(new ItemStack(Material.IRON_SWORD));
-        NBT.setCompound(((Compound) Task.COMPOUND.B.Run()));
+        NBT.setCompound(NBTUtils.parseNBTCompound(NBTCOMPOUND.B.Run()));
 
         return NBT.getItem();
+    }),
+    NBTENTITY("NBTEntity", () -> {
+
+        if(Bukkit.getWorlds().size() <= 0) return null;
+
+        World A = Bukkit.getWorlds().get(0);
+        ArmorStand B = A.spawn(A.getSpawnLocation(), ArmorStand.class);
+        B.setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
+
+        NBTEntity NBT = new NBTEntity(B);
+
+        ArrayList<NBTBase<?>> List = null;
+
+        if(NBT.getList("Equipment") != null) {
+            List = NBT.getList("Equipment");
+        };
+
+        if(NBT.getList("ArmorItems") != null) {
+            List = NBT.getList("ArmorItems");
+        };
+
+        if(List == null) return null;
+
+        NBTCompound Compound = (NBTCompound) List.get(2);
+
+        Compound.setString("id", "minecraft:iron_chestplate");
+        List.set(3, Compound);
+
+        if(NBT.getList("Equipment") != null) {
+            NBT.setList("Equipment", (byte) 10, List);
+        };
+
+        if(NBT.getList("ArmorItems") != null) {
+            NBT.setList("ArmorItems", (byte) 10, List);
+        };
+
+        NBT.setBoolean("Invisible", true);
+        NBT.setCompound(NBT);
+
+        B.remove();
+
+        return NBT;
     });
 
     private final String A;

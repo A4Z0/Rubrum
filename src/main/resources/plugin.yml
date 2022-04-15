@@ -4,6 +4,6 @@ description: Reflect classes from other versions.
 authors: [ A4Z0 ]
 
 main: com.a4z0.rubrum.Rubrum
-load: STARTUP
+load: POSTWORLD
 database: false
 api-version: 1.13
