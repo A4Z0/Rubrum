@@ -61,7 +61,7 @@ System.out.println(NBT.toString());
 Writing an NBT for an Entity
 ```java
 NBTEntity NBT = new NBTEntity(/*Entity*/);
-NBT.setBoolean"Invisible", true);
+NBT.setBoolean("Invisible", true);
 
 NBT.setCompound(NBT);
 ```
