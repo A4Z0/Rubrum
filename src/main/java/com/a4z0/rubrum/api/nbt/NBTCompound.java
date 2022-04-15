@@ -40,7 +40,7 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     };
 
     /**
-    * @return a NBT object.
+    * @return an NMS object from an NBT.
     */
 
     public Object getCompound() {
@@ -93,7 +93,7 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public int getInt(@NotNull String ID) {
-        return (int) this.Data.get(ID).Data;
+        return (this.Data.get(ID) != null) ? (int) this.Data.get(ID).Data : 0;
     };
 
     /**
@@ -147,7 +147,7 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public byte getByte(@NotNull String ID) {
-        return (byte) this.Data.get(ID).Data;
+        return (this.Data.get(ID) != null) ? (byte) this.Data.get(ID).Data : 0;
     };
 
     /**
@@ -168,7 +168,7 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public long getLong(@NotNull String ID) {
-        return (long) this.Data.get(ID).Data;
+        return (this.Data.get(ID) != null) ? (long) this.Data.get(ID).Data : 0;
     };
 
     /**
@@ -189,7 +189,7 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public UUID getUUID(@NotNull String ID) {
-        return (UUID) NBTUtils.deserialize((byte[]) this.Data.get(ID).Data);
+        return (this.Data.get(ID) != null) ? (UUID) NBTUtils.deserialize((byte[]) this.Data.get(ID).Data) : null;
     };
 
     /**
@@ -210,7 +210,7 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public float getFloat(@NotNull String ID) {
-        return (float) this.Data.get(ID).Data;
+        return (this.Data.get(ID) != null) ? (float) this.Data.get(ID).Data : 0;
     };
 
     /**
@@ -231,7 +231,7 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public short getShort(@NotNull String ID) {
-        return (short) this.Data.get(ID).Data;
+        return (this.Data.get(ID) != null) ? (short) this.Data.get(ID).Data : 0;
     };
 
     /**
@@ -252,7 +252,7 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public String getString(@NotNull String ID) {
-        return (String) this.Data.get(ID).Data;
+        return (this.Data.get(ID) != null) ? (String) this.Data.get(ID).Data : null;
     };
 
     /**
@@ -273,7 +273,7 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public double getDouble(@NotNull String ID) {
-        return (double) this.Data.get(ID).Data;
+        return (this.Data.get(ID) != null) ? (double) this.Data.get(ID).Data : 0;
     };
 
     /**
@@ -294,7 +294,7 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public Object getObject(@NotNull String ID) {
-        return NBTUtils.deserialize((byte[]) this.Data.get(ID).Data);
+        return (this.Data.get(ID) != null) ? NBTUtils.deserialize((byte[]) this.Data.get(ID).Data) : null;
     };
 
     /**
@@ -315,7 +315,7 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public boolean getBoolean(@NotNull String ID) {
-        return (boolean) this.Data.get(ID).Data;
+        return this.Data.get(ID) != null && (boolean) this.Data.get(ID).Data;
     };
 
     /**
@@ -336,7 +336,7 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public int[] getIntArray(@NotNull String ID) {
-        return (int[]) this.Data.get(ID).Data;
+        return (this.Data.get(ID) != null) ? (int[]) this.Data.get(ID).Data : null;
     };
 
     /**
@@ -357,7 +357,7 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public long[] getLongArray(@NotNull String ID) {
-        return (long[]) this.Data.get(ID).Data;
+        return (this.Data.get(ID) != null) ? (long[]) this.Data.get(ID).Data : null;
     };
 
     /**
@@ -378,7 +378,7 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public byte[] getByteArray(@NotNull String ID) {
-        return (byte[]) this.Data.get(ID).Data;
+        return (this.Data.get(ID) != null) ? (byte[]) this.Data.get(ID).Data : null;
     };
 
     /**

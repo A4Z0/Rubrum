@@ -3,6 +3,7 @@ package com.a4z0.rubrum.api.nbt;
 import com.a4z0.rubrum.reflection.CraftItemStack;
 import com.a4z0.rubrum.reflection.NBTUtils;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,14 +32,24 @@ public class NBTItem extends NBTCompound {
         };
     };
 
+    /**
+    * @return an NMS object from an NBT.
+    */
+
     @Override
     public Object getCompound() {
         return CraftItemStack.getNBTItem(CraftItemStack.asNMSCopy(this.A));
     };
 
+    /**
+    * Sets the {@link NBTCompound} and update the {@link ItemStack} NBT.
+    *
+    * @param NBTCompound a {@link NBTCompound}.
+    */
+
     @Override
     public void setCompound(@NotNull NBTCompound NBTCompound) {
-        super.setCompound(NBTCompound); this.B = CraftItemStack.asBukkitCopy(CraftItemStack.setNBT(CraftItemStack.asNMSCopy(this.B), NBTUtils.parseNBT(this)));
+        super.setCompound(NBTCompound); this.B = this.merge(this.B);
     };
 
     /**
@@ -55,6 +66,16 @@ public class NBTItem extends NBTCompound {
 
     public @NotNull ItemStack getItem() {
         return this.B;
+    };
+
+    /**
+    * @param Item a {@link ItemStack}.
+    *
+    * @return given {@link ItemStack} merged with this {@link NBTCompound}.
+    */
+
+    public @NotNull ItemStack merge(@NotNull ItemStack Item) {
+        return CraftItemStack.asBukkitCopy(CraftItemStack.setNBT(CraftItemStack.asNMSCopy(Item), NBTUtils.parseNBT(this)));
     };
 
     /**

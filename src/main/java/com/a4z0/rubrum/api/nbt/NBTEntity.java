@@ -24,10 +24,20 @@ public class NBTEntity extends NBTCompound {
         };
     };
 
+    /**
+    * @return an NMS object from an NBT.
+    */
+
     @Override
     public Object getCompound() {
         return CraftEntity.getNBTEntity(CraftEntity.asNMSCopy(this.Entity));
     };
+
+    /**
+    * Sets the {@link NBTCompound} and update the {@link Entity} NBT.
+    *
+    * @param NBTCompound a {@link NBTCompound}.
+    */
 
     @Override
     public void setCompound(@NotNull NBTCompound NBTCompound) {
