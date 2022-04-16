@@ -24,8 +24,6 @@ Writing an NBT component
 ```java
 NBTCompound NBT = new NBTCompound();
 NBT.setString("Data", "Hello, World!");
-
-return NBT;
 ```
 
 Reading an NBT component
@@ -44,13 +42,11 @@ NBT.setString("Data", "Hello, World!");
 
 NBT.setCompound(NBT);
 
-return NBT.getItem();
+ItemStack Item = NBT.getItem();
 ```
 
 Reading an NBT from an ItemStack
 ```java
-NBTItem NBT = new NBTItem(/*ItemStack with NBT*/);
-
 System.out.println(NBT.toString());
 ```
 
@@ -68,8 +64,42 @@ NBT.setCompound(NBT);
 
 Reading an Entity's NBT
 ```java
-NBTEntity NBT = new NBTEntity(/*Entity*/);
+System.out.println(NBT.toString());
+```
 
+| Class       | Description                        |
+|:------------|:-----------------------------------|
+| `NBTChunk`  | NBT Component of a **Chunk**       |
+
+Writing an NBT for a Chunk
+```java
+NBTChunk NBT = new NBTChunk(/*Chunk*/);
+
+NBTPersistentDataContainer Container = NBT.getPersistentDataContainer();
+Container.setString("Data", "Hello, World!");
+
+Container.setCompound(NBT);
+```
+
+Reading a Chunk's NBT
+```java
+System.out.println(Container.toString());
+```
+
+| Class       | Description                        |
+|:------------|:-----------------------------------|
+| `NBTBlock`  | NBT Component of a **Block**       |
+
+Writing an NBT for a Block
+```java
+NBTBlock NBT = new NBTBlock(/*Block*/);
+NBT.setString("Data", "Hello, World!");
+
+NBT.setCompound(NBT);
+```
+
+Reading a Block's NBT
+```java
 System.out.println(NBT.toString());
 ```
 

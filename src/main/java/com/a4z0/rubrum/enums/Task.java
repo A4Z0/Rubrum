@@ -79,7 +79,7 @@ public enum Task {
         NBT.setBoolean("Invisible", true);
         NBT.setCompound(NBT);
 
-        if(Version.B().M(Version.V1_14)) {
+        if(Version.B().M(Version.V1_14_R1)) {
 
             NBTCompound Container = NBT.getPersistentDataContainer();
             Container.setString("Data", "Hello, World!");
@@ -92,7 +92,7 @@ public enum Task {
     }),
     NBTCHUNK("NBTChunk", () -> {
 
-        if(!Version.B().M(Version.V1_16)) return Conclusion.NOT_SUPPORTED;
+        if(!Version.B().M(Version.V1_16_R3)) return Conclusion.NOT_SUPPORTED;
 
         World A = Bukkit.getWorlds().get(0);
         NBTChunk NBT = new NBTChunk(A.getChunkAt(A.getSpawnLocation()));
@@ -105,7 +105,7 @@ public enum Task {
     }),
     NBTBLOCK("NBTBlock", () -> {
 
-        if(!Version.B().M(Version.V1_16)) return Conclusion.NOT_SUPPORTED;
+        if(!Version.B().M(Version.V1_16_R3)) return Conclusion.NOT_SUPPORTED;
 
         World A = Bukkit.getWorlds().get(0);
         NBTBlock NBT = new NBTBlock(A.getBlockAt(A.getSpawnLocation()));

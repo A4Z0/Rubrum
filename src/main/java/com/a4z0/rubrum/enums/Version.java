@@ -52,23 +52,28 @@ public enum Version {
 
     /* Version that hasn't changed much. */
 
-    V1_8,
+    V1_8_R3,
 
     /* Versions that is possible to have two items in both hands. */
 
-    V1_9(true),
-    V1_10(true),
-    V1_11(true),
-    V1_12(true),
-    V1_13(true),
-    V1_14(true),
-    V1_15(true),
+    V1_9_R1(true),
+    V1_9_R2(true),
+    V1_10_R1(true),
+    V1_11_R1(true),
+    V1_12_R1(true),
+    V1_13_R1(true),
+    V1_13_R2(true),
+    V1_14_R1(true),
+    V1_15_R1(true),
 
     /* Versions that is possible to have two items in both hands and has been drastically changed */
 
-    V1_16(true, true),
-    V1_17(true, true),
-    V1_18(true, true);
+    V1_16_R1(true, true),
+    V1_16_R2(true, true),
+    V1_16_R3(true, true),
+    V1_17_R1(true, true),
+    V1_18_R1(true, true),
+    V1_18_R2(true, true);
 
     private final boolean A, B;
 

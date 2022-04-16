@@ -6,6 +6,10 @@ import org.bukkit.Chunk;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
 
+/**
+* NBT component of a {@link Chunk}.
+*/
+
 public class NBTChunk {
 
     private final Chunk A;
@@ -19,7 +23,7 @@ public class NBTChunk {
 
     public NBTChunk(@NotNull Chunk Chunk) {
 
-        if(!Version.B().M(Version.V1_16)) {
+        if(!Version.B().M(Version.V1_16_R3)) {
             throw new IllegalArgumentException("Feature available from version 1.16.4+");
         };
 

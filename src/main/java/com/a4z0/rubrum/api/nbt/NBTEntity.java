@@ -8,6 +8,10 @@ import org.bukkit.entity.Entity;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
 
+/**
+* NBT component of an {@link Entity}.
+*/
+
 public class NBTEntity extends NBTCompound {
 
     private final Entity A;
@@ -58,7 +62,7 @@ public class NBTEntity extends NBTCompound {
     * @return a {@link NBTPersistentDataContainer}.
     */
 
-    @Version.A(V = Version.V1_14)
+    @Version.A(V = Version.V1_14_R1)
     public NBTPersistentDataContainer getPersistentDataContainer() {
 
         if(!Version.U(this.getClass(), "getPersistentDataContainer")) {

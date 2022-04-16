@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 /**
-* NBT Component.
+* NBT component.
 */
 
 public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Cloneable {

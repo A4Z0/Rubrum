@@ -5,6 +5,10 @@ import com.a4z0.rubrum.reflection.NBTUtils;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 
+/**
+* NBT component of a {@link Block}.
+*/
+
 public class NBTBlock extends NBTCompound {
 
     private final Block A;
@@ -18,7 +22,7 @@ public class NBTBlock extends NBTCompound {
 
     public NBTBlock(@NotNull Block Block) {
 
-        if(!Version.B().M(Version.V1_16)) {
+        if(!Version.B().M(Version.V1_16_R3)) {
             throw new IllegalArgumentException("Feature available from version 1.16.4+");
         };
 
