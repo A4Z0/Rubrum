@@ -125,7 +125,7 @@ public enum Version {
     */
 
     public boolean M(@NotNull Version Version) {
-        return Version.ordinal() >= this.ordinal();
+        return this.ordinal() >= Version.ordinal();
     };
 
       //============================================//
@@ -193,7 +193,7 @@ public enum Version {
         for(Method M : C.getMethods()) {
             if(M.getName().equals(N)) {
                 if(M.getAnnotation(A.class) != null) {
-                    return (M.getAnnotation(A.class)).V().M(Version.B());
+                    return Version.B().M((M.getAnnotation(A.class)).V());
                 };
             };
         };

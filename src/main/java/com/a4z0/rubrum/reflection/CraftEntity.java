@@ -2,6 +2,8 @@ package com.a4z0.rubrum.reflection;
 
 import com.a4z0.rubrum.enums.Version;
 import org.bukkit.entity.Entity;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataHolder;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;

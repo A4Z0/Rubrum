@@ -2,13 +2,15 @@ package com.a4z0.rubrum.api.nbt;
 
 import com.a4z0.rubrum.enums.Version;
 import com.a4z0.rubrum.reflection.CraftEntity;
+import com.a4z0.rubrum.reflection.CraftPersistentDataContainer;
 import com.a4z0.rubrum.reflection.NBTUtils;
 import org.bukkit.entity.Entity;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
 
 public class NBTEntity extends NBTCompound {
 
-    private final Entity Entity;
+    private final Entity A;
 
     /**
     * Construct a {@link NBTItem} with the given params.
@@ -17,7 +19,7 @@ public class NBTEntity extends NBTCompound {
     */
 
     public NBTEntity(@NotNull Entity Entity) {
-        this.Entity = Entity;
+        this.A = Entity;
 
         if(this.getCompound() != null) {
             super.setCompound(NBTUtils.parseNBTCompound(this.getCompound()));
@@ -30,7 +32,7 @@ public class NBTEntity extends NBTCompound {
 
     @Override
     public Object getCompound() {
-        return CraftEntity.getNBTEntity(CraftEntity.asNMSCopy(this.Entity));
+        return CraftEntity.getNBTEntity(CraftEntity.asNMSCopy(this.A));
     };
 
     /**
@@ -41,7 +43,7 @@ public class NBTEntity extends NBTCompound {
 
     @Override
     public void setCompound(@NotNull NBTCompound NBTCompound) {
-        super.setCompound(NBTCompound); CraftEntity.setNBT(CraftEntity.asNMSCopy(this.Entity), NBTUtils.parseNBT(NBTCompound));
+        super.setCompound(NBTCompound); CraftEntity.setNBT(CraftEntity.asNMSCopy(this.A), NBTUtils.parseNBT(NBTCompound));
     };
 
     /**
@@ -49,16 +51,21 @@ public class NBTEntity extends NBTCompound {
     */
 
     public @NotNull Entity getEntity() {
-        return this.Entity;
+        return this.A;
     };
 
-    @Version.A(V = Version.V1_14)
-    public NBTCompound getPersistentDataContainer() {
+    /**
+    * @return a {@link PersistentDataContainer}.
+    */
 
-        if(Version.U(this.getClass(), "getPersistentDataContainer")) {
-            throw new IllegalArgumentException("This version doesn't support this method.");
+    @Version.A(V = Version.V1_14)
+    public NBTPersistentDataContainer getPersistentDataContainer() {
+
+        if(!Version.U(this.getClass(), "getPersistentDataContainer")) {
+            throw new IllegalArgumentException("Feature available from version 1.14");
         };
 
-        return null;
+        PersistentDataContainer Persistent = CraftPersistentDataContainer.getPersistentData(this.A);
+        return Persistent != null ? new NBTPersistentDataContainer(Persistent) : null;
     };
 };

@@ -1,7 +1,6 @@
 package com.a4z0.rubrum.enums;
 
 import com.a4z0.rubrum.api.nbt.*;
-import com.a4z0.rubrum.interfaces.Request;
 import com.a4z0.rubrum.interfaces.Response;
 import com.a4z0.rubrum.reflection.NBTUtils;
 import org.bukkit.Bukkit;
@@ -31,14 +30,18 @@ public enum Task {
         NBT.setLongArray("LongArray", new long[1]);
         NBT.setByteArray("ByteArray", new byte[]{1});
 
-        return NBTUtils.parseNBT(NBT);
+        NBTUtils.parseNBT(NBT);
+
+        return Conclusion.PASSED;
     }),
     NBTITEM("NBTItem", () -> {
 
         NBTItem NBT = new NBTItem(new ItemStack(Material.IRON_SWORD));
-        NBT.setCompound(NBTUtils.parseNBTCompound(NBTCOMPOUND.B.Run()));
+        NBT.setString("Data", "Hello, World!");
 
-        return NBT.getItem();
+        NBT.setCompound(NBT);
+
+        return Conclusion.PASSED;
     }),
     NBTENTITY("NBTEntity", () -> {
 
@@ -78,21 +81,28 @@ public enum Task {
         NBT.setBoolean("Invisible", true);
         NBT.setCompound(NBT);
 
+        if(Version.B().M(Version.V1_14)) {
+
+            NBTCompound Container = NBT.getPersistentDataContainer();
+            Container.setString("Data", "Hello, World!");
+            Container.setCompound(Container);
+        };
+
         B.remove();
 
-        return NBT;
+        return Conclusion.PASSED;
     });
 
     private final String A;
-    private final Response<Object> B;
+    private final Response<Conclusion> B;
 
     /**
     * Construct a {@link Task} with the given params.
     *
-    * @param B a {@link Request}.
+    * @param B a {@link Response}.
     */
 
-    Task(@NotNull String A, @NotNull Response<Object> B) {
+    Task(@NotNull String A, @NotNull Response<Conclusion> B) {
         this.A = A;
         this.B = B;
     };
@@ -106,23 +116,24 @@ public enum Task {
     };
 
     /**
-    * @param C a {@link Request}.
-    *
-    * @return true if the test runs successfully.
+    * @return a {@link Conclusion}.
     */
 
-    public boolean T(@NotNull Request C) {
-
-        Object O;
-
+    public @NotNull Conclusion T() {
         try {
-            O = this.B.Run();
+            return this.B.Run();
         } catch (IllegalArgumentException e) {
-            O = null;
-        };
-
-        C.Run(this, O);
-
-        return O != null;
+            return Conclusion.FAILED;
+        }
     };
+
+    /**
+    * {@link Task} conclusion types.
+    */
+
+    public enum Conclusion {
+        PASSED,
+        FAILED,
+        NOT_SUPPORTED;
+    }
 };

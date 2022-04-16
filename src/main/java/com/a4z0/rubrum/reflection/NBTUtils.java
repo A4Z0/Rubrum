@@ -87,6 +87,7 @@ public class NBTUtils {
 
             return new NBTCompound(Map);
         }catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
             throw new IllegalArgumentException("Error converting NBT to Compound");
         }
     };
