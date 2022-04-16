@@ -78,7 +78,7 @@ NBTChunk NBT = new NBTChunk(/*Chunk*/);
 NBTPersistentDataContainer Container = NBT.getPersistentDataContainer();
 Container.setString("Data", "Hello, World!");
 
-Container.setCompound(NBT);
+Container.setCompound(Container);
 ```
 
 Reading a Chunk's NBT
