@@ -7,6 +7,8 @@ import org.bukkit.persistence.PersistentDataHolder;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
+import java.util.Set;
 
 public class CraftPersistentDataContainer {
 
@@ -64,7 +66,12 @@ public class CraftPersistentDataContainer {
     public static void setPersistentData(@NotNull PersistentDataContainer Container, @NotNull NBTCompound NBTCompound) {
         try {
             Object NBT = NBTUtils.parseNBT(NBTCompound);
-            (A.cast(Container)).getClass().getMethod("putAll", NBT.getClass()).invoke(Container, NBT);
+            Object Craft = (A.cast(Container));
+
+            Map<String, Object> Map = (Map<String, Object>) Craft.getClass().getMethod("getRaw").invoke(Craft);
+            Map.clear();
+
+            Craft.getClass().getMethod("putAll", NBT.getClass()).invoke(Container, NBT);
         }catch (Error | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
             throw new IllegalArgumentException("Error setting PersistentDataContainer");

@@ -53,7 +53,7 @@ public class NBTUtils {
 
             NBTCompound.serialize().forEach((K, N) -> {
                 try {
-                    NBT.getClass().getMethod(Version.B().D() ? "a" : "set", String.class, B).invoke(NBT, K, parseNBTBase(N));
+                    NBT.getClass().getMethod(Version.B().D() ? "a" : "set", String.class, B).invoke(NBT, K, parseNBTBase((NBTBase<?>) N));
                 } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                     throw new IllegalArgumentException("Error writing an NBT");
                 }
@@ -73,7 +73,7 @@ public class NBTUtils {
 
     public static @NotNull NBTCompound parseNBTCompound(@NotNull Object Object) {
         try {
-            HashMap<String, NBTBase<?>> Map = new HashMap<>();
+            HashMap<String, Object> Map = new HashMap<>();
 
             for(String Key : ((Set<String>) Object.getClass().getMethod(Version.B().D() ? "d" : "c").invoke(Object))) {
 
@@ -168,6 +168,7 @@ public class NBTUtils {
             return Base;
 
         }catch (NoSuchMethodException | ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchFieldException e) {
+            e.printStackTrace();
             throw new IllegalArgumentException("Error reading NBTBase");
         }
     };
@@ -255,7 +256,7 @@ public class NBTUtils {
             }
             case 10: {
 
-                Map<String, NBTBase<?>> Map = new HashMap<>();
+                Map<String, Object> Map = new HashMap<>();
 
                 ((Map<String, Object>) Value).forEach((A, B) -> {
                     Map.put(A, parseNMSNBTBase(B));

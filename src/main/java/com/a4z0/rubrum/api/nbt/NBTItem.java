@@ -42,13 +42,13 @@ public class NBTItem extends NBTCompound {
     };
 
     /**
-    * Sets the {@link NBTCompound} and update the {@link ItemStack} NBT.
+    * Sets the {@link NBTItem} and update the {@link ItemStack} NBT.
     *
     * @param NBTCompound a {@link NBTCompound}.
     */
 
     @Override
-    public void setCompound(@NotNull NBTCompound NBTCompound) {
+    public void setCompound(NBTCompound NBTCompound) {
         super.setCompound(NBTCompound); this.B = this.merge(this.B);
     };
 

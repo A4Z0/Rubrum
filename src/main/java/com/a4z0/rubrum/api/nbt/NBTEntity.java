@@ -36,13 +36,13 @@ public class NBTEntity extends NBTCompound {
     };
 
     /**
-    * Sets the {@link NBTCompound} and update the {@link Entity} NBT.
+    * Sets the {@link NBTEntity} and update the {@link Entity} NBT.
     *
     * @param NBTCompound a {@link NBTCompound}.
     */
 
     @Override
-    public void setCompound(@NotNull NBTCompound NBTCompound) {
+    public void setCompound(NBTCompound NBTCompound) {
         super.setCompound(NBTCompound); CraftEntity.setNBT(CraftEntity.asNMSCopy(this.A), NBTUtils.parseNBT(NBTCompound));
     };
 
@@ -55,14 +55,14 @@ public class NBTEntity extends NBTCompound {
     };
 
     /**
-    * @return a {@link PersistentDataContainer}.
+    * @return a {@link NBTPersistentDataContainer}.
     */
 
     @Version.A(V = Version.V1_14)
     public NBTPersistentDataContainer getPersistentDataContainer() {
 
         if(!Version.U(this.getClass(), "getPersistentDataContainer")) {
-            throw new IllegalArgumentException("Feature available from version 1.14");
+            throw new IllegalArgumentException("Feature available from version 1.14+");
         };
 
         PersistentDataContainer Persistent = CraftPersistentDataContainer.getPersistentData(this.A);

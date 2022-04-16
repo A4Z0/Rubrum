@@ -33,13 +33,13 @@ public class NBTPersistentDataContainer extends NBTCompound {
     };
 
     /**
-    * Sets the {@link NBTCompound} and update the {@link PersistentDataContainer} NBT.
+    * Sets the {@link NBTPersistentDataContainer} and update the {@link PersistentDataContainer} NBT.
     *
     * @param NBTCompound a {@link NBTCompound}.
     */
 
     @Override
-    public void setCompound(@NotNull NBTCompound NBTCompound) {
+    public void setCompound(NBTCompound NBTCompound) {
         super.setCompound(NBTCompound);
         CraftPersistentDataContainer.setPersistentData(this.A, this);
     };

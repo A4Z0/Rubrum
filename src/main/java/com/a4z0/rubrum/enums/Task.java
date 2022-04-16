@@ -45,8 +45,6 @@ public enum Task {
     }),
     NBTENTITY("NBTEntity", () -> {
 
-        if(Bukkit.getWorlds().size() <= 0) return null;
-
         World A = Bukkit.getWorlds().get(0);
         ArmorStand B = A.spawn(A.getSpawnLocation(), ArmorStand.class);
         B.setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
@@ -91,6 +89,33 @@ public enum Task {
         B.remove();
 
         return Conclusion.PASSED;
+    }),
+    NBTCHUNK("NBTChunk", () -> {
+
+        if(!Version.B().M(Version.V1_16)) return Conclusion.NOT_SUPPORTED;
+
+        World A = Bukkit.getWorlds().get(0);
+        NBTChunk NBT = new NBTChunk(A.getChunkAt(A.getSpawnLocation()));
+
+        NBTCompound Container = NBT.getPersistentDataContainer();
+        Container.setString("Data", "Hello, World!");
+        Container.setCompound(Container);
+
+        return Conclusion.PASSED;
+    }),
+    NBTBLOCK("NBTBlock", () -> {
+
+        if(!Version.B().M(Version.V1_16)) return Conclusion.NOT_SUPPORTED;
+
+        World A = Bukkit.getWorlds().get(0);
+        NBTBlock NBT = new NBTBlock(A.getBlockAt(A.getSpawnLocation()));
+        NBT.setString("Data", "Hello, World!");
+        NBT.setCompound(NBT);
+
+        NBTChunk Chunk = new NBTChunk(NBT.getBlock().getChunk());
+        Chunk.getPersistentDataContainer().setCompound(null);
+
+        return Conclusion.PASSED;
     });
 
     private final String A;
@@ -123,6 +148,7 @@ public enum Task {
         try {
             return this.B.Run();
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             return Conclusion.FAILED;
         }
     };

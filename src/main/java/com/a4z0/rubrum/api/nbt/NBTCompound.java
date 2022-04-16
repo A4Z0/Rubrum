@@ -35,8 +35,15 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     * @param Map a serialized {@link NBTCompound}.
     */
 
-    public NBTCompound(@NotNull Map<String, NBTBase<?>> Map) {
-        this.Data = Map;
+    public NBTCompound(@NotNull Map<String, Object> Map) {
+
+        Map<String, NBTBase<?>> Data = new HashMap<>();
+
+        Map.forEach((A, B) -> {
+            Data.put(A, (NBTBase<?>) B);
+        });
+
+        this.Data = Data;
     };
 
     /**
@@ -44,7 +51,7 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public Object getCompound() {
-        return null;
+        return NBTUtils.parseNBT(this);
     };
 
     /**
@@ -53,8 +60,8 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     * @param NBTCompound a {@link NBTCompound}.
     */
 
-    public void setCompound(@NotNull NBTCompound NBTCompound) {
-        this.Data = NBTCompound.Data;
+    public void setCompound(NBTCompound NBTCompound) {
+        this.Data = NBTCompound != null ? NBTCompound.Data : new HashMap<>();
     };
 
     /**
@@ -298,6 +305,21 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     };
 
     /**
+    * @param ID Value ID.
+    * @param Class Value class.
+    *
+    * @return a {@link Object} as a cast of {@link Class} type.
+    */
+
+    public <T> T getObject(@NotNull String ID, @NotNull Class<T> Class) {
+        try {
+            return (this.Data.get(ID) != null) ? Class.cast(NBTUtils.deserialize((byte[]) this.Data.get(ID).Data)) : null;
+        } catch (ClassCastException e) {
+            return null;
+        }
+    };
+
+    /**
     * Sets a {@link Object} in {@link NBTCompound}.
     *
     * @param ID Value ID.
@@ -401,7 +423,7 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     * @return a {@link Map} representing this {@link NBTCompound}.
     */
 
-    public @NotNull Map<String, NBTBase<?>> serialize() {
+    public @NotNull Map<String, Object> serialize() {
         return new HashMap<>(this.Data);
     };
 
