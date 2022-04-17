@@ -103,5 +103,24 @@ Reading a Block's NBT
 System.out.println(NBT.toString());
 ```
 
+| Class            | Description                        |
+|:-----------------|:-----------------------------------|
+| `NBTTileEntity`  | NBT Component of a **TileEntity**  |
+
+Writing an NBT for a TileEntity
+```java
+Block Block = (/* Sign Block */);
+
+NBTTileEntity NBT = new NBTTileEntity(Block.getState());
+NBT.setString("Text1", "Hello, World!");
+
+NBT.setCompound(NBT);
+```
+
+Reading a TileEntity's NBT
+```java
+System.out.println(NBT.toString());
+```
+
 #### License
 [GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/)

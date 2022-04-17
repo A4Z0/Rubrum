@@ -75,6 +75,16 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     /**
     * @param ID Value ID.
     *
+    * @return true if it contains the Key.
+    */
+
+    public boolean hasKey(@NotNull String ID) {
+        return this.Data.containsKey(ID);
+    };
+
+    /**
+    * @param ID Value ID.
+    *
     * @return a {@link NBTBase}.
     */
 
@@ -89,8 +99,8 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     * @param Value {@link NBTBase} Value.
     */
 
-    public NBTBase<?> set(@NotNull String ID, NBTBase<?> Value) {
-        return this.Data.put(ID, Value);
+    public void set(@NotNull String ID, NBTBase<?> Value) {
+        this.Data.put(ID, Value);
     };
 
     /**
@@ -100,7 +110,10 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public int getInt(@NotNull String ID) {
-        return (this.Data.get(ID) != null) ? (int) this.Data.get(ID).Data : 0;
+
+        if(!this.hasKey(ID)) throw new NullPointerException();
+
+        return (int) this.Data.get(ID).Data;
     };
 
     /**
@@ -154,7 +167,10 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public byte getByte(@NotNull String ID) {
-        return (this.Data.get(ID) != null) ? (byte) this.Data.get(ID).Data : 0;
+
+        if(!this.hasKey(ID)) throw new NullPointerException();
+
+        return (byte) this.Data.get(ID).Data;
     };
 
     /**
@@ -175,7 +191,10 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public long getLong(@NotNull String ID) {
-        return (this.Data.get(ID) != null) ? (long) this.Data.get(ID).Data : 0;
+
+        if(!this.hasKey(ID)) throw new NullPointerException();
+
+        return (long) this.Data.get(ID).Data;
     };
 
     /**
@@ -217,7 +236,10 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public float getFloat(@NotNull String ID) {
-        return (this.Data.get(ID) != null) ? (float) this.Data.get(ID).Data : 0;
+
+        if(!this.hasKey(ID)) throw new NullPointerException();
+
+        return (float) this.Data.get(ID).Data;
     };
 
     /**
@@ -238,7 +260,10 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public short getShort(@NotNull String ID) {
-        return (this.Data.get(ID) != null) ? (short) this.Data.get(ID).Data : 0;
+
+        if(!this.hasKey(ID)) throw new NullPointerException();
+
+        return (short) this.Data.get(ID).Data;
     };
 
     /**
@@ -280,7 +305,10 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public double getDouble(@NotNull String ID) {
-        return (this.Data.get(ID) != null) ? (double) this.Data.get(ID).Data : 0;
+
+        if(!this.hasKey(ID)) throw new NullPointerException();
+
+        return (double) this.Data.get(ID).Data;
     };
 
     /**
@@ -337,7 +365,10 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public boolean getBoolean(@NotNull String ID) {
-        return this.Data.get(ID) != null && (boolean) this.Data.get(ID).Data;
+
+        if(!this.hasKey(ID)) throw new NullPointerException();
+
+        return (boolean) this.Data.get(ID).Data;
     };
 
     /**

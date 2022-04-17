@@ -3,18 +3,18 @@ package com.a4z0.rubrum.enums;
 import org.jetbrains.annotations.NotNull;
 
 public enum Value {
-    INT((byte) 3, "data", "c"),
-    BYTE((byte) 1, "data", "x"),
-    LONG((byte) 4, "data", "c"),
-    FLOAT((byte) 5, "data", "w"),
-    SHORT((byte) 2, "data", "c"),
-    STRING((byte) 8, "data", "A"),
-    DOUBLE((byte) 6, "data", "w"),
-    LIST((byte) 9, "list", "c"),
-    COMPOUND((byte) 10, "map", "x"),
-    INT_ARRAY((byte) 11, "data", "c"),
-    LONG_ARRAY((byte) 12, "data", "c"),
-    BYTE_ARRAY((byte) 7, "data", "c");
+    Int((byte) 3, "data", "c"),
+    Byte((byte) 1, "data", "x"),
+    Long((byte) 4, "data", "c"),
+    Float((byte) 5, "data", "w"),
+    Short((byte) 2, "data", "c"),
+    String((byte) 8, "data", "A"),
+    Double((byte) 6, "data", "w"),
+    List((byte) 9, "list", "c"),
+    Compound((byte) 10, "map", "x"),
+    IntArray((byte) 11, "data", "c"),
+    LongArray((byte) 12, "data", "c"),
+    ByteArray((byte) 7, "data", "c");
 
     private final byte A;
     private final String B, C;

@@ -29,21 +29,26 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 * Contains the versions that are supported.
 *
 * Older version supported:
-* {@link #V1_8}.
+* {@link #V1_8_R3}.
 *
 * Versions that have been smoothly changed:
-* {@link #V1_9},
-* {@link #V1_10},
-* {@link #V1_11},
-* {@link #V1_12},
-* {@link #V1_13},
-* {@link #V1_14},
-* {@link #V1_15}.
+* {@link #V1_9_R1},
+* {@link #V1_9_R2},
+* {@link #V1_10_R1},
+* {@link #V1_11_R1},
+* {@link #V1_12_R1},
+* {@link #V1_13_R1},
+* {@link #V1_13_R2},
+* {@link #V1_14_R1},
+* {@link #V1_15_R1}.
 *
 * Versions that have been drastically changed:
-* {@link #V1_16},
-* {@link #V1_17},
-* {@link #V1_18}.
+* {@link #V1_16_R1},
+* {@link #V1_16_R2},
+* {@link #V1_16_R3},
+* {@link #V1_17_R1},
+* {@link #V1_18_R1}.
+* {@link #V1_18_R2}.
 */
 
 public enum Version {

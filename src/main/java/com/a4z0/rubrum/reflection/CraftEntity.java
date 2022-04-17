@@ -44,7 +44,7 @@ public class CraftEntity {
     * @return a NMS {@link Entity}.
     */
 
-    public static @NotNull Object asNMSCopy(@NotNull Entity Entity) {
+    public static @NotNull Object getNMS(@NotNull Entity Entity) {
         try {
             return (A.cast(Entity)).getClass().getMethod("getHandle").invoke((A.cast(Entity)));
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
@@ -58,7 +58,7 @@ public class CraftEntity {
     * @return a NBT object.
     */
 
-    public static Object getNBTEntity(@NotNull Object Entity) {
+    public static Object getNBT(@NotNull Object Entity) {
         try {
             Object C = NBTUtils.A.getConstructors()[0].newInstance();
 
@@ -94,8 +94,7 @@ public class CraftEntity {
             };
 
         } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
-            e.printStackTrace();
-            throw new IllegalArgumentException("Error getting NBTTagCompound from a NMS Entity object");
+            throw new IllegalArgumentException("Error setting NBT on a NMS Entity");
         }
     };
 };

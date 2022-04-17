@@ -36,7 +36,7 @@ public class NBTEntity extends NBTCompound {
 
     @Override
     public Object getCompound() {
-        return CraftEntity.getNBTEntity(CraftEntity.asNMSCopy(this.A));
+        return CraftEntity.getNBT(CraftEntity.getNMS(this.A));
     };
 
     /**
@@ -47,7 +47,7 @@ public class NBTEntity extends NBTCompound {
 
     @Override
     public void setCompound(NBTCompound NBTCompound) {
-        super.setCompound(NBTCompound); CraftEntity.setNBT(CraftEntity.asNMSCopy(this.A), NBTUtils.parseNBT(NBTCompound));
+        super.setCompound(NBTCompound); CraftEntity.setNBT(CraftEntity.getNMS(this.A), NBTUtils.parseNBT(NBTCompound));
     };
 
     /**

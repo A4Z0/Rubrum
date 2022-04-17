@@ -41,7 +41,7 @@ public class NBTItem extends NBTCompound {
 
     @Override
     public Object getCompound() {
-        return CraftItemStack.getNBTItem(CraftItemStack.asNMSCopy(this.A));
+        return CraftItemStack.getNBT(CraftItemStack.getNMS(this.A));
     };
 
     /**
@@ -78,7 +78,7 @@ public class NBTItem extends NBTCompound {
     */
 
     public @NotNull ItemStack merge(@NotNull ItemStack Item) {
-        return CraftItemStack.asBukkitCopy(CraftItemStack.setNBT(CraftItemStack.asNMSCopy(Item), NBTUtils.parseNBT(this)));
+        return CraftItemStack.asBukkitCopy(CraftItemStack.setNBT(CraftItemStack.getNMS(Item), NBTUtils.parseNBT(this)));
     };
 
     /**

@@ -6,6 +6,7 @@ import com.a4z0.rubrum.reflection.NBTUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -114,6 +115,29 @@ public enum Task {
 
         NBTChunk Chunk = new NBTChunk(NBT.getBlock().getChunk());
         Chunk.getPersistentDataContainer().setCompound(null);
+
+        return Conclusion.PASSED;
+    }),
+    NBTTILEENTITY("NBTTileEntity", () -> {
+
+        World A = Bukkit.getWorlds().get(0);
+        Block O = A.getHighestBlockAt(A.getSpawnLocation());
+        Material M = O.getType();
+
+        O.setType(Material.SIGN);
+
+        NBTTileEntity NBT = new NBTTileEntity(O.getState());
+
+        NBT.setString("Text1", "Hello, World!");
+        NBT.setCompound(NBT);
+
+        if(Version.B().M(Version.V1_14_R1)) {
+            NBTCompound Container = NBT.getPersistentDataContainer();
+            Container.setString("Data", "Hello, World!");
+            Container.setCompound(Container);
+        };
+
+        O.setType(M);
 
         return Conclusion.PASSED;
     });

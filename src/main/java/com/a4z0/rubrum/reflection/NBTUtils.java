@@ -111,7 +111,7 @@ public class NBTUtils {
                 if(Base == null) Base = Method.invoke(B, (byte) 7);
 
             } else {
-                Class<?> NBTTag = Class.forName("net.minecraft.nbt.NBTTag" + NBTBase.getClass().getSimpleName().substring(3));
+                Class<?> NBTTag = Class.forName("net.minecraft.nbt.NBTTag" + Value.V(NBTBase.getTypeID()).name());
 
                 if(NBTBase.getTypeID() == 9 || NBTBase.getTypeID() == 10) {
                     Base = NBTTag.getConstructor().newInstance();
