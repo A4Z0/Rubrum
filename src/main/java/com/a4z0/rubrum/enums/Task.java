@@ -124,8 +124,7 @@ public enum Task {
         Block O = A.getHighestBlockAt(A.getSpawnLocation());
         Material M = O.getType();
 
-        O.setType(Material.SIGN);
-
+        O.setType(Material.getMaterial("SIGN"));
         NBTTileEntity NBT = new NBTTileEntity(O.getState());
 
         NBT.setString("Text1", "Hello, World!");
