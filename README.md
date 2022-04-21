@@ -76,7 +76,7 @@ Writing an NBT for a Chunk
 NBTChunk NBT = new NBTChunk(/*Chunk*/);
 NBT.setString("Data", "Hello, World!");
 
-NBT.setTag(Container);
+NBT.setTag(NBT);
 ```
 
 Reading a Chunk's NBT
