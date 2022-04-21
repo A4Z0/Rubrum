@@ -52,7 +52,7 @@ System.out.println(NBT.toString());
 
 | Class       | Description                        |
 |:------------|:-----------------------------------|
-| `NBTEntity` | NBT component of an **Entity**     |
+| `NBTEntity` | NBT component of an **Entity**.    |
 
 Writing an NBT for an Entity
 ```java
@@ -69,7 +69,7 @@ System.out.println(NBT.toString());
 
 | Class       | Description                        |
 |:------------|:-----------------------------------|
-| `NBTChunk`  | NBT component of a **Chunk**       |
+| `NBTChunk`  | NBT component of a **Chunk**.      |
 
 Writing an NBT for a Chunk
 ```java
@@ -86,7 +86,7 @@ System.out.println(NBT.toString());
 
 | Class       | Description                        |
 |:------------|:-----------------------------------|
-| `NBTBlock`  | NBT Component of a **Block**       |
+| `NBTBlock`  | NBT Component of a **Block**.      |
 
 Writing an NBT for a Block
 ```java
@@ -103,7 +103,7 @@ System.out.println(NBT.toString());
 
 | Class            | Description                                   |
 |:-----------------|:----------------------------------------------|
-| `NBTTileEntity`  | NBT component of a **BlockState** TileEntity  |
+| `NBTTileEntity`  | NBT component of a **BlockState** TileEntity. |
 
 Writing an NBT for a TileEntity
 ```java
