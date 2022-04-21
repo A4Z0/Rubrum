@@ -1,8 +1,6 @@
 package com.a4z0.rubrum.api.nbt;
 
 import com.a4z0.rubrum.reflection.CraftItemStack;
-import com.a4z0.rubrum.reflection.NBTUtils;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,45 +16,41 @@ public class NBTItem extends NBTCompound {
     /**
     * Construct a {@link NBTItem} with the given params.
     *
-    * @param Item a {@link ItemStack}.
+    * @param Item {@link ItemStack} to be read.
     */
 
     public NBTItem(@NotNull ItemStack Item) {
-
-        if(Item.getType().equals(Material.AIR)) {
-            throw new IllegalArgumentException("Item type can't be AIR.");
-        };
-
         this.A = Item;
         this.B = Item.clone();
 
-        if(this.getCompound() != null) {
-            super.setCompound(NBTUtils.parseNBTCompound(this.getCompound()));
+        if(this.hasNBTData()) {
+            super.setTag((NBTCompound) NBTUtils.GET_NBTBASE(CraftItemStack.getNBT(CraftItemStack.getNMS(this.A))));
         };
     };
 
     /**
-    * @return an NMS object from an NBT.
-    */
-
-    @Override
-    public Object getCompound() {
-        return CraftItemStack.getNBT(CraftItemStack.getNMS(this.A));
-    };
-
-    /**
-    * Sets the {@link NBTItem} and update the {@link ItemStack} NBT.
+    * Defines the NBT of the item stored in this {@link NBTItem}.
     *
-    * @param NBTCompound a {@link NBTCompound}.
+    * @param NBTCompound {@link NBTCompound} to be merged into the item.
     */
 
     @Override
-    public void setCompound(NBTCompound NBTCompound) {
-        super.setCompound(NBTCompound); this.B = this.merge(this.B);
+    public void setTag(@NotNull NBTCompound NBTCompound) {
+        this.B = this.merge(this.B);
     };
 
     /**
-    * @return the original {@link ItemStack}.
+    * @param Item Item to be merged with this {@link NBTCompound}.
+    *
+    * @return the item merged with this {@link NBTCompound}.
+    */
+
+    public @NotNull ItemStack merge(@NotNull ItemStack Item) {
+        return CraftItemStack.parseNMSItem(CraftItemStack.setNBT(CraftItemStack.getNMS(Item), this.getComponent()));
+    };
+
+    /**
+    * @return the given {@link ItemStack}.
     */
 
     public @NotNull ItemStack getRawItem() {
@@ -72,20 +66,10 @@ public class NBTItem extends NBTCompound {
     };
 
     /**
-    * @param Item a {@link ItemStack}.
-    *
-    * @return given {@link ItemStack} merged with this {@link NBTCompound}.
+    * @return true if the item contains NBT Data.
     */
 
-    public @NotNull ItemStack merge(@NotNull ItemStack Item) {
-        return CraftItemStack.asBukkitCopy(CraftItemStack.setNBT(CraftItemStack.getNMS(Item), NBTUtils.parseNBT(this)));
-    };
-
-    /**
-    * @return true if it has NBT data.
-    */
-
-    public boolean hasNBTData() {
-        return this.getCompound() != null;
+    public final boolean hasNBTData() {
+        return CraftItemStack.getNBT(CraftItemStack.getNMS(this.A)) != null;
     };
 };

@@ -1,46 +1,37 @@
 package com.a4z0.rubrum.api.nbt;
 
 import com.a4z0.rubrum.reflection.CraftPersistentDataContainer;
-import com.a4z0.rubrum.reflection.NBTUtils;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
 
+/**
+* NBT component of an {@link PersistentDataContainer}.
+*/
+
 public class NBTPersistentDataContainer extends NBTCompound {
 
-    private final PersistentDataContainer A;
+    protected final PersistentDataContainer A;
 
     /**
     * Construct a {@link NBTPersistentDataContainer} with the given params.
     *
-    * @param Container a {@link PersistentDataContainer}.
+    * @param PersistentDataContainer {@link PersistentDataContainer} to be read.
     */
 
-    public NBTPersistentDataContainer(@NotNull PersistentDataContainer Container) {
-        this.A = Container;
+    public NBTPersistentDataContainer(@NotNull PersistentDataContainer PersistentDataContainer) {
+        this.A = PersistentDataContainer;
 
-        if(this.getCompound() != null) {
-            super.setCompound(NBTUtils.parseNBTCompound(this.getCompound()));
-        };
+        super.setTag((NBTCompound) NBTUtils.GET_NBTBASE(CraftPersistentDataContainer.getNBT(this.A)));
     };
 
     /**
-    * @return an NMS object from an NBT.
-    */
-
-    @Override
-    public Object getCompound() {
-        return CraftPersistentDataContainer.getNBTContainer(this.A);
-    };
-
-    /**
-    * Sets the {@link NBTPersistentDataContainer} and update the {@link PersistentDataContainer} NBT.
+    * Defines the NBT of the PersistentDataContainer stored in this {@link NBTPersistentDataContainer}.
     *
-    * @param NBTCompound a {@link NBTCompound}.
+    * @param NBTCompound {@link NBTCompound} to be merged into the PersistentDataContainer.
     */
 
     @Override
-    public void setCompound(NBTCompound NBTCompound) {
-        super.setCompound(NBTCompound);
-        CraftPersistentDataContainer.setPersistentData(this.A, this);
+    public void setTag(@NotNull NBTCompound NBTCompound) {
+        CraftPersistentDataContainer.setNBT(this.A, this.getComponent());
     };
 };

@@ -1,6 +1,7 @@
 package com.a4z0.rubrum.reflection;
 
-import com.a4z0.rubrum.enums.Version;
+import com.a4z0.rubrum.api.nbt.NBTUtils;
+import com.a4z0.rubrum.api.version.enums.Version;
 import org.bukkit.block.BlockState;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,14 +10,14 @@ import java.lang.reflect.Method;
 
 public class CraftTileEntity {
 
-    private static final Class<?> A = A();
-    private static final Class<?> B = B();
+    public static final Class<?> NMS_CRAFTWORLD_CLASS = GET_CRAFTWORLD_CLASS();
+    public static final Class<?> NMS_BLOCKPOSITION_CLASS = GET_BLOCKPOSITION_CLASS();
 
     /**
-    * @return a {@link Class}.
+    * @return the NMS class of CraftWorld.
     */
 
-    private static @NotNull Class<?> A() {
+    private static @NotNull Class<?> GET_CRAFTWORLD_CLASS() {
         try {
             return Class.forName("org.bukkit.craftbukkit." + Version.BUKKIT_VERSION + ".CraftWorld");
         } catch (ClassNotFoundException e) {
@@ -25,10 +26,10 @@ public class CraftTileEntity {
     };
 
     /**
-    * @return a {@link Class}.
+    * @return the NMS class of BlockPosition.
     */
 
-    private static @NotNull Class<?> B() {
+    private static @NotNull Class<?> GET_BLOCKPOSITION_CLASS() {
         try {
             return Class.forName(Version.B().D() ? "net.minecraft.core.BlockPosition" : "net.minecraft.server." + Version.BUKKIT_VERSION + ".BlockPosition");
         } catch (ClassNotFoundException e) {
@@ -37,76 +38,92 @@ public class CraftTileEntity {
     };
 
     /**
-    * @param Tile a {@link BlockState}.
+    * @param BlockState BlockState to be converted.
     *
-    * @return a NMS TileEntity object.
+    * @return an NMS version of TileEntity by the given blockstate.
     */
 
-    public static Object getNMS(@NotNull BlockState Tile) {
+    public static Object getNMS(@NotNull BlockState BlockState) {
         try {
-            Object C = A.cast(Tile.getWorld());
+            Object C = NMS_CRAFTWORLD_CLASS.cast(BlockState.getWorld());
             Object N = C.getClass().getMethod("getHandle").invoke(C);
-            Object P = B.getConstructor(int.class, int.class, int.class).newInstance(Tile.getX(), Tile.getY(), Tile.getZ());
+            Object P = NMS_BLOCKPOSITION_CLASS.getConstructor(int.class, int.class, int.class).newInstance(BlockState.getX(), BlockState.getY(), BlockState.getZ());
 
-            Object T;
+            Object TileEntity;
 
             if(Version.B().D()) {
-                T = N.getClass().getMethod("getBlockEntity", P.getClass(), boolean.class).invoke(N, P, false);
+                TileEntity = N.getClass().getMethod("getBlockEntity", P.getClass(), boolean.class).invoke(N, P, false);
             }else {
-                T = N.getClass().getMethod("getTileEntity", P.getClass()).invoke(N, P);
+                TileEntity = N.getClass().getMethod("getTileEntity", P.getClass()).invoke(N, P);
             };
 
-            return T;
+            return TileEntity;
         }catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new IllegalArgumentException("Error getting NMS TileEntity from a BlockState Tile");
+            throw new IllegalArgumentException("Error getting NMS TileEntity from a BlockState");
         }
     };
 
     /**
-    * @param Tile a NMS TileEntity object.
+    * @param TileEntity NMS version of an TileEntity.
     *
-    * @return a NMS NBT object.
+    * @return the NBT component of the given TileEntity.
     */
 
-    public static Object getNBT(Object Tile) {
+    public static Object getNBT(Object TileEntity) {
+        if(TileEntity == null) return null;
+
         try {
-            if(Tile == null) return null;
 
-            Object NBT = NBTUtils.A.getConstructor().newInstance();
+            Object NBT = NBTUtils.GET_NBTBASE_INSTANCE((byte) 10);
 
-            if(Version.B().D()) {
-                NBT = Tile.getClass().getMethod("m").invoke(Tile);
-            }else {
-                Tile.getClass().getMethod((Version.B().T() ? "save" : "b"), NBT.getClass()).invoke(Tile, NBT);
+            for(String Fieldname : new String[]{"save", "m", "b"}) {
+                try {
+                    if(!Fieldname.equals("m")) {
+                        Method Method = TileEntity.getClass().getMethod(Fieldname, NBT.getClass());
+                        Method.setAccessible(true);
+
+                        Method.invoke(TileEntity, NBT);
+
+                        break;
+                    };
+
+                    Method Method = TileEntity.getClass().getMethod(Fieldname);
+                    Method.setAccessible(true);
+
+                    NBT = Method.invoke(TileEntity);
+
+                } catch (NoSuchMethodException ignored) {
+                    continue;
+                }
+
+                break;
             };
 
             return NBT;
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
-            throw new IllegalArgumentException("Error getting NBTTagCompound from a NMS TileEntity object");
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new IllegalArgumentException("Error getting NBT from a NMS TileEntity");
         }
     };
 
     /**
-    * Defines the NBT of the given NMS TileEntity object.
-    *
-    * @param Tile a NMS TileEntity object.
-    * @param NBT a NBT object.
+    * @param TileEntity NMS version of an TileEntity to be changed.
+    * @param NBT NBT to be added to the TilEentity.
     */
 
-    public static void setNBT(Object Tile, Object NBT) {
-        try {
-            if(Tile == null || NBT == null) return;
+    public static void setNBT(Object TileEntity, @NotNull Object NBT) {
+        if(TileEntity == null) return;
 
+        try {
             if(Version.B().M(Version.V1_17_R1)) {
-                Tile.getClass().getMethod("a", NBT.getClass()).invoke(Tile, NBT);
+                TileEntity.getClass().getMethod("a", NBT.getClass()).invoke(TileEntity, NBT);
             }else if(Version.B().M(Version.V1_16_R1)) {
-                Object D = Tile.getClass().getMethod("getBlock").invoke(Tile);
-                Tile.getClass().getMethod("load", D.getClass(), NBT.getClass()).invoke(Tile, D, NBT);
+                Object D = TileEntity.getClass().getMethod("getBlock").invoke(TileEntity);
+                TileEntity.getClass().getMethod("load", D.getClass(), NBT.getClass()).invoke(TileEntity, D, NBT);
             }else {
-                Tile.getClass().getMethod(Version.B().T() ? "load" : "a", NBT.getClass()).invoke(Tile, NBT);
+                TileEntity.getClass().getMethod(Version.B().T() ? "load" : "a", NBT.getClass()).invoke(TileEntity, NBT);
             };
+
         }catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException("Error setting NBT on a NMS TileEntity");
         }
     };

@@ -1,4 +1,4 @@
-package com.a4z0.rubrum.enums;
+package com.a4z0.rubrum.api.version.enums;
 
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
@@ -6,9 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.lang.reflect.Method;
-
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /*
 * What is the purpose of this?
@@ -175,39 +172,5 @@ public enum Version {
         };
 
         return Version.NOT_SUPPORTED;
-    };
-
-    /**
-    * Declares a method as available from a version.
-    */
-
-    @Retention(RUNTIME) @Target({ METHOD })
-    public @interface A {
-
-        /**
-        * @return the available {@link Version}.
-        */
-
-        @NotNull Version V();
-
-    };
-
-    /**
-    * @param C a {@link Class} with the given {@link Method} name.
-    * @param N a {@link Method} name with {@link Version.A}.
-    *
-    * @return true if the {@link Method} can be used.
-    */
-
-    public static boolean U(@NotNull Class<?> C, @NotNull String N) {
-        for(Method M : C.getMethods()) {
-            if(M.getName().equals(N)) {
-                if(M.getAnnotation(A.class) != null) {
-                    return Version.B().M((M.getAnnotation(A.class)).V());
-                };
-            };
-        };
-
-        return true;
     };
 };

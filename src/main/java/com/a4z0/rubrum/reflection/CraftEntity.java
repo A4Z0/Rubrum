@@ -1,9 +1,8 @@
 package com.a4z0.rubrum.reflection;
 
-import com.a4z0.rubrum.enums.Version;
+import com.a4z0.rubrum.api.nbt.NBTUtils;
+import com.a4z0.rubrum.api.version.enums.Version;
 import org.bukkit.entity.Entity;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataHolder;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
@@ -11,14 +10,14 @@ import java.lang.reflect.Method;
 
 public class CraftEntity {
 
-    private static final Class<?> A = A();
-    private static final Class<?> B = B();
+    public static final Class<?> NMS_CRAFTENTITY_CLASS = GET_CRAFTENTITY_CLASS();
+    public static final Class<?> NMS_ENTITYLIVING_CLASS = GET_ENTITYLIVING_CLASS();
 
     /**
-    * @return a {@link Class}.
+    * @return the NMS class of CraftEntity.
     */
 
-    private static @NotNull Class<?> A() {
+    private static @NotNull Class<?> GET_CRAFTENTITY_CLASS() {
         try {
             return Class.forName("org.bukkit.craftbukkit." + Version.BUKKIT_VERSION + ".entity.CraftEntity");
         } catch (ClassNotFoundException e) {
@@ -27,10 +26,10 @@ public class CraftEntity {
     };
 
     /**
-    * @return a {@link Class}.
+    * @return the NMS class of EntityLiving.
     */
 
-    private static @NotNull Class<?> B() {
+    private static @NotNull Class<?> GET_ENTITYLIVING_CLASS() {
         try {
             return Class.forName(Version.B().D() ? "net.minecraft.world.entity.EntityLiving" : "net.minecraft.server." + Version.BUKKIT_VERSION + ".EntityLiving");
         } catch (ClassNotFoundException e) {
@@ -39,61 +38,60 @@ public class CraftEntity {
     };
 
     /**
-    * @param Entity a bukkit {@link Entity}.
+    * @param Entity Entity to be converted.
     *
-    * @return a NMS {@link Entity}.
+    * @return an NMS version of the given entity.
     */
 
     public static @NotNull Object getNMS(@NotNull Entity Entity) {
         try {
-            return (A.cast(Entity)).getClass().getMethod("getHandle").invoke((A.cast(Entity)));
+            return (NMS_CRAFTENTITY_CLASS.cast(Entity)).getClass().getMethod("getHandle").invoke((NMS_CRAFTENTITY_CLASS.cast(Entity)));
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new IllegalArgumentException("Error converting an bukkit Entity to NMS Entity object");
+            throw new IllegalArgumentException("Error converting an Entity to an NMS Entity");
         }
     };
 
     /**
-    * @param Entity a NMS {@link Entity} object.
+    * @param Entity NMS version of an entity.
     *
-    * @return a NBT object.
+    * @return the NBT component of the given entity.
     */
 
-    public static Object getNBT(@NotNull Object Entity) {
+    public static @NotNull Object getNBT(@NotNull Object Entity) {
         try {
-            Object C = NBTUtils.A.getConstructors()[0].newInstance();
+            Object NBT = NBTUtils.GET_NBTBASE_INSTANCE((byte) 10);
 
-            for(Method M : Entity.getClass().getMethods()){
-                if((M.getName().equals("b")) && (M.getParameterTypes().length == 1) && (M.getParameterTypes()[0] == C.getClass())){
-                    try {
-                        M.invoke(Entity, C);
-                    } catch (InvocationTargetException | IllegalAccessException e) {
-                        throw new IllegalArgumentException("Error reading NBTTagCompound from an NMS Entity object");
-                    };
-                };
-            };
+            Method Method = Entity.getClass().getDeclaredMethod("b", NBT.getClass());
+            Method.setAccessible(true);
+            Method.invoke(Entity, NBT);
 
-            return C;
-        } catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
-            throw new IllegalArgumentException("Error getting NBTTagCompound from a NMS Entity object");
+            return NBT;
+        }catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new IllegalArgumentException("Error when trying to read the NBT of an NMS Entity");
         }
     };
 
     /**
-    * Defines the NBT of the given NMS {@link Entity} object.
-    *
-    * @param Entity a NMS {@link Entity} object.
-    * @param NBT a NBT object.
+    * @param Entity NMS version of an entity to be changed.
+    * @param NBT NBT to be added to the entity.
     */
 
     public static void setNBT(@NotNull Object Entity, @NotNull Object NBT) {
         try {
-            if(Entity.getClass().getSuperclass().equals(B)) {
-                Entity.getClass().getMethod("a", NBT.getClass()).invoke(Entity, NBT);
-            }else{
-                Entity.getClass().getMethod(Version.B().D() ? "load" : "f", NBT.getClass()).invoke(Entity, NBT);
+            for(String Fieldname : new String[]{"load", "a"}) {
+                try {
+                    Method Method = Entity.getClass().getMethod(Fieldname, NBT.getClass());
+                    Method.setAccessible(true);
+
+                    Method.invoke(Entity, NBT);
+                } catch (NoSuchMethodException ignored) {
+                    continue;
+                }
+
+                break;
             };
 
-        } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
+        } catch (InvocationTargetException | IllegalAccessException  e) {
             throw new IllegalArgumentException("Error setting NBT on a NMS Entity");
         }
     };

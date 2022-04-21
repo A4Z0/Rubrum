@@ -40,7 +40,7 @@ Writing an NBT to an ItemStack
 NBTItem NBT = new NBTItem(new ItemStack(Material.IRON_SWORD));
 NBT.setString("Data", "Hello, World!");
 
-NBT.setCompound(NBT);
+NBT.setTag(NBT);
 
 ItemStack Item = NBT.getItem();
 ```
@@ -59,7 +59,7 @@ Writing an NBT for an Entity
 NBTEntity NBT = new NBTEntity(/*Entity*/);
 NBT.setBoolean("Invisible", true);
 
-NBT.setCompound(NBT);
+NBT.setTag(NBT);
 ```
 
 Reading an Entity's NBT
@@ -74,16 +74,14 @@ System.out.println(NBT.toString());
 Writing an NBT for a Chunk
 ```java
 NBTChunk NBT = new NBTChunk(/*Chunk*/);
+NBT.setString("Data", "Hello, World!");
 
-NBTPersistentDataContainer Container = NBT.getPersistentDataContainer();
-Container.setString("Data", "Hello, World!");
-
-Container.setCompound(Container);
+NBT.setTag(Container);
 ```
 
 Reading a Chunk's NBT
 ```java
-System.out.println(Container.toString());
+System.out.println(NBT.toString());
 ```
 
 | Class       | Description                        |
@@ -95,7 +93,7 @@ Writing an NBT for a Block
 NBTBlock NBT = new NBTBlock(/*Block*/);
 NBT.setString("Data", "Hello, World!");
 
-NBT.setCompound(NBT);
+NBT.setTag(NBT);
 ```
 
 Reading a Block's NBT
@@ -114,7 +112,7 @@ Block Block = (/* Sign Block */);
 NBTTileEntity NBT = new NBTTileEntity(Block.getState());
 NBT.setString("Text1", "Hello, World!");
 
-NBT.setCompound(NBT);
+NBT.setTag(NBT);
 ```
 
 Reading a TileEntity's NBT

@@ -1,6 +1,6 @@
 package com.a4z0.rubrum.reflection;
 
-import com.a4z0.rubrum.enums.Version;
+import com.a4z0.rubrum.api.version.enums.Version;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,13 +8,17 @@ import java.lang.reflect.InvocationTargetException;
 
 public class CraftItemStack {
 
-    private static final Class<?> A = A();
-
     /**
-    * @return a {@link Class}.
+    * Stores the CraftItemStack NMS class.
     */
 
-    private static @NotNull Class<?> A() {
+    public static final Class<?> NMS_CRAFTITEMSTACK_CLASS = GET_CRAFTITEMSTACK_CLASS();
+
+    /**
+    * @return the NMS class of CraftItemStack.
+    */
+
+    private static @NotNull Class<?> GET_CRAFTITEMSTACK_CLASS() {
         try {
             return Class.forName("org.bukkit.craftbukkit." + Version.BUKKIT_VERSION + ".inventory.CraftItemStack");
         } catch (ClassNotFoundException e) {
@@ -23,37 +27,23 @@ public class CraftItemStack {
     };
 
     /**
-    * @param Item a bukkit {@link ItemStack}.
+    * @param Item Item to be converted.
     *
-    * @return a NMS {@link ItemStack}.
+    * @return an NMS version of the given item.
     */
 
     public static @NotNull Object getNMS(@NotNull ItemStack Item) {
         try {
-            return A.getMethod("asNMSCopy", ItemStack.class).invoke(A, Item);
+            return NMS_CRAFTITEMSTACK_CLASS.getMethod("asNMSCopy", ItemStack.class).invoke(NMS_CRAFTITEMSTACK_CLASS, Item);
         } catch (Error | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new IllegalArgumentException("Error converting an bukkit ItemStack to NMS ItemStack object");
+            throw new IllegalArgumentException("Error converting an ItemStack to NMS ItemStack object");
         }
     };
 
     /**
-    * @param Item a NMS {@link ItemStack} object.
+    * @param Item NMS version of an item.
     *
-    * @return a bukkit {@link ItemStack}.
-    */
-
-    public static ItemStack asBukkitCopy(@NotNull Object Item) {
-        try {
-            return (ItemStack) A.getMethod("asBukkitCopy", Item.getClass()).invoke(A, Item);
-        } catch (Error | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new IllegalArgumentException("Error converting an NMS ItemStack object to bukkit ItemStack");
-        }
-    };
-
-    /**
-    * @param Item a NMS {@link ItemStack} object.
-    *
-    * @return a NBT object.
+    * @return the NBT component of the given item.
     */
 
     public static Object getNBT(@NotNull Object Item) {
@@ -65,10 +55,10 @@ public class CraftItemStack {
     };
 
     /**
-    * @param Item a NMS {@link ItemStack} object.
-    * @param NBT a NBT object.
+    * @param Item NMS version of an item to be changed.
+    * @param NBT NBT to be added to Item.
     *
-    * @return a NMS {@link ItemStack} object with the NBT .
+    * @return an NMS version of the Item merged with the NBT.
     */
 
     public static Object setNBT(@NotNull Object Item, @NotNull Object NBT) {
@@ -78,6 +68,20 @@ public class CraftItemStack {
             return Item;
         } catch (Error | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalArgumentException("Error setting NBT on a NMS ItemStack");
+        }
+    };
+
+    /**
+    * @param Item NMS version of an item.
+    *
+    * @return the NMS version of the Item as an {@link ItemStack}.
+    */
+
+    public static ItemStack parseNMSItem(@NotNull Object Item) {
+        try {
+            return (ItemStack) NMS_CRAFTITEMSTACK_CLASS.getMethod("asBukkitCopy", Item.getClass()).invoke(NMS_CRAFTITEMSTACK_CLASS, Item);
+        } catch (Error | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new IllegalArgumentException("Error converting an NMS ItemStack object to bukkit ItemStack");
         }
     };
 };

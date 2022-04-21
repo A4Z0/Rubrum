@@ -1,8 +1,7 @@
 package com.a4z0.rubrum.enums;
 
 import com.a4z0.rubrum.api.nbt.*;
-import com.a4z0.rubrum.interfaces.Response;
-import com.a4z0.rubrum.reflection.NBTUtils;
+import com.a4z0.rubrum.api.version.enums.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -11,8 +10,9 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.Callable;
 
 public enum Task {
     NBTCOMPOUND("NBTCompound", () -> {
@@ -23,7 +23,6 @@ public enum Task {
         NBT.setByte("Byte", (byte) 1);
         NBT.setLong("Long", 10000);
         NBT.setFloat("Float", 0.01f);
-        NBT.setUUID("UUID", UUID.randomUUID());
         NBT.setShort("Short", (short) 1.00);
         NBT.setString("String", "One");
         NBT.setDouble("Double", 100.100);
@@ -31,28 +30,25 @@ public enum Task {
         NBT.setLongArray("LongArray", new long[1]);
         NBT.setByteArray("ByteArray", new byte[]{1});
 
-        NBTUtils.parseNBT(NBT);
-
-        return Conclusion.PASSED;
+        return 1;
     }),
     NBTITEM("NBTItem", () -> {
 
         NBTItem NBT = new NBTItem(new ItemStack(Material.IRON_SWORD));
         NBT.setString("Data", "Hello, World!");
 
-        NBT.setCompound(NBT);
+        NBT.setTag(NBT);
 
-        return Conclusion.PASSED;
+        return 1;
     }),
     NBTENTITY("NBTEntity", () -> {
 
         World A = Bukkit.getWorlds().get(0);
         ArmorStand B = A.spawn(A.getSpawnLocation(), ArmorStand.class);
-        B.setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
 
         NBTEntity NBT = new NBTEntity(B);
 
-        ArrayList<NBTBase<?>> List = null;
+        List<NBTBase<?>> List = null;
 
         if(NBT.getList("Equipment") != null) {
             List = NBT.getList("Equipment");
@@ -70,53 +66,52 @@ public enum Task {
         List.set(3, Compound);
 
         if(NBT.getList("Equipment") != null) {
-            NBT.setList("Equipment", (byte) 10, List);
+            NBT.setList("Equipment", List, (byte) 10);
         };
 
         if(NBT.getList("ArmorItems") != null) {
-            NBT.setList("ArmorItems", (byte) 10, List);
+            NBT.setList("ArmorItems", List, (byte) 10);
         };
 
         NBT.setBoolean("Invisible", true);
-        NBT.setCompound(NBT);
+        NBT.setTag(NBT);
 
         if(Version.B().M(Version.V1_14_R1)) {
 
-            NBTCompound Container = NBT.getPersistentDataContainer();
-            Container.setString("Data", "Hello, World!");
-            Container.setCompound(Container);
+            NBTCompound Data = NBT.getPersistentDataContainer();
+            Data.setString("Data", "Hello, World!");
+            Data.setTag(Data);
         };
 
         B.remove();
 
-        return Conclusion.PASSED;
+        return 1;
     }),
     NBTCHUNK("NBTChunk", () -> {
 
-        if(!Version.B().M(Version.V1_16_R3)) return Conclusion.NOT_SUPPORTED;
+        if(!Version.B().M(Version.V1_16_R3)) return 2;
 
         World A = Bukkit.getWorlds().get(0);
         NBTChunk NBT = new NBTChunk(A.getChunkAt(A.getSpawnLocation()));
+        NBT.setString("Data", "Hello, World!");
+        NBT.setTag(NBT);
 
-        NBTCompound Container = NBT.getPersistentDataContainer();
-        Container.setString("Data", "Hello, World!");
-        Container.setCompound(Container);
-
-        return Conclusion.PASSED;
+        return 1;
     }),
     NBTBLOCK("NBTBlock", () -> {
 
-        if(!Version.B().M(Version.V1_16_R3)) return Conclusion.NOT_SUPPORTED;
+        if(!Version.B().M(Version.V1_16_R3)) return 2;
 
         World A = Bukkit.getWorlds().get(0);
         NBTBlock NBT = new NBTBlock(A.getBlockAt(A.getSpawnLocation()));
         NBT.setString("Data", "Hello, World!");
-        NBT.setCompound(NBT);
+        NBT.setTag(NBT);
 
         NBTChunk Chunk = new NBTChunk(NBT.getBlock().getChunk());
-        Chunk.getPersistentDataContainer().setCompound(null);
+        Chunk.setCompound("blocks", null);
+        Chunk.setTag(Chunk);
 
-        return Conclusion.PASSED;
+        return 1;
     }),
     NBTTILEENTITY("NBTTileEntity", () -> {
 
@@ -124,39 +119,45 @@ public enum Task {
         Block O = A.getHighestBlockAt(A.getSpawnLocation());
         Material M = O.getType();
 
-        O.setType(Material.getMaterial("SIGN"));
+        try {
+            O.setType(Objects.requireNonNull(Material.getMaterial("SIGN")));
+        }catch (NullPointerException e) {
+            O.setType(Objects.requireNonNull(Material.getMaterial("OAK_SIGN")));
+        };
+
         NBTTileEntity NBT = new NBTTileEntity(O.getState());
 
         NBT.setString("Text1", "Hello, World!");
-        NBT.setCompound(NBT);
+        NBT.setTag(NBT);
 
         if(Version.B().M(Version.V1_14_R1)) {
-            NBTCompound Container = NBT.getPersistentDataContainer();
-            Container.setString("Data", "Hello, World!");
-            Container.setCompound(Container);
+            NBTCompound Data = NBT.getPersistentDataContainer();
+            Data.setString("Data", "Hello, World!");
+            Data.setTag(Data);
         };
 
         O.setType(M);
 
-        return Conclusion.PASSED;
+        return 1;
     });
 
     private final String A;
-    private final Response<Conclusion> B;
+    private final Callable<Integer> B;
 
     /**
     * Construct a {@link Task} with the given params.
     *
-    * @param B a {@link Response}.
+    * @param A Task's name.
+    * @param B Task's callabe.
     */
 
-    Task(@NotNull String A, @NotNull Response<Conclusion> B) {
+    Task(@NotNull String A, @NotNull Callable<Integer> B) {
         this.A = A;
         this.B = B;
     };
 
     /**
-    * @return the task name.
+    * @return the {@link Task} name.
     */
 
     public @NotNull String N() {
@@ -164,25 +165,14 @@ public enum Task {
     };
 
     /**
-    * @return a {@link Conclusion}.
+    * @return a value based on {@link Task} execution.
     */
 
-    public @NotNull Conclusion T() {
+    public int T() {
         try {
-            return this.B.Run();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            return Conclusion.FAILED;
+            return this.B.call();
+        } catch (Exception e) {
+            return 0;
         }
     };
-
-    /**
-    * {@link Task} conclusion types.
-    */
-
-    public enum Conclusion {
-        PASSED,
-        FAILED,
-        NOT_SUPPORTED;
-    }
 };

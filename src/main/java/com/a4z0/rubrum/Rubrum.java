@@ -1,7 +1,7 @@
 package com.a4z0.rubrum;
 
+import com.a4z0.rubrum.api.version.enums.Version;
 import com.a4z0.rubrum.enums.Task;
-import com.a4z0.rubrum.enums.Version;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Rubrum extends JavaPlugin {
@@ -18,18 +18,19 @@ public final class Rubrum extends JavaPlugin {
         this.getLogger().info("Starting scan tasks...");
         this.getLogger().info("");
 
-        for(Task T : Task.values()) {
-            switch(T.T()) {
-                case PASSED: {
-                    this.getLogger().info("Task -> (" + T.N() + ") Ok!");
-                    break;
-                }
-                case FAILED: {
-                    this.getLogger().warning("Task -> (" + T.N() + ") Error.");
+        for(Task Task : Task.values()) {
+            switch(Task.T()) {
+                case 0: {
+                    this.getLogger().warning("Task -> (" + Task.N() + ") Error.");
                     this.getServer().getPluginManager().disablePlugin(this);
+
                     return;
                 }
-                case NOT_SUPPORTED: {
+                case 1: {
+                    this.getLogger().info("Task -> (" + Task.N() + ") Ok!");
+                    break;
+                }
+                case 2: {
                     break;
                 }
             }

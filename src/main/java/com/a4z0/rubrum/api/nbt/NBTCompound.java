@@ -1,12 +1,15 @@
 package com.a4z0.rubrum.api.nbt;
 
-import com.a4z0.rubrum.reflection.NBTUtils;
+import org.apache.commons.lang.SerializationUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
-* NBT component.
+* Base of an NBT component.
+*
+* Stores data with class {@link Map}.
 */
 
 public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Cloneable {
@@ -17,16 +20,6 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
 
     public NBTCompound() {
         this.Data = new HashMap<>();
-    };
-
-    /**
-    * Construct a {@link NBTCompound}.
-    *
-    * @param NBTCompound a {@link NBTCompound}.
-    */
-
-    public NBTCompound(@NotNull NBTCompound NBTCompound) {
-        this.Data = NBTCompound.Data;
     };
 
     /**
@@ -47,407 +40,411 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     };
 
     /**
-    * @return an NMS object from an NBT.
-    */
-
-    public Object getCompound() {
-        return NBTUtils.parseNBT(this);
-    };
-
-    /**
-    * Sets the {@link NBTCompound}.
+    * Construct a {@link NBTCompound} with the given params.
     *
-    * @param NBTCompound a {@link NBTCompound}.
+    * @param NBTCompound an {@link NBTCompound} to be cloned.
     */
 
-    public void setCompound(NBTCompound NBTCompound) {
-        this.Data = NBTCompound != null ? NBTCompound.Data : new HashMap<>();
+    public NBTCompound(@NotNull NBTCompound NBTCompound) {
+        this.Data = new HashMap<>(NBTCompound.Data);
+    };
+
+    @Override
+    protected Object getComponent() {
+
+        Map<String, Object> Map = new HashMap<>();
+
+        this.Data.forEach((A, B) -> {
+           if(B != null) Map.put(A, B.getComponent());
+        });
+
+        return NBTUtils.GET_NBTBASE_INSTANCE(this.getTypeID(), Map);
     };
 
     /**
-    * @return keys of this {@link NBTCompound}.
+    * Overwrite this {@link NBTCompound}.
+    *
+    * @param NBTCompound {@link NBTCompound} to overwrite this.
     */
 
-    public Set<String> getKeys() {
+    public void setTag(@NotNull NBTCompound NBTCompound) {
+        this.Data = NBTCompound.Data;
+    };
+
+    /**
+    * @return keys that this {@link NBTCompound} contains.
+    */
+
+    public @NotNull Set<String> getKeys() {
         return this.Data.keySet();
     };
 
     /**
-    * @param ID Value ID.
+    * @param Key presence of key to be tested.
     *
     * @return true if it contains the Key.
     */
 
-    public boolean hasKey(@NotNull String ID) {
-        return this.Data.containsKey(ID);
+    public boolean hasKey(@NotNull String Key) {
+        return this.Data.containsKey(Key);
     };
 
     /**
-    * @param ID Value ID.
+    * @param Key key associated with the value to be returned.
     *
     * @return a {@link NBTBase}.
     */
 
-    public NBTBase<?> get(@NotNull String ID) {
-        return this.Data.get(ID);
+    public NBTBase<?> get(@NotNull String Key) {
+        return this.Data.get(Key);
     };
 
     /**
-    * Sets a {@link NBTBase} in {@link NBTCompound}.
+    * @param Key key associated with the value to be set.
     *
-    * @param ID Value ID.
-    * @param Value {@link NBTBase} Value.
+    * @param NBTBase a {@link NBTBase}.
     */
 
-    public void set(@NotNull String ID, NBTBase<?> Value) {
-        this.Data.put(ID, Value);
+    public void set(@NotNull String Key, NBTBase<?> NBTBase) {
+        this.Data.put(Key, NBTBase);
     };
 
     /**
-    * @param ID Value ID.
+    * @param Key key associated with the value to be returned.
     *
-    * @return a {@link Integer}.
+    * @return the value associated with the key.
     */
 
-    public int getInt(@NotNull String ID) {
+    public byte getByte(@NotNull String Key) {
 
-        if(!this.hasKey(ID)) throw new NullPointerException();
+        if(!this.hasKey(Key)) throw new NullPointerException();
 
-        return (int) this.Data.get(ID).Data;
+        return (byte) this.get(Key).Data;
     };
 
     /**
-    * Sets a {@link Integer} in {@link NBTCompound}.
+    * Defines a value associated with the key in this {@link NBTCompound}.
     *
-    * @param ID Value ID.
-    * @param Value {@link Integer} Value.
+    * @param Key key associated with the value to be set.
+    * @param Byte the value associated with the key.
     */
 
-    public void setInt(@NotNull String ID, int Value) {
-        this.Data.put(ID, new NBTInt(Value));
+    public void setByte(@NotNull String Key, byte Byte) {
+        this.set(Key, new NBTByte(Byte));
     };
 
     /**
-    * @param ID Value ID.
+    * @param Key key associated with the value to be returned.
     *
-    * @return a {@link ArrayList} of {@link NBTBase}.
+    * @return the value associated with the key.
     */
 
-    public ArrayList<NBTBase<?>> getList(@NotNull String ID) {
-        return (this.Data.get(ID) != null) ? (ArrayList<NBTBase<?>>) this.Data.get(ID).Data : null;
+    public boolean getBoolean(@NotNull String Key) {
+
+        if(!this.hasKey(Key)) throw new NullPointerException();
+
+        return ((byte) this.get(Key).Data) > 0;
     };
 
     /**
-    * Sets a {@link ArrayList} of {@link NBTBase} in {@link NBTCompound}.
+    * Defines a value associated with the key in this {@link NBTCompound}.
     *
-    * @param ID Value ID.
-    * @param Value {@link ArrayList} of {@link NBTBase} as a value.
+    * @param Key key associated with the value to be set.
+    * @param Boolean the value associated with the key.
     */
 
-    public void setList(@NotNull String ID, ArrayList<NBTBase<?>> Value) {
-        this.Data.put(ID, new NBTList(Value));
+    public void setBoolean(@NotNull String Key, boolean Boolean) {
+        this.set(Key, new NBTByte((byte) (Boolean ? 1 : 0)));
     };
 
     /**
-    * Sets a {@link ArrayList} of {@link NBTBase} in {@link NBTCompound}.
+    * @param Key key associated with the value to be returned.
     *
-    * @param ID Value ID.
-    * @param Type a {@link NBTList} type.
-    * @param Value {@link ArrayList} of {@link NBTBase} as a value.
+    * @return the value associated with the key.
     */
 
-    public void setList(@NotNull String ID, byte Type, ArrayList<NBTBase<?>> Value) {
-        this.Data.put(ID, new NBTList(Value, Type));
+    public short getShort(@NotNull String Key) {
+
+        if(!this.hasKey(Key)) throw new NullPointerException();
+
+        return (short) this.get(Key).Data;
     };
 
     /**
-    * @param ID Value ID.
+    * Defines a value associated with the key in this {@link NBTCompound}.
     *
-    * @return a {@link Byte}.
+    * @param Key key associated with the value to be set.
+    * @param Short the value associated with the key.
     */
 
-    public byte getByte(@NotNull String ID) {
-
-        if(!this.hasKey(ID)) throw new NullPointerException();
-
-        return (byte) this.Data.get(ID).Data;
+    public void setShort(@NotNull String Key, short Short) {
+        this.set(Key, new NBTShort(Short));
     };
 
     /**
-    * Sets a {@link Byte} in {@link NBTCompound}.
+    * @param Key key associated with the value to be returned.
     *
-    * @param ID Value ID.
-    * @param Value {@link Byte} Value.
+    * @return the value associated with the key.
     */
 
-    public void setByte(@NotNull String ID, byte Value) {
-        this.Data.put(ID, new NBTByte(Value));
+    public int getInt(@NotNull String Key) {
+
+        if(!this.hasKey(Key)) throw new NullPointerException();
+
+        return (int) this.get(Key).Data;
     };
 
     /**
-    * @param ID Value ID.
+    * Defines a value associated with the key in this {@link NBTCompound}.
     *
-    * @return a {@link Long}.
+    * @param Key key associated with the value to be set.
+    * @param Int the value associated with the key.
     */
 
-    public long getLong(@NotNull String ID) {
-
-        if(!this.hasKey(ID)) throw new NullPointerException();
-
-        return (long) this.Data.get(ID).Data;
+    public void setInt(@NotNull String Key, int Int) {
+        this.set(Key, new NBTInt(Int));
     };
 
     /**
-    * Sets a {@link Long} in {@link NBTCompound}.
+    * @param Key key associated with the value to be returned.
     *
-    * @param ID Value ID.
-    * @param Value {@link Long} Value.
+    * @return the value associated with the key.
     */
 
-    public void setLong(@NotNull String ID, long Value) {
-        this.Data.put(ID, new NBTLong(Value));
+    public long getLong(@NotNull String Key) {
+
+        if(!this.hasKey(Key)) throw new NullPointerException();
+
+        return (long) this.get(Key).Data;
     };
 
     /**
-    * @param ID Value ID.
+    * Defines a value associated with the key in this {@link NBTCompound}.
     *
-    * @return a {@link UUID}.
+    * @param Key key associated with the value to be set.
+    * @param Long the value associated with the key.
     */
 
-    public UUID getUUID(@NotNull String ID) {
-        return (this.Data.get(ID) != null) ? (UUID) NBTUtils.deserialize((byte[]) this.Data.get(ID).Data) : null;
+    public void setLong(@NotNull String Key, long Long) {
+        this.set(Key, new NBTLong(Long));
     };
 
     /**
-    * Sets a {@link UUID} in {@link NBTCompound}.
+    * @param Key key associated with the value to be returned.
     *
-    * @param ID Value ID.
-    * @param Value {@link UUID} Value.
+    * @return the value associated with the key.
     */
 
-    public void setUUID(@NotNull String ID, @NotNull UUID Value) {
-        this.Data.put(ID, new NBTByteArray(NBTUtils.serialize(Value)));
+    public float getFloat(@NotNull String Key) {
+
+        if(!this.hasKey(Key)) throw new NullPointerException();
+
+        return (float) this.get(Key).Data;
     };
 
     /**
-    * @param ID Value ID.
+    * Defines a value associated with the key in this {@link NBTCompound}.
     *
-    * @return a {@link Float}.
+    * @param Key key associated with the value to be set.
+    * @param Float the value associated with the key.
     */
 
-    public float getFloat(@NotNull String ID) {
-
-        if(!this.hasKey(ID)) throw new NullPointerException();
-
-        return (float) this.Data.get(ID).Data;
+    public void setFloat(@NotNull String Key, float Float) {
+        this.set(Key, new NBTFloat(Float));
     };
 
     /**
-    * Sets a {@link Float} in {@link NBTCompound}.
+    * @param Key key associated with the value to be returned.
     *
-    * @param ID Value ID.
-    * @param Value {@link Float} Value.
+    * @return the value associated with the key.
     */
 
-    public void setFloat(@NotNull String ID, float Value) {
-        this.Data.put(ID, new NBTFloat(Value));
+    public double getDouble(@NotNull String Key) {
+
+        if(!this.hasKey(Key)) throw new NullPointerException();
+
+        return (double) this.get(Key).Data;
     };
 
     /**
-    * @param ID Value ID.
+    * Defines a value associated with the key in this {@link NBTCompound}.
     *
-    * @return a {@link Short}.
+    * @param Key key associated with the value to be set.
+    * @param Double the value associated with the key.
     */
 
-    public short getShort(@NotNull String ID) {
-
-        if(!this.hasKey(ID)) throw new NullPointerException();
-
-        return (short) this.Data.get(ID).Data;
+    public void setDouble(@NotNull String Key, double Double) {
+        this.set(Key, new NBTDouble(Double));
     };
 
     /**
-    * Sets a {@link Short} in {@link NBTCompound}.
+    * @param Key key associated with the value to be returned.
     *
-    * @param ID Value ID.
-    * @param Value {@link Short} Value.
+    * @return the value associated with the key.
     */
 
-    public void setShort(@NotNull String ID, short Value) {
-        this.Data.put(ID, new NBTShort(Value));
+    public byte[] getByteArray(@NotNull String Key) {
+        return this.hasKey(Key) ? (byte[]) this.get(Key).Data : null;
     };
 
     /**
-    * @param ID Value ID.
+    * Defines a value associated with the key in this {@link NBTCompound}.
     *
-    * @return a {@link String}.
+    * @param Key key associated with the value to be set.
+    * @param ByteArray the value associated with the key.
     */
 
-    public String getString(@NotNull String ID) {
-        return (this.Data.get(ID) != null) ? (String) this.Data.get(ID).Data : null;
+    public void setByteArray(@NotNull String Key, byte[] ByteArray) {
+        this.set(Key, new NBTByteArray(ByteArray));
     };
 
     /**
-    * Sets a {@link String} in {@link NBTCompound}.
+    * @param Key key associated with the value to be returned.
     *
-    * @param ID Value ID.
-    * @param Value {@link String} Value.
+    * @return the value associated with the key.
     */
 
-    public void setString(@NotNull String ID, @NotNull String Value) {
-        this.Data.put(ID, new NBTString(Value));
+    public String getString(@NotNull String Key) {
+        return this.hasKey(Key) ? (String) this.get(Key).Data : null;
     };
 
     /**
-    * @param ID Value ID.
+    * Defines a value associated with the key in this {@link NBTCompound}.
     *
-    * @return a {@link Double}.
+    * @param Key key associated with the value to be set.
+    * @param String the value associated with the key.
     */
 
-    public double getDouble(@NotNull String ID) {
-
-        if(!this.hasKey(ID)) throw new NullPointerException();
-
-        return (double) this.Data.get(ID).Data;
+    public void setString(@NotNull String Key, String String) {
+        this.set(Key, new NBTString(String));
     };
 
     /**
-    * Sets a {@link Double} in {@link NBTCompound}.
+    * @param Key key associated with the value to be returned.
     *
-    * @param ID Value ID.
-    * @param Value {@link Double} Value.
+    * @return the value associated with the key.
     */
 
-    public void setDouble(@NotNull String ID, double Value) {
-        this.Data.put(ID, new NBTDouble(Value));
+    public List<NBTBase<?>> getList(@NotNull String Key) {
+        return this.hasKey(Key) ? ((NBTList) this.get(Key)).Data : null;
     };
 
     /**
-    * @param ID Value ID.
+    * Defines a value associated with the key in this {@link NBTCompound}.
     *
-    * @return a {@link Object}.
+    * @param Key key associated with the value to be set.
+    * @param List the value associated with the key.
     */
 
-    public Object getObject(@NotNull String ID) {
-        return (this.Data.get(ID) != null) ? NBTUtils.deserialize((byte[]) this.Data.get(ID).Data) : null;
+    public void setList(@NotNull String Key, List<NBTBase<?>> List) {
+        this.set(Key, new NBTList(List));
     };
 
     /**
-    * @param ID Value ID.
-    * @param Class Value class.
+    * Defines a value associated with the key in this {@link NBTCompound}.
     *
-    * @return a {@link Object} as a cast of {@link Class} type.
+    * @param Key key associated with the value to be set.
+    * @param List the value associated with the key.
+    * @param Type the type associated with the list.
     */
 
-    public <T> T getObject(@NotNull String ID, @NotNull Class<T> Class) {
-        try {
-            return (this.Data.get(ID) != null) ? Class.cast(NBTUtils.deserialize((byte[]) this.Data.get(ID).Data)) : null;
-        } catch (ClassCastException e) {
-            return null;
-        }
+    public void setList(@NotNull String Key, List<NBTBase<?>> List, byte Type) {
+        this.set(Key, new NBTList(List, Type));
     };
 
     /**
-    * Sets a {@link Object} in {@link NBTCompound}.
+    * @param Key key associated with the value to be returned.
     *
-    * @param ID Value ID.
-    * @param Value {@link Object} Value.
+    * @return the value associated with the key.
     */
 
-    public void setObject(@NotNull String ID, Object Value) {
-        this.Data.put(ID, new NBTByteArray(NBTUtils.serialize(Value)));
+    public NBTCompound getCompound(@NotNull String Key) {
+        return this.hasKey(Key) ? (NBTCompound) this.get(Key) : null;
     };
 
     /**
-    * @param ID Value ID.
+    * Defines a value associated with the key in this {@link NBTCompound}.
     *
-    * @return a {@link Boolean}.
+    * @param Key key associated with the value to be set.
+    * @param NBTCompound the value associated with the key.
     */
 
-    public boolean getBoolean(@NotNull String ID) {
-
-        if(!this.hasKey(ID)) throw new NullPointerException();
-
-        return (boolean) this.Data.get(ID).Data;
+    public void setCompound(@NotNull String Key, NBTCompound NBTCompound) {
+        this.set(Key, NBTCompound != null ? new NBTCompound(NBTCompound) : null);
     };
 
     /**
-    * Sets a {@link Boolean} in {@link NBTCompound}.
+    * @param Key key associated with the value to be returned.
     *
-    * @param ID Value ID.
-    * @param Value {@link Boolean} Value.
+    * @return the value associated with the key.
     */
 
-    public void setBoolean(@NotNull String ID, boolean Value) {
-        this.Data.put(ID, new NBTByte((byte) (Value ? 1 : 0)));
+    public int[] getIntArray(@NotNull String Key) {
+        return this.hasKey(Key) ? (int[]) this.get(Key).Data : null;
     };
 
     /**
-    * @param ID Value ID.
+    * Defines a value associated with the key in this {@link NBTCompound}.
     *
-    * @return a {@link Integer} Array.
+    * @param Key key associated with the value to be set.
+    * @param IntArray the value associated with the key.
     */
 
-    public int[] getIntArray(@NotNull String ID) {
-        return (this.Data.get(ID) != null) ? (int[]) this.Data.get(ID).Data : null;
+    public void setIntArray(@NotNull String Key, int[] IntArray) {
+        this.set(Key, new NBTIntArray(IntArray));
     };
 
     /**
-    * Sets a {@link Integer} Array in {@link NBTCompound}.
+    * @param Key key associated with the value to be returned.
     *
-    * @param ID Value ID.
-    * @param Value {@link Integer} Array Value.
+    * @return the value associated with the key.
     */
 
-    public void setIntArray(@NotNull String ID, int[] Value) {
-        this.Data.put(ID, new NBTIntArray(Value));
+    public long[] getLongArray(@NotNull String Key) {
+        return this.hasKey(Key) ? (long[]) this.get(Key).Data : null;
     };
 
     /**
-    * @param ID Value ID.
+    * Defines a value associated with the key in this {@link NBTCompound}.
     *
-    * @return a {@link Long} Array.
+    * @param Key key associated with the value to be set.
+    * @param LongArray the value associated with the key.
     */
 
-    public long[] getLongArray(@NotNull String ID) {
-        return (this.Data.get(ID) != null) ? (long[]) this.Data.get(ID).Data : null;
+    public void setLongArray(@NotNull String Key, long[] LongArray) {
+        this.set(Key, new NBTLongArray(LongArray));
     };
 
     /**
-    * Sets a {@link Long} Array in {@link NBTCompound}.
+    * @param Key key associated with the value to be returned.
     *
-    * @param ID Value ID.
-    * @param Value {@link Long} Array Value.
+    * @return the value associated with the key.
     */
 
-    public void setLongArray(@NotNull String ID, long[] Value) {
-        this.Data.put(ID, new NBTLongArray(Value));
+    public Object getObject(@NotNull String Key) {
+        return this.hasKey(Key) ? this.get(Key).Data : null;
     };
 
     /**
-    * @param ID Value ID.
+    * @param Key key associated with the value to be returned.
+    * @param Class class associated with the value to be returned
     *
-    * @return a {@link Byte} Array.
+    * @return the value associated with the key.
     */
 
-    public byte[] getByteArray(@NotNull String ID) {
-        return (this.Data.get(ID) != null) ? (byte[]) this.Data.get(ID).Data : null;
+    public <T> T getObject(@NotNull String Key, @NotNull Class<T> Class) {
+        return this.hasKey(Key) ? Class.cast(this.get(Key).Data) : null;
     };
 
     /**
-    * Sets a {@link Byte} Array in {@link NBTCompound}.
+    * Defines a value associated with the key in this {@link NBTCompound}.
     *
-    * @param ID Value ID.
-    * @param Value {@link Byte} Array Value.
+    * @param Key key associated with the value to be set.
+    * @param Object the value associated with the key.
     */
 
-    public void setByteArray(@NotNull String ID, byte[] Value) {
-        this.Data.put(ID, new NBTByteArray(Value));
-    };
-
-    @Override
-    public byte getTypeID() {
-        return 10;
+    public void setObject(@NotNull String Key, @NotNull Serializable Object) {
+        this.set(Key, new NBTByteArray(SerializationUtils.serialize(Object)));
     };
 
     /**
@@ -467,19 +464,26 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
         return new NBTCompound(this);
     };
 
+    @Override
+    protected final byte getTypeID() {
+        return 10;
+    };
+
     /**
-    * @return a {@link NBTCompound} as a {@link String}.
+    * @return this {@link NBTCompound} as a {@link String}.
     */
 
     @Override
     public @NotNull String toString() {
 
-        StringBuilder Structure = new StringBuilder();
+        StringBuilder Builder = new StringBuilder();
 
-        this.Data.forEach((A, B) -> {
-            Structure.append("\"").append(A).append("\"").append(": ").append(B.Data).append(", ");
+        this.Data.forEach((K, V) -> {
+            String[] Data = V.toString().split(V.getClass().getSimpleName() + ": ");
+
+            Builder.append(K).append(": ").append(Data[1], 0, Data[1].length()).append(", ");
         });
 
-        return this.getClass().getSimpleName() + ": {" + (Structure.length() > 0 ? Structure.substring(0, Structure.length() -2) : "") +"}";
+        return this.getClass().getSimpleName() + ": {" + (Builder.length() > 0 ? Builder.substring(0, Builder.length() -2) : "") + "}";
     };
 };

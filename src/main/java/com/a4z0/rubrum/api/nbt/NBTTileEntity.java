@@ -1,8 +1,7 @@
 package com.a4z0.rubrum.api.nbt;
 
-import com.a4z0.rubrum.enums.Version;
+import com.a4z0.rubrum.api.version.enums.Version;
 import com.a4z0.rubrum.reflection.CraftTileEntity;
-import com.a4z0.rubrum.reflection.NBTUtils;
 import org.bukkit.block.BlockState;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
@@ -10,76 +9,71 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Field;
 
 /**
-* NBT component of a TileEntity.
+* NBT component of an {@link BlockState} TileEntity.
 */
 
 public class NBTTileEntity extends NBTCompound {
 
-    private final BlockState A;
+    protected final BlockState A;
+    protected NBTPersistentDataContainer B;
 
     /**
-    * Construct a {@link NBTTileEntity} with the givem params.
+    * Construct a {@link NBTTileEntity} with the given params.
     *
-    * @param Tile a {@link BlockState}.
+    * @param BlockState {@link BlockState} to be read.
     */
 
-    public NBTTileEntity(@NotNull BlockState Tile) {
-        this.A = Tile;
+    public NBTTileEntity(@NotNull BlockState BlockState) {
+        this.A = BlockState;
 
-        if(this.getCompound() != null) {
-            super.setCompound(NBTUtils.parseNBTCompound(this.getCompound()));
+        if(CraftTileEntity.getNBT(CraftTileEntity.getNMS(this.A)) != null) {
+            super.setTag((NBTCompound) NBTUtils.GET_NBTBASE(CraftTileEntity.getNBT(CraftTileEntity.getNMS(this.A))));
         };
     };
 
     /**
-    * @return the {@link BlockState} Tile.
-    */
-
-    public @NotNull BlockState getTileEntity() {
-        return this.A;
-    };
-
-    /**
-    * @return an NMS object from an NBT.
-    */
-
-    @Override
-    public Object getCompound() {
-        return CraftTileEntity.getNBT(CraftTileEntity.getNMS(this.A));
-    };
-
-    /**
-    * Sets the {@link NBTTileEntity} and update the TileEntity NBT.
+    * Defines the NBT of the BlockState's TileEntity stored in this {@link NBTTileEntity}.
     *
-    * @param NBTCompound a {@link NBTCompound}.
+    * @param NBTCompound {@link NBTCompound} to be merged into the TileEntity.
     */
 
     @Override
-    public void setCompound(NBTCompound NBTCompound) {
-        super.setCompound(NBTCompound);
-        CraftTileEntity.setNBT(CraftTileEntity.getNMS(this.A), NBTUtils.parseNBT(this));
+    public void setTag(@NotNull NBTCompound NBTCompound) {
+        CraftTileEntity.setNBT(CraftTileEntity.getNMS(this.A), this.getComponent());
     };
 
     /**
-    * @return a {@link NBTPersistentDataContainer}.
+    * @return the given {@link BlockState}.
     */
 
-    @Version.A(V = Version.V1_14_R1)
+    public @NotNull BlockState getBlockState() {
+        return A;
+    };
+
+    /**
+    * @return an TileEntity {@link NBTPersistentDataContainer}.
+    */
+
     public NBTPersistentDataContainer getPersistentDataContainer() {
 
-        if(!Version.U(this.getClass(), "getPersistentDataContainer")) {
+        if(!Version.B().M(Version.V1_14_R1)) {
             throw new IllegalArgumentException("Feature available from version 1.14+");
         };
 
-        try {
-            Object T = CraftTileEntity.getNMS(this.A);
-            Field D = T.getClass().getField("persistentDataContainer");
+        if(this.B == null) {
+            try {
+                Object TileEntity = CraftTileEntity.getNMS(this.A);
+                Field Data = TileEntity.getClass().getField("persistentDataContainer");
+                Data.setAccessible(true);
 
-            PersistentDataContainer Persistent = (PersistentDataContainer) D.get(T);
+                PersistentDataContainer PersistentDataContainer = (PersistentDataContainer) Data.get(TileEntity);
 
-            return Persistent != null ? new NBTPersistentDataContainer(Persistent) : null;
-        }catch (NoSuchFieldException | IllegalAccessException e) {
-            return null;
-        }
+                this.B = PersistentDataContainer != null ? new NBTPersistentDataContainer(PersistentDataContainer) : null;
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                throw new IllegalArgumentException("Error getting PersistentDataContainer from a TileEntity");
+            }
+        };
+
+        return this.B;
     };
 };

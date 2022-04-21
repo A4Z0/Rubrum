@@ -1,24 +1,22 @@
 package com.a4z0.rubrum.api.nbt;
 
-import com.a4z0.rubrum.enums.Version;
-import com.a4z0.rubrum.reflection.CraftPersistentDataContainer;
+import com.a4z0.rubrum.api.version.enums.Version;
 import org.bukkit.Chunk;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
 
 /**
 * NBT component of a {@link Chunk}.
 */
 
-public class NBTChunk {
+public class NBTChunk extends NBTCompound {
 
-    private final Chunk A;
-    private NBTPersistentDataContainer B;
+    protected final Chunk A;
+    protected final NBTPersistentDataContainer B;
 
     /**
     * Construct a {@link NBTChunk} with the given params.
     *
-    * @param Chunk a {@link Chunk}.
+    * @param Chunk {@link Chunk} to be read.
     */
 
     public NBTChunk(@NotNull Chunk Chunk) {
@@ -28,27 +26,27 @@ public class NBTChunk {
         };
 
         this.A = Chunk;
+        this.B = new NBTPersistentDataContainer(Chunk.getPersistentDataContainer());
+
+        super.setTag(this.B);
     };
 
     /**
-    * @return the {@link Chunk}.
+    * Defines the NBT of the chunk stored in this {@link NBTChunk}.
+    *
+    * @param NBTCompound {@link NBTCompound} to be merged into the chunk.
+    */
+
+    @Override
+    public void setTag(@NotNull NBTCompound NBTCompound) {
+        this.B.setTag(NBTCompound);
+    };
+
+    /**
+    * @return the given {@link Chunk}.
     */
 
     public @NotNull Chunk getChunk() {
         return this.A;
-    };
-
-    /**
-    * @return a {@link NBTPersistentDataContainer}.
-    */
-
-    public NBTPersistentDataContainer getPersistentDataContainer() {
-        PersistentDataContainer Persistent = CraftPersistentDataContainer.getPersistentData(this.A);
-
-        if(this.B == null) {
-            this.B = Persistent != null ? new NBTPersistentDataContainer(Persistent) : null;
-        };
-
-        return this.B;
     };
 };
