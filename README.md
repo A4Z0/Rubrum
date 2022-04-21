@@ -16,9 +16,9 @@ You need at least [Java 8](https://www.java.com/) running on your machine.
 
 ### Documentation
 
-| Class         | Description    |
-|:--------------|:---------------|
-| `NBTCompound` | NBT component. |
+| Class         | Description                                               |
+|:--------------|:----------------------------------------------------------|
+| `NBTCompound` | Base of an NBT component. Stores data with class **Map**. |
 
 Writing an NBT component
 ```java
@@ -52,7 +52,7 @@ System.out.println(NBT.toString());
 
 | Class       | Description                        |
 |:------------|:-----------------------------------|
-| `NBTEntity` | NBT Component of an **Entity**     |
+| `NBTEntity` | NBT component of an **Entity**     |
 
 Writing an NBT for an Entity
 ```java
@@ -69,7 +69,7 @@ System.out.println(NBT.toString());
 
 | Class       | Description                        |
 |:------------|:-----------------------------------|
-| `NBTChunk`  | NBT Component of a **Chunk**       |
+| `NBTChunk`  | NBT component of a **Chunk**       |
 
 Writing an NBT for a Chunk
 ```java
@@ -101,9 +101,9 @@ Reading a Block's NBT
 System.out.println(NBT.toString());
 ```
 
-| Class            | Description                        |
-|:-----------------|:-----------------------------------|
-| `NBTTileEntity`  | NBT Component of a **TileEntity**  |
+| Class            | Description                                   |
+|:-----------------|:----------------------------------------------|
+| `NBTTileEntity`  | NBT component of a **BlockState** TileEntity  |
 
 Writing an NBT for a TileEntity
 ```java
