@@ -8,23 +8,15 @@ import java.lang.reflect.InvocationTargetException;
 
 public class CraftItemStack {
 
-    /**
-    * Stores the CraftItemStack NMS class.
-    */
+    public static final Class<?> A;
 
-    public static final Class<?> NMS_CRAFTITEMSTACK_CLASS = GET_CRAFTITEMSTACK_CLASS();
-
-    /**
-    * @return the NMS class of CraftItemStack.
-    */
-
-    private static @NotNull Class<?> GET_CRAFTITEMSTACK_CLASS() {
+    static {
         try {
-            return Class.forName("org.bukkit.craftbukkit." + Version.BUKKIT_VERSION + ".inventory.CraftItemStack");
+            A = Class.forName("org.bukkit.craftbukkit." + Version.BUKKIT_VERSION + ".inventory.CraftItemStack");
         } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException("Unable to get CraftItemStack class");
+            throw new IllegalArgumentException("Unable to find wanted class");
         }
-    };
+    }
 
     /**
     * @param Item Item to be converted.
@@ -34,7 +26,7 @@ public class CraftItemStack {
 
     public static @NotNull Object getNMS(@NotNull ItemStack Item) {
         try {
-            return NMS_CRAFTITEMSTACK_CLASS.getMethod("asNMSCopy", ItemStack.class).invoke(NMS_CRAFTITEMSTACK_CLASS, Item);
+            return A.getMethod("asNMSCopy", ItemStack.class).invoke(A, Item);
         } catch (Error | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalArgumentException("Error converting an ItemStack to NMS ItemStack object");
         }
@@ -79,7 +71,7 @@ public class CraftItemStack {
 
     public static ItemStack parseNMSItem(@NotNull Object Item) {
         try {
-            return (ItemStack) NMS_CRAFTITEMSTACK_CLASS.getMethod("asBukkitCopy", Item.getClass()).invoke(NMS_CRAFTITEMSTACK_CLASS, Item);
+            return (ItemStack) A.getMethod("asBukkitCopy", Item.getClass()).invoke(A, Item);
         } catch (Error | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalArgumentException("Error converting an NMS ItemStack object to bukkit ItemStack");
         }

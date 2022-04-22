@@ -10,32 +10,15 @@ import java.lang.reflect.Method;
 
 public class CraftEntity {
 
-    public static final Class<?> NMS_CRAFTENTITY_CLASS = GET_CRAFTENTITY_CLASS();
-    public static final Class<?> NMS_ENTITYLIVING_CLASS = GET_ENTITYLIVING_CLASS();
+    public static final Class<?> A;
 
-    /**
-    * @return the NMS class of CraftEntity.
-    */
-
-    private static @NotNull Class<?> GET_CRAFTENTITY_CLASS() {
+    static {
         try {
-            return Class.forName("org.bukkit.craftbukkit." + Version.BUKKIT_VERSION + ".entity.CraftEntity");
+            A = Class.forName("org.bukkit.craftbukkit." + Version.BUKKIT_VERSION + ".entity.CraftEntity");
         } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException("Unable to get CraftEntity class");
+            throw new IllegalArgumentException("Unable to find wanted class");
         }
-    };
-
-    /**
-    * @return the NMS class of EntityLiving.
-    */
-
-    private static @NotNull Class<?> GET_ENTITYLIVING_CLASS() {
-        try {
-            return Class.forName(Version.B().D() ? "net.minecraft.world.entity.EntityLiving" : "net.minecraft.server." + Version.BUKKIT_VERSION + ".EntityLiving");
-        } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException("Unable to get EntityLiving class");
-        }
-    };
+    }
 
     /**
     * @param Entity Entity to be converted.
@@ -45,7 +28,7 @@ public class CraftEntity {
 
     public static @NotNull Object getNMS(@NotNull Entity Entity) {
         try {
-            return (NMS_CRAFTENTITY_CLASS.cast(Entity)).getClass().getMethod("getHandle").invoke((NMS_CRAFTENTITY_CLASS.cast(Entity)));
+            return (A.cast(Entity)).getClass().getMethod("getHandle").invoke((A.cast(Entity)));
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalArgumentException("Error converting an Entity to an NMS Entity");
         }

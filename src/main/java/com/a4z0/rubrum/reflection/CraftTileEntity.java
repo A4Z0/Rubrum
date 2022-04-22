@@ -10,32 +10,17 @@ import java.lang.reflect.Method;
 
 public class CraftTileEntity {
 
-    public static final Class<?> NMS_CRAFTWORLD_CLASS = GET_CRAFTWORLD_CLASS();
-    public static final Class<?> NMS_BLOCKPOSITION_CLASS = GET_BLOCKPOSITION_CLASS();
+    public static final Class<?> A;
+    public static final Class<?> B;
 
-    /**
-    * @return the NMS class of CraftWorld.
-    */
-
-    private static @NotNull Class<?> GET_CRAFTWORLD_CLASS() {
+    static {
         try {
-            return Class.forName("org.bukkit.craftbukkit." + Version.BUKKIT_VERSION + ".CraftWorld");
+            A = Class.forName("org.bukkit.craftbukkit." + Version.BUKKIT_VERSION + ".CraftWorld");
+            B = Class.forName(Version.B().D() ? "net.minecraft.core.BlockPosition" : "net.minecraft.server." + Version.BUKKIT_VERSION + ".BlockPosition");
         } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException("Unable to get CraftWorld class");
+            throw new IllegalArgumentException("Unable to find wanted class");
         }
-    };
-
-    /**
-    * @return the NMS class of BlockPosition.
-    */
-
-    private static @NotNull Class<?> GET_BLOCKPOSITION_CLASS() {
-        try {
-            return Class.forName(Version.B().D() ? "net.minecraft.core.BlockPosition" : "net.minecraft.server." + Version.BUKKIT_VERSION + ".BlockPosition");
-        } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException("Unable to get BlockPosition class");
-        }
-    };
+    }
 
     /**
     * @param BlockState BlockState to be converted.
@@ -45,9 +30,9 @@ public class CraftTileEntity {
 
     public static Object getNMS(@NotNull BlockState BlockState) {
         try {
-            Object C = NMS_CRAFTWORLD_CLASS.cast(BlockState.getWorld());
+            Object C = A.cast(BlockState.getWorld());
             Object N = C.getClass().getMethod("getHandle").invoke(C);
-            Object P = NMS_BLOCKPOSITION_CLASS.getConstructor(int.class, int.class, int.class).newInstance(BlockState.getX(), BlockState.getY(), BlockState.getZ());
+            Object P = B.getConstructor(int.class, int.class, int.class).newInstance(BlockState.getX(), BlockState.getY(), BlockState.getZ());
 
             Object TileEntity;
 
