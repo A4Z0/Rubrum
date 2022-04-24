@@ -1,6 +1,7 @@
 package com.a4z0.rubrum.api.nbt;
 
 import com.a4z0.rubrum.reflection.CraftItemStack;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,6 +21,10 @@ public class NBTItem extends NBTCompound {
     */
 
     public NBTItem(@NotNull ItemStack Item) {
+
+        if(Item.getType().equals(Material.AIR))
+            throw new NullPointerException("Item Material can't be AIR");
+
         this.A = Item;
         this.B = Item.clone();
 

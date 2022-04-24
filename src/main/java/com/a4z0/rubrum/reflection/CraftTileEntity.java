@@ -1,7 +1,7 @@
 package com.a4z0.rubrum.reflection;
 
 import com.a4z0.rubrum.api.nbt.NBTUtils;
-import com.a4z0.rubrum.api.version.enums.Version;
+import com.a4z0.rubrum.api.version.Version;
 import org.bukkit.block.BlockState;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,9 +16,16 @@ public class CraftTileEntity {
     static {
         try {
             A = Class.forName("org.bukkit.craftbukkit." + Version.BUKKIT_VERSION + ".CraftWorld");
-            B = Class.forName(Version.B().D() ? "net.minecraft.core.BlockPosition" : "net.minecraft.server." + Version.BUKKIT_VERSION + ".BlockPosition");
         } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException("Unable to find wanted class");
+            throw new IllegalArgumentException("Could not find CraftWorld class");
+        }
+    }
+
+    static {
+        try {
+            B = Class.forName(Version.B().D() ? "net.minecraft.core.BlockPosition" : "net.minecraft.server." + Version.BUKKIT_VERSION + ".BlockPosition");
+        }catch (ClassNotFoundException e) {
+            throw new IllegalArgumentException("Could not find BlockPosition class");
         }
     }
 

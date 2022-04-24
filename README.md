@@ -1,5 +1,14 @@
-# Rubrum (1.8-1.18)
-Reflect classes from other versions.
+# Rubrum [1.8 - 1.18]
+Assistance in modifying NBTs in multiple versions.
+
+<div>
+  <a target="_blank" href="https://github.com/A4Z0/Rubrum/blob/master/LICENSE">
+    <img alt="License" src="https://img.shields.io/github/license/A4Z0/Rubrum?style=for-the-badge">
+  </a>
+  <a target="_blank" href="https://jitpack.io/#A4Z0/Rubrum">
+    <img alt="JitPack" src="https://img.shields.io/jitpack/v/github/A4Z0/Rubrum?style=for-the-badge">
+  </a>
+</div>
 
 ### References
 - [Dependencies](#dependencies)

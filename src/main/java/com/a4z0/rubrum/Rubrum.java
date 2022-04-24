@@ -1,6 +1,6 @@
 package com.a4z0.rubrum;
 
-import com.a4z0.rubrum.api.version.enums.Version;
+import com.a4z0.rubrum.api.version.Version;
 import com.a4z0.rubrum.enums.Task;
 import org.bukkit.plugin.java.JavaPlugin;
 

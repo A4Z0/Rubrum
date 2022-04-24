@@ -1,6 +1,6 @@
 name: Rubrum
 version: '${project.version}'
-description: Reflect classes from other versions.
+description: Assistance in modifying NBTs in multiple versions.
 authors: [ A4Z0 ]
 
 main: com.a4z0.rubrum.Rubrum

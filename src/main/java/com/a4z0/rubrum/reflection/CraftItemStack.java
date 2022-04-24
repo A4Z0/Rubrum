@@ -1,6 +1,6 @@
 package com.a4z0.rubrum.reflection;
 
-import com.a4z0.rubrum.api.version.enums.Version;
+import com.a4z0.rubrum.api.version.Version;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +14,7 @@ public class CraftItemStack {
         try {
             A = Class.forName("org.bukkit.craftbukkit." + Version.BUKKIT_VERSION + ".inventory.CraftItemStack");
         } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException("Unable to find wanted class");
+            throw new IllegalArgumentException("Could not find CraftItemStack class");
         }
     }
 

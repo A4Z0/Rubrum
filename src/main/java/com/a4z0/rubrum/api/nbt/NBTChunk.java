@@ -1,6 +1,6 @@
 package com.a4z0.rubrum.api.nbt;
 
-import com.a4z0.rubrum.api.version.enums.Version;
+import com.a4z0.rubrum.api.version.Version;
 import org.bukkit.Chunk;
 import org.jetbrains.annotations.NotNull;
 

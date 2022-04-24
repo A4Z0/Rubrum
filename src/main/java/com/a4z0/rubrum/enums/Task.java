@@ -1,7 +1,7 @@
 package com.a4z0.rubrum.enums;
 
 import com.a4z0.rubrum.api.nbt.*;
-import com.a4z0.rubrum.api.version.enums.Version;
+import com.a4z0.rubrum.api.version.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;

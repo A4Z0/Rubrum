@@ -1,7 +1,7 @@
 package com.a4z0.rubrum.reflection;
 
 import com.a4z0.rubrum.api.nbt.NBTUtils;
-import com.a4z0.rubrum.api.version.enums.Version;
+import com.a4z0.rubrum.api.version.Version;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +16,7 @@ public class CraftEntity {
         try {
             A = Class.forName("org.bukkit.craftbukkit." + Version.BUKKIT_VERSION + ".entity.CraftEntity");
         } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException("Unable to find wanted class");
+            throw new IllegalArgumentException("Could not find CraftEntity class");
         }
     }
 

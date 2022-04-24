@@ -1,11 +1,7 @@
-package com.a4z0.rubrum.api.version.enums;
+package com.a4z0.rubrum.api.version;
 
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-import java.lang.reflect.Method;
 
 /*
 * What is the purpose of this?
@@ -14,7 +10,7 @@ import java.lang.reflect.Method;
 * Ex:
 *   A: Pick up item from player's hand.
 *       1.8 (A == false): Player.getItemInHand();
-*       1.9 - 1.15 (A == true): Player.getItemInMainHand();
+*       1.9 - 1.18 (A == true): Player.getItemInMainHand();
 *   B: Color System.
 *       1.8 - 1.15 (B == false) Minecraft standard colors.
 *       1.16 - 1.18 (B == true) Added hexadecimal colors.

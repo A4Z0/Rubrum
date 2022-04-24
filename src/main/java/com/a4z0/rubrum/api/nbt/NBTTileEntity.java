@@ -1,6 +1,6 @@
 package com.a4z0.rubrum.api.nbt;
 
-import com.a4z0.rubrum.api.version.enums.Version;
+import com.a4z0.rubrum.api.version.Version;
 import com.a4z0.rubrum.reflection.CraftTileEntity;
 import org.bukkit.block.BlockState;
 import org.bukkit.persistence.PersistentDataContainer;
