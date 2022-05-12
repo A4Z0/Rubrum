@@ -55,7 +55,7 @@ public class CraftItemStack {
 
     public static Object setNBT(@NotNull Object Item, @NotNull Object NBT) {
         try {
-            Item.getClass().getMethod(Version.B().D() ? "a" : "setTag", NBT.getClass()).invoke(Item, NBT);
+            Item.getClass().getMethod(Version.B().D() ? "c" : "setTag", NBT.getClass()).invoke(Item, NBT);
 
             return Item;
         } catch (Error | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {

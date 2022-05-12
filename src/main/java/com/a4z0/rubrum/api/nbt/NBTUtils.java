@@ -10,21 +10,13 @@ import java.util.*;
 
 public class NBTUtils {
 
-    /**
-    * Stores the NBTBase NMS class.
-    */
+    public static final Class<?> A;
 
-    public static final Class<?> NMS_NBT_BASE_CLASS = GET_NBTBASE_CLASS();
-
-    /**
-    * @return the NMS class of NBTBase.
-    */
-
-    private static @NotNull Class<?> GET_NBTBASE_CLASS() {
+    static {
         try {
-            return Class.forName(Version.B().D() ? "net.minecraft.nbt.NBTBase" : "net.minecraft.server." + Version.BUKKIT_VERSION + ".NBTBase");
+            A = Class.forName(Version.B().D() ? "net.minecraft.nbt.NBTBase" : "net.minecraft.server." + Version.BUKKIT_VERSION + ".NBTBase");
         } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException("Unable to get NBTBase class");
+            throw new IllegalArgumentException("Could not find NBTBase class");
         }
     };
 
@@ -36,6 +28,9 @@ public class NBTUtils {
 
     public static @NotNull String GET_NBTBASE_CLASS_NAME(byte ID) {
         switch (ID) {
+            case 0: {
+                return "NBTTagEnd";
+            }
             case 1: {
                 return "NBTTagByte";
             }
@@ -86,14 +81,14 @@ public class NBTUtils {
 
     public static @NotNull Object GET_NBTBASE_INSTANCE(byte ID, Object... Values) {
         try {
-            if(!NBTUtils.NMS_NBT_BASE_CLASS.isInterface()) {
-                Method Method = NBTUtils.NMS_NBT_BASE_CLASS.getDeclaredMethod("createTag", byte.class);
+            if(!NBTUtils.A.isInterface()) {
+                Method Method = NBTUtils.A.getDeclaredMethod("createTag", byte.class);
                 Method.setAccessible(true);
 
-                Object Object = Method.invoke(NBTUtils.NMS_NBT_BASE_CLASS, ID);
+                Object Object = Method.invoke(NBTUtils.A, ID);
 
                 if(Object == null) {
-                    Object = Method.invoke(NBTUtils.NMS_NBT_BASE_CLASS, (byte) 7);
+                    Object = Method.invoke(NBTUtils.A, (byte) 7);
                     Values[0] = SerializationUtils.serialize((Serializable) Values[0]);
                 };
 
@@ -115,6 +110,9 @@ public class NBTUtils {
             Constructor.setAccessible(true);
 
             switch (ID) {
+                case 0: {
+                    return Constructor.newInstance();
+                }
                 case 1: {
                     return Constructor.newInstance(Values.length > 0 ? Values[0] : (byte) 0);
                 }
@@ -168,7 +166,6 @@ public class NBTUtils {
     */
 
     public static @NotNull NBTBase<?> GET_NBTBASE(@NotNull Object NBTBase) {
-
         Object[] Values = new Object[3];
 
         try {
@@ -198,6 +195,9 @@ public class NBTUtils {
         }
 
         switch((byte) Values[0]) {
+            case 0: {
+                return new NBTEnd();
+            }
             case 1: {
                 return new NBTByte((byte) Values[1]);
             }
@@ -267,31 +267,36 @@ public class NBTUtils {
         }
 
         final Field[] Fields = new Field[2];
+        final List<String[]> Names = GET_NBTBASE_FIELDS_NAME(ID);
 
-        for(String Fieldname : GET_NBTBASE_FIELDS_NAME(ID).get(0)) {
-            try {
-                Field Field = NBTBase.getClass().getDeclaredField(Fieldname);
-                Field.setAccessible(true);
+        if(Names.size() > 0) {
+            for(String Fieldname : Names.get(0)) {
+                try {
+                    Field Field = NBTBase.getClass().getDeclaredField(Fieldname);
+                    Field.setAccessible(true);
 
-                Fields[0] = Field;
-            } catch (NoSuchFieldException ignored) {
-                continue;
-            }
+                    Fields[0] = Field;
+                } catch (NoSuchFieldException ignored) {
+                    continue;
+                };
 
-            break;
+                break;
+            };
         };
 
-        for(String Fieldname : GET_NBTBASE_FIELDS_NAME(ID).get(1)) {
-            try {
-                Field Field = NBTBase.getClass().getDeclaredField(Fieldname);
-                Field.setAccessible(true);
+        if(Names.size() > 1) {
+            for (String Fieldname : Names.get(1)) {
+                try {
+                    Field Field = NBTBase.getClass().getDeclaredField(Fieldname);
+                    Field.setAccessible(true);
 
-                Fields[1] = Field;
-            } catch (NoSuchFieldException ignored) {
-                continue;
-            }
+                    Fields[1] = Field;
+                } catch (NoSuchFieldException ignored) {
+                    continue;
+                };
 
-            break;
+                break;
+            };
         };
 
         return Fields;
