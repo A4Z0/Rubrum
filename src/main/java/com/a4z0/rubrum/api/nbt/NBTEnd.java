@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 /**
 * Base of an NBT component.
 *
-* Means the end of a component.
+* It is used to null-terminate lists and maps.
 */
 
 public class NBTEnd extends NBTBase<String> {
@@ -29,6 +29,6 @@ public class NBTEnd extends NBTBase<String> {
 
     @Override
     public @NotNull String toString() {
-        return this.getClass().getSimpleName() + ": " + Data + "";
+        return this.getClass().getSimpleName() + ": " + Data;
     };
 };
