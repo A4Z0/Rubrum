@@ -32,9 +32,7 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
 
         Map<String, NBTBase<?>> Data = new HashMap<>();
 
-        Map.forEach((A, B) -> {
-            Data.put(A, (NBTBase<?>) B);
-        });
+        Map.forEach((A, B) -> Data.put(A, (NBTBase<?>) B));
 
         this.Data = Data;
     };
