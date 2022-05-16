@@ -18,7 +18,7 @@ public abstract class NBTBase<T> {
 
     protected NBTBase() {
         this.Data = null;
-    };
+    }
 
     /**
     * Construct a {@link NBTBase} with the given params.
@@ -28,7 +28,7 @@ public abstract class NBTBase<T> {
 
     protected NBTBase(@NotNull T Data) {
         this.Data = Data;
-    };
+    }
 
     /**
     * @return an NBT component.
@@ -36,7 +36,7 @@ public abstract class NBTBase<T> {
 
     protected Object getComponent() {
         return NBTUtils.GET_NBTBASE_INSTANCE(this.getTypeID(), this.Data);
-    };
+    }
 
     /**
     * @return the type ID.
@@ -51,7 +51,7 @@ public abstract class NBTBase<T> {
     @Override
     public int hashCode() {
         return this.getTypeID();
-    };
+    }
 
     /**
     * @return this {@link NBTBase} as a {@link String}.
@@ -60,5 +60,5 @@ public abstract class NBTBase<T> {
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + ": " + Data;
-    };
-};
+    }
+}

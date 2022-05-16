@@ -52,11 +52,11 @@ public enum Task {
 
         if(NBT.getList("Equipment") != null) {
             List = NBT.getList("Equipment");
-        };
+        }
 
         if(NBT.getList("ArmorItems") != null) {
             List = NBT.getList("ArmorItems");
-        };
+        }
 
         if(List == null) return null;
 
@@ -67,11 +67,11 @@ public enum Task {
 
         if(NBT.getList("Equipment") != null) {
             NBT.setList("Equipment", List, (byte) 10);
-        };
+        }
 
         if(NBT.getList("ArmorItems") != null) {
             NBT.setList("ArmorItems", List, (byte) 10);
-        };
+        }
 
         NBT.setBoolean("Invisible", true);
         NBT.setTag(NBT);
@@ -81,7 +81,7 @@ public enum Task {
             NBTCompound Data = NBT.getPersistentDataContainer();
             Data.setString("Data", "Hello, World!");
             Data.setTag(Data);
-        };
+        }
 
         B.remove();
 
@@ -123,7 +123,7 @@ public enum Task {
             O.setType(Objects.requireNonNull(Material.getMaterial("SIGN")));
         }catch (NullPointerException e) {
             O.setType(Objects.requireNonNull(Material.getMaterial("OAK_SIGN")));
-        };
+        }
 
         NBTTileEntity NBT = new NBTTileEntity(O.getState());
 
@@ -134,7 +134,7 @@ public enum Task {
             NBTCompound Data = NBT.getPersistentDataContainer();
             Data.setString("Data", "Hello, World!");
             Data.setTag(Data);
-        };
+        }
 
         O.setType(M);
 
@@ -154,7 +154,7 @@ public enum Task {
     Task(@NotNull String A, @NotNull Callable<Integer> B) {
         this.A = A;
         this.B = B;
-    };
+    }
 
     /**
     * @return the {@link Task} name.
@@ -162,7 +162,7 @@ public enum Task {
 
     public @NotNull String N() {
         return this.A;
-    };
+    }
 
     /**
     * @return a value based on {@link Task} execution.
@@ -174,5 +174,5 @@ public enum Task {
         } catch (Exception e) {
             return 0;
         }
-    };
-};
+    }
+}

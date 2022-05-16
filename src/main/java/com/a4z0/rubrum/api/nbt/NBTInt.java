@@ -18,7 +18,7 @@ public class NBTInt extends NBTBase<Integer> {
 
     public NBTInt(int Int) {
         this.Data = Int;
-    };
+    }
 
     /**
     * Construct a {@link NBTInt} with the given params.
@@ -28,12 +28,12 @@ public class NBTInt extends NBTBase<Integer> {
 
     public NBTInt(@NotNull Integer Integer) {
         this.Data = Integer;
-    };
+    }
 
     @Override
     protected final byte getTypeID() {
         return 3;
-    };
+    }
 
     /**
     * @return this {@link NBTInt} as a {@link String}.
@@ -42,5 +42,5 @@ public class NBTInt extends NBTBase<Integer> {
     @Override
     public @NotNull String toString() {
         return this.getClass().getSimpleName() + ": " + Data;
-    };
-};
+    }
+}

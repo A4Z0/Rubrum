@@ -18,7 +18,7 @@ public class NBTByte extends NBTBase<Byte> {
 
     public NBTByte(byte Byte) {
         this.Data = Byte;
-    };
+    }
 
     /**
     * Construct a {@link NBTByte} with the given params.
@@ -28,12 +28,12 @@ public class NBTByte extends NBTBase<Byte> {
 
     public NBTByte(@NotNull Byte Byte) {
         this.Data = Byte;
-    };
+    }
 
     @Override
     protected final byte getTypeID() {
         return 1;
-    };
+    }
 
     /**
     * @return this {@link NBTByte} as a {@link String}.
@@ -42,5 +42,5 @@ public class NBTByte extends NBTBase<Byte> {
     @Override
     public @NotNull String toString() {
         return this.getClass().getSimpleName() + ": " + Data + "b";
-    };
-};
+    }
+}

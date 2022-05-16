@@ -18,12 +18,12 @@ public class NBTLongArray extends NBTBase<long[]> {
 
     public NBTLongArray(long[] LongArray) {
         this.Data = LongArray;
-    };
+    }
 
     @Override
     protected final byte getTypeID() {
         return 12;
-    };
+    }
 
     /**
     * @return this {@link NBTLongArray} as a {@link String}.
@@ -32,5 +32,5 @@ public class NBTLongArray extends NBTBase<long[]> {
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + ": " + Arrays.toString(Data);
-    };
-};
+    }
+}

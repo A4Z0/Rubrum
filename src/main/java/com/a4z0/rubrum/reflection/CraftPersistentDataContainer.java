@@ -20,7 +20,7 @@ public class CraftPersistentDataContainer {
         }catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalArgumentException("Error parsing PersistentDataContainer for NBT");
         }
-    };
+    }
 
     /**
     * @param PersistentDataContainer a {@link PersistentDataContainer}.
@@ -36,5 +36,5 @@ public class CraftPersistentDataContainer {
         }catch (Error | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalArgumentException("Error setting PersistentDataContainer");
         }
-    };
-};
+    }
+}

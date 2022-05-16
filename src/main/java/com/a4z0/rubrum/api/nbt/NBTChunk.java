@@ -23,13 +23,13 @@ public class NBTChunk extends NBTCompound {
 
         if(!Version.B().M(Version.V1_16_R3)) {
             throw new IllegalArgumentException("Feature available from version 1.16.4+");
-        };
+        }
 
         this.A = Chunk;
         this.B = new NBTPersistentDataContainer(Chunk.getPersistentDataContainer());
 
         super.setTag(this.B);
-    };
+    }
 
     /**
     * Defines the NBT of the chunk stored in this {@link NBTChunk}.
@@ -40,7 +40,7 @@ public class NBTChunk extends NBTCompound {
     @Override
     public void setTag(@NotNull NBTCompound NBTCompound) {
         this.B.setTag(NBTCompound);
-    };
+    }
 
     /**
     * @return the given {@link Chunk}.
@@ -48,5 +48,5 @@ public class NBTChunk extends NBTCompound {
 
     public @NotNull Chunk getChunk() {
         return this.A;
-    };
-};
+    }
+}

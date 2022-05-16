@@ -18,7 +18,7 @@ public class NBTDouble extends NBTBase<Double> {
 
     public NBTDouble(double Double) {
         this.Data = Double;
-    };
+    }
 
     /**
     * Construct a {@link NBTDouble} with the given params.
@@ -28,12 +28,12 @@ public class NBTDouble extends NBTBase<Double> {
 
     public NBTDouble(@NotNull Double Double) {
         this.Data = Double;
-    };
+    }
 
     @Override
     protected final byte getTypeID() {
         return 6;
-    };
+    }
 
     /**
     * @return this {@link NBTDouble} as a {@link String}.
@@ -42,5 +42,5 @@ public class NBTDouble extends NBTBase<Double> {
     @Override
     public @NotNull String toString() {
         return this.getClass().getSimpleName() + ": " + Data + "d";
-    };
-};
+    }
+}

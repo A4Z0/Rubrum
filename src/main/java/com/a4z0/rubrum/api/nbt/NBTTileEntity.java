@@ -28,8 +28,8 @@ public class NBTTileEntity extends NBTCompound {
 
         if(CraftTileEntity.getNBT(CraftTileEntity.getNMS(this.A)) != null) {
             super.setTag((NBTCompound) NBTUtils.GET_NBTBASE(CraftTileEntity.getNBT(CraftTileEntity.getNMS(this.A))));
-        };
-    };
+        }
+    }
 
     /**
     * Defines the NBT of the BlockState's TileEntity stored in this {@link NBTTileEntity}.
@@ -40,7 +40,7 @@ public class NBTTileEntity extends NBTCompound {
     @Override
     public void setTag(@NotNull NBTCompound NBTCompound) {
         CraftTileEntity.setNBT(CraftTileEntity.getNMS(this.A), this.getComponent());
-    };
+    }
 
     /**
     * @return the given {@link BlockState}.
@@ -48,7 +48,7 @@ public class NBTTileEntity extends NBTCompound {
 
     public @NotNull BlockState getBlockState() {
         return A;
-    };
+    }
 
     /**
     * @return an TileEntity {@link NBTPersistentDataContainer}.
@@ -56,9 +56,8 @@ public class NBTTileEntity extends NBTCompound {
 
     public NBTPersistentDataContainer getPersistentDataContainer() {
 
-        if(!Version.B().M(Version.V1_14_R1)) {
+        if(!Version.B().M(Version.V1_14_R1))
             throw new IllegalArgumentException("Feature available from version 1.14+");
-        };
 
         if(this.B == null) {
             try {
@@ -72,8 +71,8 @@ public class NBTTileEntity extends NBTCompound {
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 throw new IllegalArgumentException("Error getting PersistentDataContainer from a TileEntity");
             }
-        };
+        }
 
         return this.B;
-    };
-};
+    }
+}

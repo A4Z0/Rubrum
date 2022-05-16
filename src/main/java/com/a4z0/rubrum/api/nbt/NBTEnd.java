@@ -16,12 +16,12 @@ public class NBTEnd extends NBTBase<String> {
 
     public NBTEnd() {
         this.Data = "End";
-    };
+    }
 
     @Override
     protected byte getTypeID() {
         return 0;
-    };
+    }
 
     /**
     * @return this {@link NBTEnd} as a {@link String}.
@@ -30,5 +30,5 @@ public class NBTEnd extends NBTBase<String> {
     @Override
     public @NotNull String toString() {
         return this.getClass().getSimpleName() + ": " + Data;
-    };
-};
+    }
+}

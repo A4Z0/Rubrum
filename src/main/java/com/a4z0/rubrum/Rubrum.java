@@ -13,7 +13,7 @@ public final class Rubrum extends JavaPlugin {
             this.getServer().getPluginManager().disablePlugin(this);
 
             return;
-        };
+        }
 
         this.getLogger().info("Starting scan tasks...");
         this.getLogger().info("");
@@ -34,9 +34,9 @@ public final class Rubrum extends JavaPlugin {
                     break;
                 }
             }
-        };
+        }
 
         this.getLogger().info("");
         this.getLogger().info("Successfully started!");
-    };
-};
+    }
+}

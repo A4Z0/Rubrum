@@ -18,12 +18,12 @@ public class NBTString extends NBTBase<String> {
 
     public NBTString(@NotNull String String) {
         this.Data = String;
-    };
+    }
 
     @Override
     protected final byte getTypeID() {
         return 8;
-    };
+    }
 
     /**
     * @return this {@link NBTString} as a {@link String}.
@@ -32,5 +32,5 @@ public class NBTString extends NBTBase<String> {
     @Override
     public @NotNull String toString() {
         return this.getClass().getSimpleName() + ": \"" + Data + "\"";
-    };
-};
+    }
+}

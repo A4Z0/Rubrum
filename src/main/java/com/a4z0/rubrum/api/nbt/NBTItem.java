@@ -30,8 +30,8 @@ public class NBTItem extends NBTCompound {
 
         if(this.hasNBTData()) {
             super.setTag((NBTCompound) NBTUtils.GET_NBTBASE(CraftItemStack.getNBT(CraftItemStack.getNMS(this.A))));
-        };
-    };
+        }
+    }
 
     /**
     * Defines the NBT of the item stored in this {@link NBTItem}.
@@ -42,7 +42,7 @@ public class NBTItem extends NBTCompound {
     @Override
     public void setTag(@NotNull NBTCompound NBTCompound) {
         this.B = this.merge(this.B);
-    };
+    }
 
     /**
     * @param Item Item to be merged with this {@link NBTCompound}.
@@ -52,7 +52,7 @@ public class NBTItem extends NBTCompound {
 
     public @NotNull ItemStack merge(@NotNull ItemStack Item) {
         return CraftItemStack.parseNMSItem(CraftItemStack.setNBT(CraftItemStack.getNMS(Item), this.getComponent()));
-    };
+    }
 
     /**
     * @return the given {@link ItemStack}.
@@ -60,7 +60,7 @@ public class NBTItem extends NBTCompound {
 
     public @NotNull ItemStack getRawItem() {
         return this.A;
-    };
+    }
 
     /**
     * @return the new {@link ItemStack}.
@@ -68,7 +68,7 @@ public class NBTItem extends NBTCompound {
 
     public @NotNull ItemStack getItem() {
         return this.B;
-    };
+    }
 
     /**
     * @return true if the item contains NBT Data.
@@ -76,5 +76,5 @@ public class NBTItem extends NBTCompound {
 
     public final boolean hasNBTData() {
         return CraftItemStack.getNBT(CraftItemStack.getNMS(this.A)) != null;
-    };
-};
+    }
+}

@@ -47,13 +47,13 @@ public class CraftTileEntity {
                 TileEntity = N.getClass().getMethod("getBlockEntity", P.getClass(), boolean.class).invoke(N, P, false);
             }else {
                 TileEntity = N.getClass().getMethod("getTileEntity", P.getClass()).invoke(N, P);
-            };
+            }
 
             return TileEntity;
         }catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalArgumentException("Error getting NMS TileEntity from a BlockState");
         }
-    };
+    }
 
     /**
     * @param TileEntity NMS version of an TileEntity.
@@ -77,7 +77,7 @@ public class CraftTileEntity {
                         Method.invoke(TileEntity, NBT);
 
                         break;
-                    };
+                    }
 
                     Method Method = TileEntity.getClass().getMethod(Fieldname);
                     Method.setAccessible(true);
@@ -89,13 +89,13 @@ public class CraftTileEntity {
                 }
 
                 break;
-            };
+            }
 
             return NBT;
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new IllegalArgumentException("Error getting NBT from a NMS TileEntity");
         }
-    };
+    }
 
     /**
     * @param TileEntity NMS version of an TileEntity to be changed.
@@ -113,10 +113,10 @@ public class CraftTileEntity {
                 TileEntity.getClass().getMethod("load", D.getClass(), NBT.getClass()).invoke(TileEntity, D, NBT);
             }else {
                 TileEntity.getClass().getMethod(Version.B().T() ? "load" : "a", NBT.getClass()).invoke(TileEntity, NBT);
-            };
+            }
 
         }catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalArgumentException("Error setting NBT on a NMS TileEntity");
         }
-    };
-};
+    }
+}

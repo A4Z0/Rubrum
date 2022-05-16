@@ -18,7 +18,7 @@ public class NBTFloat extends NBTBase<Float> {
 
     public NBTFloat(float Float) {
         this.Data = Float;
-    };
+    }
 
     /**
     * Construct a {@link NBTFloat} with the given params.
@@ -28,12 +28,12 @@ public class NBTFloat extends NBTBase<Float> {
 
     public NBTFloat(@NotNull Float Float) {
         this.Data = Float;
-    };
+    }
 
     @Override
     protected final byte getTypeID() {
         return 5;
-    };
+    }
 
     /**
     * @return this {@link NBTFloat} as a {@link String}.
@@ -42,5 +42,5 @@ public class NBTFloat extends NBTBase<Float> {
     @Override
     public @NotNull String toString() {
         return this.getClass().getSimpleName() + ": " + Data + "f";
-    };
-};
+    }
+}

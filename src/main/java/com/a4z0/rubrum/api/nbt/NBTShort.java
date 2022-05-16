@@ -18,7 +18,7 @@ public class NBTShort extends NBTBase<Short> {
 
     public NBTShort(short Short) {
         this.Data = Short;
-    };
+    }
 
     /**
     * Construct a {@link NBTShort} with the given params.
@@ -28,12 +28,12 @@ public class NBTShort extends NBTBase<Short> {
 
     public NBTShort(Short Short) {
         this.Data = Short;
-    };
+    }
 
     @Override
     protected final byte getTypeID() {
         return 2;
-    };
+    }
 
     /**
     * @return this {@link NBTShort} as a {@link String}.
@@ -42,5 +42,5 @@ public class NBTShort extends NBTBase<Short> {
     @Override
     public @NotNull String toString() {
         return this.getClass().getSimpleName() + ": " + Data + "s";
-    };
-};
+    }
+}

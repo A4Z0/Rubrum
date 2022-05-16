@@ -24,7 +24,7 @@ public class NBTEntity extends NBTCompound {
         this.A = Entity;
 
         super.setTag((NBTCompound) NBTUtils.GET_NBTBASE(CraftEntity.getNBT(CraftEntity.getNMS(this.A))));
-    };
+    }
 
     /**
     * Defines the NBT of the entity stored in this {@link NBTEntity}.
@@ -35,7 +35,7 @@ public class NBTEntity extends NBTCompound {
     @Override
     public void setTag(@NotNull NBTCompound NBTCompound) {
         CraftEntity.setNBT(CraftEntity.getNMS(this.A), this.getComponent());
-    };
+    }
 
     /**
     * @return the given {@link Entity}.
@@ -43,7 +43,7 @@ public class NBTEntity extends NBTCompound {
 
     public @NotNull Entity getEntity() {
         return this.A;
-    };
+    }
 
     /**
     * @return an entity {@link NBTPersistentDataContainer}.
@@ -51,14 +51,12 @@ public class NBTEntity extends NBTCompound {
 
     public NBTPersistentDataContainer getPersistentDataContainer() {
 
-        if(!Version.B().M(Version.V1_14_R1)) {
+        if(!Version.B().M(Version.V1_14_R1))
             throw new IllegalArgumentException("Feature available from version 1.14+");
-        };
 
-        if(this.B == null) {
+        if(this.B == null)
             this.B = new NBTPersistentDataContainer(this.A.getPersistentDataContainer());
-        };
 
         return this.B;
-    };
-};
+    }
+}

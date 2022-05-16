@@ -18,7 +18,7 @@ public class NBTLong extends NBTBase<Long> {
 
     public NBTLong(long Long) {
         this.Data = Long;
-    };
+    }
 
     /**
     * Construct a {@link NBTLong} with the given params.
@@ -28,12 +28,12 @@ public class NBTLong extends NBTBase<Long> {
 
     public NBTLong(@NotNull Long Long) {
         this.Data = Long;
-    };
+    }
 
     @Override
     protected final byte getTypeID() {
         return 4;
-    };
+    }
 
     /**
     * @return this {@link NBTLong} as a {@link String}.
@@ -42,5 +42,5 @@ public class NBTLong extends NBTBase<Long> {
     @Override
     public @NotNull String toString() {
         return this.getClass().getSimpleName() + ": " + Data + "L";
-    };
-};
+    }
+}

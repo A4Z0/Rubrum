@@ -18,7 +18,7 @@ public class NBTUtils {
         } catch (ClassNotFoundException e) {
             throw new IllegalArgumentException("Could not find NBTBase class");
         }
-    };
+    }
 
     /**
     * @param ID type ID of an NBTBase
@@ -26,7 +26,7 @@ public class NBTUtils {
     * @return the class name of an NBTBase based on the given type ID.
     */
 
-    public static @NotNull String GET_NBTBASE_CLASS_NAME(byte ID) {
+    protected static @NotNull String GET_NBTBASE_CLASS_NAME(byte ID) {
         switch (ID) {
             case 0: {
                 return "NBTTagEnd";
@@ -70,7 +70,7 @@ public class NBTUtils {
             default:
                 throw new IllegalArgumentException("Could not find a NBTBase class name");
         }
-    };
+    }
 
     /**
     * @param ID type ID of an NBTBase.
@@ -90,20 +90,20 @@ public class NBTUtils {
                 if(Object == null) {
                     Object = Method.invoke(NBTUtils.A, (byte) 7);
                     Values[0] = SerializationUtils.serialize((Serializable) Values[0]);
-                };
+                }
 
                 Field[] Fields = GET_NBTBASE_FIELDS(Object);
 
                 if(Fields[0] != null && Values.length > 0) {
                     Fields[0].set(Object, Values[0]);
-                };
+                }
 
                 if(Fields[1] != null && Values.length > 1) {
                     Fields[1].set(Object, Values[1]);
-                };
+                }
 
                 return Object;
-            };
+            }
 
             Class<?> NBTClass = Class.forName("net.minecraft.nbt." + GET_NBTBASE_CLASS_NAME(ID));
             Constructor<?> Constructor = NBTClass.getDeclaredConstructors()[0];
@@ -157,7 +157,7 @@ public class NBTUtils {
         } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | ClassNotFoundException | InstantiationException e) {
             throw new IllegalArgumentException("Something went wrong when creating an instance of an NMS NBTBase");
         }
-    };
+    }
 
     /**
     * @param NBTBase NMS object of an NBTBase.
@@ -165,7 +165,7 @@ public class NBTUtils {
     * @return the NMS object of an NBTBase converted to {@link NBTBase}.
     */
 
-    public static @NotNull NBTBase<?> GET_NBTBASE(@NotNull Object NBTBase) {
+    protected static @NotNull NBTBase<?> GET_NBTBASE(@NotNull Object NBTBase) {
         Object[] Values = new Object[3];
 
         try {
@@ -182,13 +182,13 @@ public class NBTUtils {
                     if(Deserialized instanceof long[]) {
                         Values[0] = (byte) 12;
                         Values[1] = Deserialized;
-                    };
-                };
-            };
+                    }
+                }
+            }
 
             if(Fields[1] != null) {
                 Values[2] = Fields[1].get(NBTBase);
-            };
+            }
 
         }catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalArgumentException("Error reading values from an NMS NBTBase");
@@ -227,16 +227,14 @@ public class NBTUtils {
 
                 for(Object NBT : (ArrayList<Object>) Values[1]) {
                     Array.add(GET_NBTBASE(NBT));
-                };
+                }
 
                 return new NBTList(Array, (byte) Values[2]);
             }
             case 10: {
                 Map<String, Object> Map = new HashMap<>();
 
-                ((Map<String, Object>) Values[1]).forEach((A, B) -> {
-                    Map.put(A, GET_NBTBASE(B));
-                });
+                ((Map<String, Object>) Values[1]).forEach((A, B) -> Map.put(A, GET_NBTBASE(B)));
 
                 return new NBTCompound(Map);
             }
@@ -248,7 +246,7 @@ public class NBTUtils {
             }
             default: throw new IllegalArgumentException("Unable to create NBTBase");
         }
-    };
+    }
 
     /**
     * @param NBTBase NMS object of an NBTBase.
@@ -256,7 +254,7 @@ public class NBTUtils {
     * @return the fields of the NMS object of a given NBTBase.
     */
 
-    public static @NotNull Field[] GET_NBTBASE_FIELDS(@NotNull Object NBTBase) {
+    protected static @NotNull Field[] GET_NBTBASE_FIELDS(@NotNull Object NBTBase) {
 
         byte ID;
 
@@ -278,11 +276,11 @@ public class NBTUtils {
                     Fields[0] = Field;
                 } catch (NoSuchFieldException ignored) {
                     continue;
-                };
+                }
 
                 break;
-            };
-        };
+            }
+        }
 
         if(Names.size() > 1) {
             for (String Fieldname : Names.get(1)) {
@@ -293,14 +291,14 @@ public class NBTUtils {
                     Fields[1] = Field;
                 } catch (NoSuchFieldException ignored) {
                     continue;
-                };
+                }
 
                 break;
-            };
-        };
+            }
+        }
 
         return Fields;
-    };
+    }
 
     /**
     * @param ID type ID of an NBTBase
@@ -308,7 +306,7 @@ public class NBTUtils {
     * @return the field name of an NBTBase based on the given type ID.
     */
 
-    public static @NotNull List<String[]> GET_NBTBASE_FIELDS_NAME(byte ID) {
+    protected static @NotNull List<String[]> GET_NBTBASE_FIELDS_NAME(byte ID) {
 
         List<String[]> List = new ArrayList<>();
 
@@ -332,10 +330,10 @@ public class NBTUtils {
             case 10: {
                 List.add(new String[]{"map", "x"});
             }
-        };
+        }
 
         if(List.size() < 2) List.add(new String[0]);
 
         return List;
-    };
-};
+    }
+}

@@ -18,12 +18,12 @@ public class NBTByteArray extends NBTBase<byte[]> {
 
     public NBTByteArray(byte[] ByteArray) {
         this.Data = ByteArray;
-    };
+    }
 
     @Override
     protected final byte getTypeID() {
         return 7;
-    };
+    }
 
     /**
     * @return this {@link NBTByteArray} as a {@link String}.
@@ -32,5 +32,5 @@ public class NBTByteArray extends NBTBase<byte[]> {
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + ": " + Arrays.toString(Data);
-    };
-};
+    }
+}

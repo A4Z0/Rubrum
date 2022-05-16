@@ -30,7 +30,7 @@ public class CraftItemStack {
         } catch (Error | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalArgumentException("Error converting an ItemStack to NMS ItemStack object");
         }
-    };
+    }
 
     /**
     * @param Item NMS version of an item.
@@ -44,7 +44,7 @@ public class CraftItemStack {
         } catch (Error | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalArgumentException("Error getting NBTTagCompound from a NMS ItemStack object");
         }
-    };
+    }
 
     /**
     * @param Item NMS version of an item to be changed.
@@ -61,7 +61,7 @@ public class CraftItemStack {
         } catch (Error | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalArgumentException("Error setting NBT on a NMS ItemStack");
         }
-    };
+    }
 
     /**
     * @param Item NMS version of an item.
@@ -75,5 +75,5 @@ public class CraftItemStack {
         } catch (Error | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalArgumentException("Error converting an NMS ItemStack object to bukkit ItemStack");
         }
-    };
-};
+    }
+}

@@ -23,16 +23,12 @@ public class NBTBlock extends NBTCompound {
         this.A = Block;
         this.B = new NBTChunk(Block.getChunk());
 
-        if(!this.B.hasKey("blocks")) {
-            return;
-        };
+        if(!this.B.hasKey("blocks")) return;
 
-        if(!this.B.getCompound("blocks").hasKey(this.A.getX() + "_" + this.A.getY() + "_" + this.A.getZ())) {
-            return;
-        };
+        if(!this.B.getCompound("blocks").hasKey(this.A.getX() + "_" + this.A.getY() + "_" + this.A.getZ())) return;
 
         super.setTag(this.B.getCompound("blocks").getCompound(this.A.getX() + "_" + this.A.getY() + "_" + this.A.getZ()));
-    };
+    }
 
     /**
     * Defines the NBT of the block stored in this {@link NBTBlock}.
@@ -42,13 +38,11 @@ public class NBTBlock extends NBTCompound {
 
     @Override
     public void setTag(@NotNull NBTCompound NBTCompound) {
-        if(!this.B.hasKey("blocks")) {
-            this.B.setCompound("blocks", new NBTCompound());
-        };
+        if(!this.B.hasKey("blocks")) this.B.setCompound("blocks", new NBTCompound());
 
         this.B.getCompound("blocks").setCompound(this.A.getX() + "_" + this.A.getY() + "_" + this.A.getZ(), NBTCompound);
         this.B.setTag(this.B);
-    };
+    }
 
     /**
     * @return the given {@link Block}.
@@ -56,5 +50,5 @@ public class NBTBlock extends NBTCompound {
 
     public @NotNull Block getBlock() {
         return this.A;
-    };
-};
+    }
+}

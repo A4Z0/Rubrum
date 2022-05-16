@@ -32,7 +32,7 @@ public class CraftEntity {
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalArgumentException("Error converting an Entity to an NMS Entity");
         }
-    };
+    }
 
     /**
     * @param Entity NMS version of an entity.
@@ -52,7 +52,7 @@ public class CraftEntity {
         }catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalArgumentException("Error when trying to read the NBT of an NMS Entity");
         }
-    };
+    }
 
     /**
     * @param Entity NMS version of an entity to be changed.
@@ -72,10 +72,10 @@ public class CraftEntity {
                 }
 
                 break;
-            };
+            }
 
         } catch (InvocationTargetException | IllegalAccessException  e) {
             throw new IllegalArgumentException("Error setting NBT on a NMS Entity");
         }
-    };
-};
+    }
+}

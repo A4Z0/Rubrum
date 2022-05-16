@@ -81,7 +81,7 @@ public enum Version {
 
     Version() {
         this(false);
-    };
+    }
 
     /**
     * Construct a {@link Version} with the given params.
@@ -91,7 +91,7 @@ public enum Version {
 
     Version(boolean A) {
         this(A, false);
-    };
+    }
 
     /**
     * Construct a {@link Version} with the given params.
@@ -103,7 +103,7 @@ public enum Version {
     Version(boolean A, boolean B) {
         this.A = A;
         this.B = B;
-    };
+    }
 
     /**
     * @return true if the version is Two Handed.
@@ -111,7 +111,7 @@ public enum Version {
 
     public boolean T() {
         return this.A;
-    };
+    }
 
     /**
     * @return true if the version has Changed Drastically.
@@ -119,7 +119,7 @@ public enum Version {
 
     public boolean D() {
         return this.B;
-    };
+    }
 
     /**
     * @param Version a {@link Version}.
@@ -129,9 +129,9 @@ public enum Version {
 
     public boolean M(@NotNull Version Version) {
         return this.ordinal() >= Version.ordinal();
-    };
+    }
 
-      //============================================//
+    //============================================//
      //               Static Values                //
     //============================================//
 
@@ -141,7 +141,7 @@ public enum Version {
 
     private static @NotNull String V() {
         return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-    };
+    }
 
     /** Store the running version. */
     public final static String BUKKIT_VERSION = V();
@@ -153,10 +153,10 @@ public enum Version {
     public static boolean S() {
         for(Version Version : Version.values()) {
             if(BUKKIT_VERSION.contains(Version.name().substring(1))) return true;
-        };
+        }
 
         return false;
-    };
+    }
 
     /**
     * @return the bukkit version as a {@link Version}.
@@ -165,8 +165,8 @@ public enum Version {
     public static @NotNull Version B() {
         for(Version Version : Version.values()) {
             if(BUKKIT_VERSION.contains(Version.name().substring(1))) return Version;
-        };
+        }
 
         return Version.NOT_SUPPORTED;
-    };
-};
+    }
+}
