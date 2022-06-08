@@ -19,6 +19,11 @@ public class NBTEnd extends NBTBase<String> {
     }
 
     @Override
+    protected Object getComponent() {
+        return NBTUtils.NBTEND.O();
+    }
+
+    @Override
     protected byte getTypeID() {
         return 0;
     }

@@ -1,6 +1,6 @@
 package com.a4z0.rubrum.reflection;
 
-import com.a4z0.rubrum.api.version.Version;
+import com.a4z0.rubrum.enums.Version;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,6 +59,7 @@ public class CraftItemStack {
 
             return Item;
         } catch (Error | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
             throw new IllegalArgumentException("Error setting NBT on a NMS ItemStack");
         }
     }

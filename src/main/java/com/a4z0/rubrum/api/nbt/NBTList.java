@@ -59,7 +59,7 @@ public class NBTList extends NBTBase<List<NBTBase<?>>> {
 
     @Override
     protected Object getComponent() {
-        return NBTUtils.GET_NBTBASE_INSTANCE(this.getTypeID(), (this.Data.stream().filter(Objects::nonNull).map(NBTBase::getComponent).collect(Collectors.toList())), this.Type);
+        return NBTUtils.NBTLIST.O(this.Data.stream().filter(Objects::nonNull).map(NBTBase::getComponent).collect(Collectors.toList()), this.Type);
     }
 
     @Override

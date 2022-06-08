@@ -1,6 +1,6 @@
 package com.a4z0.rubrum.api.nbt;
 
-import com.a4z0.rubrum.api.version.Version;
+import com.a4z0.rubrum.enums.Version;
 import com.a4z0.rubrum.reflection.CraftTileEntity;
 import org.bukkit.block.BlockState;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -27,7 +27,7 @@ public class NBTTileEntity extends NBTCompound {
         this.A = BlockState;
 
         if(CraftTileEntity.getNBT(CraftTileEntity.getNMS(this.A)) != null) {
-            super.setTag((NBTCompound) NBTUtils.GET_NBTBASE(CraftTileEntity.getNBT(CraftTileEntity.getNMS(this.A))));
+            super.setTag((NBTCompound) NBTUtils.B(CraftTileEntity.getNBT(CraftTileEntity.getNMS(this.A))));
         }
     }
 
@@ -39,7 +39,7 @@ public class NBTTileEntity extends NBTCompound {
 
     @Override
     public void setTag(@NotNull NBTCompound NBTCompound) {
-        CraftTileEntity.setNBT(CraftTileEntity.getNMS(this.A), this.getComponent());
+       CraftTileEntity.setNBT(CraftTileEntity.getNMS(this.A), NBTCompound.getComponent());
     }
 
     /**

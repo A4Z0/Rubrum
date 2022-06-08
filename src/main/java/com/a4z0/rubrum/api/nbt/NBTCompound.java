@@ -56,7 +56,7 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
            if(B != null) Map.put(A, B.getComponent());
         });
 
-        return NBTUtils.GET_NBTBASE_INSTANCE(this.getTypeID(), Map);
+        return NBTUtils.NBTCOMPOUND.O(Map);
     }
 
     /**
@@ -78,7 +78,7 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     }
 
     /**
-    * @param Key presence of key to be tested.
+    * @param Key Key whose presence in this {@link NBTCompound} is to be tested.
     *
     * @return true if it contains the Key.
     */

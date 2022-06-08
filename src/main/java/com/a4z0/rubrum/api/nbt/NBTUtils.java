@@ -1,339 +1,188 @@
 package com.a4z0.rubrum.api.nbt;
 
-import com.a4z0.rubrum.api.version.Version;
-import org.apache.commons.lang.SerializationUtils;
+import com.a4z0.rubrum.enums.Version;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.Serializable;
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
-public class NBTUtils {
+public enum NBTUtils {
+    NBTEND("NBTTagEnd", new Object[]{}, new String[]{}),
+    NBTBYTE("NBTTagByte", new Object[]{(byte) 0}, new String[]{"data", "x"}),
+    NBTSHORT("NBTTagShort", new Object[]{(short) 0}, new String[]{"data", "c"}),
+    NBTINT("NBTTagInt", new Object[]{0}, new String[]{"data", "c"}),
+    NBTLONG("NBTTagLong", new Object[]{0L}, new String[]{"data", "c"}),
+    NBTFLOAT("NBTTagFloat", new Object[]{0f}, new String[]{"data", "w"}),
+    NBTDOUBLE("NBTTagDouble", new Object[]{0d}, new String[]{"data", "w"}),
+    NBTBYTEARRAY("NBTTagByteArray", new Object[]{new Byte[]{}}, new String[]{"data", "c"}),
+    NBTSTRING("NBTTagString", new Object[]{""}, new String[]{"data", "A"}),
+    NBTLIST("NBTTagList", new Object[]{(new ArrayList<>()), (byte) 0}, new String[]{"data", "c", "list", "w"}),
+    NBTCOMPOUND("NBTTagCompound", new Object[]{(new HashMap<>())}, new String[]{"map", "x"}),
+    NBTINTARRAY("NBTTagIntArray", new Object[]{(new int[]{})}, new String[]{"data", "c"}),
+    NBTLONGARRAY("NBTTagLongArray", new Object[]{(new long[]{})}, new String[]{"data", "c"});
 
-    public static final Class<?> A;
+    private Class<?> B;
+    private final Object[] C;
+    private final List<String[]> D = new ArrayList<>();
 
-    static {
+    NBTUtils(@NotNull String B, @NotNull Object[] C, @NotNull String[]... D) {
+        this.C = C;
+        this.D.addAll(Arrays.asList(D));
+
         try {
-            A = Class.forName(Version.B().D() ? "net.minecraft.nbt.NBTBase" : "net.minecraft.server." + Version.BUKKIT_VERSION + ".NBTBase");
-        } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException("Could not find NBTBase class");
+            this.B = Class.forName((Version.B().D() ? "net.minecraft.nbt." : "net.minecraft.server.") + B);
+        }catch (ClassNotFoundException e) {
+            this.B = null;
         }
     }
 
-    /**
-    * @param ID type ID of an NBTBase
-    *
-    * @return the class name of an NBTBase based on the given type ID.
-    */
+    public static @NotNull NBTBase<?> B(@NotNull Object NBTBase) {
+        NBTUtils NBT = NBTUtils.N(NBTBase.getClass().getSimpleName());
 
-    protected static @NotNull String GET_NBTBASE_CLASS_NAME(byte ID) {
-        switch (ID) {
-            case 0: {
-                return "NBTTagEnd";
+        List<Object> Params = new ArrayList<>();
+
+        if(NBT.D.size() > 0) {
+            for(String Fieldname : NBT.D.get(0)) {
+                Field Field;
+
+                try {
+                    Field = NBTBase.getClass().getDeclaredField(Fieldname);
+                    Field.setAccessible(true);
+
+                    Params.add(Field.get(NBTBase));
+                }catch (NoSuchFieldException | IllegalAccessException ignored) {}
             }
-            case 1: {
-                return "NBTTagByte";
-            }
-            case 2: {
-                return "NBTTagShort";
-            }
-            case 3: {
-                return "NBTTagInt";
-            }
-            case 4: {
-                return "NBTTagLong";
-            }
-            case 5: {
-                return "NBTTagFloat";
-            }
-            case 6: {
-                return "NBTTagDouble";
-            }
-            case 7: {
-                return "NBTTagByteArray";
-            }
-            case 8: {
-                return "NBTTagString";
-            }
-            case 9: {
-                return "NBTTagList";
-            }
-            case 10: {
-                return "NBTTagCompound";
-            }
-            case 11: {
-                return "NBTTagIntArray";
-            }
-            case 12: {
-                return "NBTTagLongArray";
-            }
-            default:
-                throw new IllegalArgumentException("Could not find a NBTBase class name");
-        }
-    }
-
-    /**
-    * @param ID type ID of an NBTBase.
-    * @param Values values to be stored in NBTBase.
-    *
-    * @return an instance of an NBTBase based on the given type ID.
-    */
-
-    public static @NotNull Object GET_NBTBASE_INSTANCE(byte ID, Object... Values) {
-        try {
-            if(!NBTUtils.A.isInterface()) {
-                Method Method = NBTUtils.A.getDeclaredMethod("createTag", byte.class);
-                Method.setAccessible(true);
-
-                Object Object = Method.invoke(NBTUtils.A, ID);
-
-                if(Object == null) {
-                    Object = Method.invoke(NBTUtils.A, (byte) 7);
-                    Values[0] = SerializationUtils.serialize((Serializable) Values[0]);
-                }
-
-                Field[] Fields = GET_NBTBASE_FIELDS(Object);
-
-                if(Fields[0] != null && Values.length > 0) {
-                    Fields[0].set(Object, Values[0]);
-                }
-
-                if(Fields[1] != null && Values.length > 1) {
-                    Fields[1].set(Object, Values[1]);
-                }
-
-                return Object;
-            }
-
-            Class<?> NBTClass = Class.forName("net.minecraft.nbt." + GET_NBTBASE_CLASS_NAME(ID));
-            Constructor<?> Constructor = NBTClass.getDeclaredConstructors()[0];
-            Constructor.setAccessible(true);
-
-            switch (ID) {
-                case 0: {
-                    return Constructor.newInstance();
-                }
-                case 1: {
-                    return Constructor.newInstance(Values.length > 0 ? Values[0] : (byte) 0);
-                }
-                case 2: {
-                    return Constructor.newInstance(Values.length > 0 ? Values[0] : (short) 0);
-                }
-                case 3: {
-                    return Constructor.newInstance(Values.length > 0 ? Values[0] : 0);
-                }
-                case 4: {
-                    return Constructor.newInstance(Values.length > 0 ? Values[0] : 0L);
-                }
-                case 5: {
-                    return Constructor.newInstance(Values.length > 0 ? Values[0] : 0f);
-                }
-                case 6: {
-                    return Constructor.newInstance(Values.length > 0 ? Values[0] : 0d);
-                }
-                case 7: {
-                    return Constructor.newInstance((Object) (Values.length > 0 ? (byte[]) Values[0] : new byte[]{}));
-                }
-                case 8: {
-                    return Constructor.newInstance(Values.length > 0 ? Values[0] : "");
-                }
-                case 9: {
-                    return Constructor.newInstance((Values.length > 0 ? Values[0] : new ArrayList<>()), (Values.length > 1 ? Values[1] : (byte) 0));
-                }
-                case 10: {
-                    return Constructor.newInstance(Values.length > 0 ? Values[0] : new HashMap<>());
-                }
-                case 11: {
-                    return Constructor.newInstance((Object) (Values.length > 0 ? (int[]) Values[0] : new int[]{}));
-                }
-                case 12: {
-                    return Constructor.newInstance((Object) (Values.length > 0 ? (long[]) Values[0] : new long[]{}));
-                }
-                default: {
-                    throw new IllegalArgumentException("Could not create instance of an NMS NBTBase");
-                }
-            }
-
-        } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | ClassNotFoundException | InstantiationException e) {
-            throw new IllegalArgumentException("Something went wrong when creating an instance of an NMS NBTBase");
-        }
-    }
-
-    /**
-    * @param NBTBase NMS object of an NBTBase.
-    *
-    * @return the NMS object of an NBTBase converted to {@link NBTBase}.
-    */
-
-    protected static @NotNull NBTBase<?> GET_NBTBASE(@NotNull Object NBTBase) {
-        Object[] Values = new Object[3];
-
-        try {
-            Values[0] = NBTBase.getClass().getMethod(Version.B().D() ? "a" : "getTypeId").invoke(NBTBase);
-
-            Field[] Fields = GET_NBTBASE_FIELDS(NBTBase);
-
-            if(Fields[0] != null) {
-                Values[1] = Fields[0].get(NBTBase);
-
-                if(((byte) Values[0]) == 7) {
-                    Object Deserialized = SerializationUtils.deserialize((byte[]) Values[1]);
-
-                    if(Deserialized instanceof long[]) {
-                        Values[0] = (byte) 12;
-                        Values[1] = Deserialized;
-                    }
-                }
-            }
-
-            if(Fields[1] != null) {
-                Values[2] = Fields[1].get(NBTBase);
-            }
-
-        }catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new IllegalArgumentException("Error reading values from an NMS NBTBase");
         }
 
-        switch((byte) Values[0]) {
+        if(NBT.D.size() > 1) {
+            for(String Fieldname : NBT.D.get(1)) {
+                Field Field;
+
+                try {
+                    Field = NBTBase.getClass().getDeclaredField(Fieldname);
+                    Field.setAccessible(true);
+
+                    Params.add(Field.get(NBTBase));
+                }catch (NoSuchFieldException | IllegalAccessException ignored) {}
+            }
+        }
+
+        switch(NBT.ordinal()) {
             case 0: {
                 return new NBTEnd();
             }
             case 1: {
-                return new NBTByte((byte) Values[1]);
+                return new NBTByte((byte) Params.get(0));
             }
             case 2: {
-                return new NBTShort((short) Values[1]);
+                return new NBTShort((short) Params.get(0));
             }
             case 3: {
-                return new NBTInt((int) Values[1]);
+                return new NBTInt((int) Params.get(0));
             }
             case 4: {
-                return new NBTLong((long) Values[1]);
+                return new NBTLong((long) Params.get(0));
             }
             case 5: {
-                return new NBTFloat((float) Values[1]);
+                return new NBTFloat((float) Params.get(0));
             }
             case 6: {
-                return new NBTDouble((double) Values[1]);
+                return new NBTDouble((double) Params.get(0));
             }
             case 7: {
-                return new NBTByteArray((byte[]) Values[1]);
+                return new NBTByteArray((byte[]) Params.get(0));
             }
             case 8: {
-                return new NBTString((String) Values[1]);
+                return new NBTString((String) Params.get(0));
             }
             case 9: {
                 ArrayList<NBTBase<?>> Array = new ArrayList<>();
 
-                for(Object NBT : (ArrayList<Object>) Values[1]) {
-                    Array.add(GET_NBTBASE(NBT));
+                for(Object NMS : (ArrayList<Object>) Params.get(0)) {
+                    Array.add(NBTUtils.B(NMS));
                 }
 
-                return new NBTList(Array, (byte) Values[2]);
+                return new NBTList(Array, (byte) Params.get(1));
             }
             case 10: {
                 Map<String, Object> Map = new HashMap<>();
 
-                ((Map<String, Object>) Values[1]).forEach((A, B) -> Map.put(A, GET_NBTBASE(B)));
+                ((Map<String, Object>) Params.get(0)).forEach((A, B) -> Map.put(A, NBTUtils.B(B)));
 
                 return new NBTCompound(Map);
             }
             case 11: {
-                return new NBTIntArray((int[]) Values[1]);
+                return new NBTIntArray((int[]) Params.get(0));
             }
             case 12: {
-                return new NBTLongArray((long[]) Values[1]);
+                return new NBTLongArray((long[]) Params.get(0));
             }
             default: throw new IllegalArgumentException("Unable to create NBTBase");
         }
     }
 
-    /**
-    * @param NBTBase NMS object of an NBTBase.
-    *
-    * @return the fields of the NMS object of a given NBTBase.
-    */
-
-    protected static @NotNull Field[] GET_NBTBASE_FIELDS(@NotNull Object NBTBase) {
-
-        byte ID;
+    public Object O(@NotNull Object... Parameters) {
+        Constructor<?> Constructor = B.getDeclaredConstructors()[this.ordinal() == 12 ? 2 : 0];
+        Constructor.setAccessible(true);
 
         try {
-            ID = ((byte) NBTBase.getClass().getMethod(Version.B().D() ? "a" : "getTypeId").invoke(NBTBase));
-        } catch (Error | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            throw new IllegalArgumentException("Error getting type ID from an NMS NBTBase");
-        }
-
-        final Field[] Fields = new Field[2];
-        final List<String[]> Names = GET_NBTBASE_FIELDS_NAME(ID);
-
-        if(Names.size() > 0) {
-            for(String Fieldname : Names.get(0)) {
-                try {
-                    Field Field = NBTBase.getClass().getDeclaredField(Fieldname);
-                    Field.setAccessible(true);
-
-                    Fields[0] = Field;
-                } catch (NoSuchFieldException ignored) {
-                    continue;
-                }
-
-                break;
+            if(Version.B().D()) {
+                return Constructor.newInstance(Parameters.length > 0 ? Parameters : this.C);
             }
-        }
 
-        if(Names.size() > 1) {
-            for (String Fieldname : Names.get(1)) {
-                try {
-                    Field Field = NBTBase.getClass().getDeclaredField(Fieldname);
-                    Field.setAccessible(true);
+            Object Instance = Constructor.newInstance();
 
-                    Fields[1] = Field;
-                } catch (NoSuchFieldException ignored) {
-                    continue;
+            if(this.D.size() > 0) {
+                for(String Fieldname : this.D.get(0)) {
+                    Field Field;
+
+                    try {
+                        Field = Instance.getClass().getDeclaredField(Fieldname);
+                        Field.setAccessible(true);
+                    }catch (NoSuchFieldException ignored) {
+                        continue;
+                    }
+
+                    Field.set(Instance, Parameters[0]);
                 }
-
-                break;
             }
-        }
 
-        return Fields;
+            if(this.D.size() > 1) {
+                for(String Fieldname : this.D.get(1)) {
+                    Field Field;
+
+                    try {
+                        Field = Instance.getClass().getDeclaredField(Fieldname);
+                        Field.setAccessible(true);
+                    }catch (NoSuchFieldException ignored) {
+                        continue;
+                    }
+
+                    Field.set(Instance, Parameters[1]);
+                }
+            }
+
+            return Instance;
+        }catch (Error | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            throw new IllegalArgumentException("Could not create this NMS object");
+        }
     }
 
-    /**
-    * @param ID type ID of an NBTBase
-    *
-    * @return the field name of an NBTBase based on the given type ID.
-    */
-
-    protected static @NotNull List<String[]> GET_NBTBASE_FIELDS_NAME(byte ID) {
-
-        List<String[]> List = new ArrayList<>();
-
-        switch (ID) {
-            case 1: {
-                List.add(new String[]{"data", "x"});
-            }
-            case 2: case 3: case 4: case 7: case 11: case 12: {
-                List.add(new String[]{"data", "c"});
-            }
-            case 5: case 6: {
-                List.add(new String[]{"data", "w"});
-            }
-            case 8: {
-                List.add(new String[]{"data", "A"});
-            }
-            case 9: {
-                List.add(new String[]{"list", "c"});
-                List.add(new String[]{"type", "w"});
-            }
-            case 10: {
-                List.add(new String[]{"map", "x"});
-            }
+    public static @NotNull NBTUtils D(byte D) {
+        for(NBTUtils NBT : NBTUtils.values()) {
+            if(NBT.ordinal() == D) return NBT;
         }
 
-        if(List.size() < 2) List.add(new String[0]);
+        throw new NullPointerException();
+    }
 
-        return List;
+    public static @NotNull NBTUtils N(@NotNull String N) {
+        for(NBTUtils NBT : NBTUtils.values()) {
+            if(NBT.B.getSimpleName().equals(N)) return NBT;
+        }
+
+        throw new NullPointerException();
     }
 }

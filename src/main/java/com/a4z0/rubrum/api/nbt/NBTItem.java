@@ -29,7 +29,7 @@ public class NBTItem extends NBTCompound {
         this.B = Item.clone();
 
         if(this.hasNBTData()) {
-            super.setTag((NBTCompound) NBTUtils.GET_NBTBASE(CraftItemStack.getNBT(CraftItemStack.getNMS(this.A))));
+            super.setTag((NBTCompound) NBTUtils.B(CraftItemStack.getNBT(CraftItemStack.getNMS(this.A))));
         }
     }
 
@@ -41,7 +41,7 @@ public class NBTItem extends NBTCompound {
 
     @Override
     public void setTag(@NotNull NBTCompound NBTCompound) {
-        this.B = this.merge(this.B);
+        this.B = CraftItemStack.parseNMSItem(CraftItemStack.setNBT(CraftItemStack.getNMS(this.B), NBTCompound.getComponent()));
     }
 
     /**

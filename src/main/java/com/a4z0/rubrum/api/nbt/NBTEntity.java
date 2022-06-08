@@ -1,6 +1,6 @@
 package com.a4z0.rubrum.api.nbt;
 
-import com.a4z0.rubrum.api.version.Version;
+import com.a4z0.rubrum.enums.Version;
 import com.a4z0.rubrum.reflection.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +23,7 @@ public class NBTEntity extends NBTCompound {
     public NBTEntity(@NotNull Entity Entity) {
         this.A = Entity;
 
-        super.setTag((NBTCompound) NBTUtils.GET_NBTBASE(CraftEntity.getNBT(CraftEntity.getNMS(this.A))));
+        super.setTag((NBTCompound) NBTUtils.B(CraftEntity.getNBT(CraftEntity.getNMS(this.A))));
     }
 
     /**
@@ -34,7 +34,7 @@ public class NBTEntity extends NBTCompound {
 
     @Override
     public void setTag(@NotNull NBTCompound NBTCompound) {
-        CraftEntity.setNBT(CraftEntity.getNMS(this.A), this.getComponent());
+        CraftEntity.setNBT(CraftEntity.getNMS(this.A), NBTCompound.getComponent());
     }
 
     /**

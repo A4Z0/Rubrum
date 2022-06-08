@@ -35,7 +35,7 @@ public abstract class NBTBase<T> {
     */
 
     protected Object getComponent() {
-        return NBTUtils.GET_NBTBASE_INSTANCE(this.getTypeID(), this.Data);
+        return NBTUtils.D(this.getTypeID()).O(this.Data);
     }
 
     /**

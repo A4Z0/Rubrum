@@ -1,7 +1,7 @@
 package com.a4z0.rubrum.reflection;
 
 import com.a4z0.rubrum.api.nbt.NBTUtils;
-import com.a4z0.rubrum.api.version.Version;
+import com.a4z0.rubrum.enums.Version;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,7 +42,7 @@ public class CraftEntity {
 
     public static @NotNull Object getNBT(@NotNull Object Entity) {
         try {
-            Object NBT = NBTUtils.GET_NBTBASE_INSTANCE((byte) 10);
+            Object NBT = NBTUtils.NBTCOMPOUND.O();
 
             Method Method = Entity.getClass().getDeclaredMethod("b", NBT.getClass());
             Method.setAccessible(true);

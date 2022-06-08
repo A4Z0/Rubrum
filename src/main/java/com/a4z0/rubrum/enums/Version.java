@@ -1,22 +1,7 @@
-package com.a4z0.rubrum.api.version;
+package com.a4z0.rubrum.enums;
 
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
-
-/*
-* What is the purpose of this?
-* The purpose is to facilitate the creation of plugins for multiple versions.
-*
-* Ex:
-*   A: Pick up item from player's hand.
-*       1.8 (A == false): Player.getItemInHand();
-*       1.9 - 1.18 (A == true): Player.getItemInMainHand();
-*   B: Color System.
-*       1.8 - 1.15 (B == false) Minecraft standard colors.
-*       1.16 - 1.18 (B == true) Added hexadecimal colors.
-*
-* The A and B values help in checking to see if some methods have changed.
-*/
 
 /**
 * Contains the versions that are supported.
@@ -54,71 +39,59 @@ public enum Version {
 
     /* Versions that is possible to have two items in both hands. */
 
-    V1_9_R1(true),
-    V1_9_R2(true),
-    V1_10_R1(true),
-    V1_11_R1(true),
-    V1_12_R1(true),
-    V1_13_R1(true),
-    V1_13_R2(true),
-    V1_14_R1(true),
-    V1_15_R1(true),
+    V1_9_R1(1),
+    V1_9_R2(1),
+    V1_10_R1(1),
+    V1_11_R1(1),
+    V1_12_R1(1),
+    V1_13_R1(1),
+    V1_13_R2(1),
+    V1_14_R1(1),
+    V1_15_R1(1),
 
     /* Versions that is possible to have two items in both hands and has been drastically changed */
 
-    V1_16_R1(true, true),
-    V1_16_R2(true, true),
-    V1_16_R3(true, true),
-    V1_17_R1(true, true),
-    V1_18_R1(true, true),
-    V1_18_R2(true, true);
+    V1_16_R1(2),
+    V1_16_R2(2),
+    V1_16_R3(2),
+    V1_17_R1(2),
+    V1_18_R1(2),
+    V1_18_R2(2);
 
-    private final boolean A, B;
+    private final byte T;
 
     /**
     * Construct a {@link Version}.
     */
 
     Version() {
-        this(false);
+        this((byte) 0);
     }
 
     /**
     * Construct a {@link Version} with the given params.
     *
-    * @param A is Two Handed?
+    * @param V_TYPE {@link Version} type.
     */
 
-    Version(boolean A) {
-        this(A, false);
+    Version(int V_TYPE) {
+        this.T = (byte) V_TYPE;
     }
 
     /**
-    * Construct a {@link Version} with the given params.
-    *
-    * @param A is Two Handed?
-    * @param B is Drastically Changed?
-    */
-
-    Version(boolean A, boolean B) {
-        this.A = A;
-        this.B = B;
-    }
-
-    /**
-    * @return true if the version is Two Handed.
+    * @return true if the version is "Two Handed".
     */
 
     public boolean T() {
-        return this.A;
+        return T > 0;
     }
 
     /**
-    * @return true if the version has Changed Drastically.
+    * @return true if the version has "Changed Drastically".
     */
 
     public boolean D() {
-        return this.B;
+        return T > 1;
     }
 
     /**
@@ -130,10 +103,6 @@ public enum Version {
     public boolean M(@NotNull Version Version) {
         return this.ordinal() >= Version.ordinal();
     }
-
-    //============================================//
-     //               Static Values                //
-    //============================================//
 
     /**
     * @return the bukkit version.
@@ -167,6 +136,6 @@ public enum Version {
             if(BUKKIT_VERSION.contains(Version.name().substring(1))) return Version;
         }
 
-        return Version.NOT_SUPPORTED;
+        return NOT_SUPPORTED;
     }
 }

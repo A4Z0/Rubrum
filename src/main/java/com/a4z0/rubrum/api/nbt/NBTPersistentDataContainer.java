@@ -21,7 +21,7 @@ public class NBTPersistentDataContainer extends NBTCompound {
     protected NBTPersistentDataContainer(@NotNull PersistentDataContainer PersistentDataContainer) {
         this.A = PersistentDataContainer;
 
-        super.setTag((NBTCompound) NBTUtils.GET_NBTBASE(CraftPersistentDataContainer.getNBT(this.A)));
+        super.setTag((NBTCompound) NBTUtils.B(CraftPersistentDataContainer.getNBT(this.A)));
     }
 
     /**
@@ -32,6 +32,6 @@ public class NBTPersistentDataContainer extends NBTCompound {
 
     @Override
     public void setTag(@NotNull NBTCompound NBTCompound) {
-        CraftPersistentDataContainer.setNBT(this.A, this.getComponent());
+        CraftPersistentDataContainer.setNBT(this.A, NBTCompound.getComponent());
     }
 }

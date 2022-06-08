@@ -1,7 +1,7 @@
 package com.a4z0.rubrum.reflection;
 
 import com.a4z0.rubrum.api.nbt.NBTUtils;
-import com.a4z0.rubrum.api.version.Version;
+import com.a4z0.rubrum.enums.Version;
 import org.bukkit.block.BlockState;
 import org.jetbrains.annotations.NotNull;
 
@@ -66,7 +66,7 @@ public class CraftTileEntity {
 
         try {
 
-            Object NBT = NBTUtils.GET_NBTBASE_INSTANCE((byte) 10);
+            Object NBT = NBTUtils.NBTCOMPOUND.O();
 
             for(String Fieldname : new String[]{"save", "m", "b"}) {
                 try {

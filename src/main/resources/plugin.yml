@@ -7,3 +7,10 @@ main: com.a4z0.rubrum.Rubrum
 load: POSTWORLD
 database: false
 api-version: 1.13
+
+commands:
+  r-nbt:
+    description: "Shows a list containing all the command arguments"
+    usage: "/<command>"
+    aliases:
+      - nbt

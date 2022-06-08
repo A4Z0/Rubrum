@@ -1,7 +1,6 @@
 package com.a4z0.rubrum.enums;
 
 import com.a4z0.rubrum.api.nbt.*;
-import com.a4z0.rubrum.api.version.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -10,6 +9,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
@@ -19,16 +19,19 @@ public enum Task {
 
         NBTCompound NBT = new NBTCompound();
 
-        NBT.setInt("Int", 1);
+        NBT.set("End", new NBTEnd());
         NBT.setByte("Byte", (byte) 1);
-        NBT.setLong("Long", 10000);
-        NBT.setFloat("Float", 0.01f);
         NBT.setShort("Short", (short) 1.00);
+        NBT.setInt("Int", 1);
+        NBT.setLong("Long", 1L);
+        NBT.setFloat("Float", 1f);
+        NBT.setDouble("Double", 1d);
+        NBT.setByteArray("ByteArray", new byte[]{1});
         NBT.setString("String", "One");
-        NBT.setDouble("Double", 100.100);
+        NBT.setList("List", new ArrayList<>());
+        NBT.setCompound("Compound", new NBTCompound());
         NBT.setIntArray("IntArray", new int[]{1});
         NBT.setLongArray("LongArray", new long[1]);
-        NBT.setByteArray("ByteArray", new byte[]{1});
 
         return 1;
     }),
@@ -50,38 +53,51 @@ public enum Task {
 
         List<NBTBase<?>> List = null;
 
-        if(NBT.getList("Equipment") != null) {
+        if(NBT.hasKey("Equipment")) {
             List = NBT.getList("Equipment");
         }
 
-        if(NBT.getList("ArmorItems") != null) {
+        if(NBT.hasKey("ArmorItems")) {
             List = NBT.getList("ArmorItems");
         }
 
         if(List == null) return null;
 
-        NBTCompound Compound = (NBTCompound) List.get(2);
+        NBTCompound IH = new NBTCompound();
+        NBTCompound IC = new NBTCompound();
+        NBTCompound IL = new NBTCompound();
+        NBTCompound IB = new NBTCompound();
 
-        Compound.setString("id", "minecraft:iron_chestplate");
-        List.set(3, Compound);
+        NBTCompound D = new NBTCompound();
+        D.setInt("Damage", 0);
 
-        if(NBT.getList("Equipment") != null) {
-            NBT.setList("Equipment", List, (byte) 10);
-        }
+        IH.setString("id", "minecraft:iron_helmet");
+        IC.setString("id", "minecraft:iron_chestplate");
+        IL.setString("id", "minecraft:iron_leggings");
+        IB.setString("id", "minecraft:iron_boots");
 
-        if(NBT.getList("ArmorItems") != null) {
-            NBT.setList("ArmorItems", List, (byte) 10);
-        }
-
-        NBT.setBoolean("Invisible", true);
-        NBT.setTag(NBT);
+        List.set(3, IH);
+        List.set(2, IC);
+        List.set(1, IL);
+        List.set(0, IB);
 
         if(Version.B().M(Version.V1_14_R1)) {
+            IH.setCompound("tag", D.clone());
+            IH.setByte("Count", (byte) 1);
+            IC.setCompound("tag", D.clone());
+            IC.setByte("Count", (byte) 1);
+            IL.setCompound("tag", D.clone());
+            IL.setByte("Count", (byte) 1);
+            IB.setCompound("tag", D.clone());
+            IB.setByte("Count", (byte) 1);
 
             NBTCompound Data = NBT.getPersistentDataContainer();
             Data.setString("Data", "Hello, World!");
             Data.setTag(Data);
         }
+
+        NBT.setBoolean("Invisible", true);
+        NBT.setTag(NBT);
 
         B.remove();
 
@@ -172,6 +188,7 @@ public enum Task {
         try {
             return this.B.call();
         } catch (Exception e) {
+            e.printStackTrace();
             return 0;
         }
     }
