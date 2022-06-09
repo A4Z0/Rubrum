@@ -33,6 +33,11 @@ public enum Task {
         NBT.setIntArray("IntArray", new int[]{1});
         NBT.setLongArray("LongArray", new long[1]);
 
+        NBTItem A = new NBTItem(new ItemStack(Material.IRON_SWORD));
+        A.setTag(NBT);
+
+        System.out.println(new NBTItem(A.getItem()));
+
         return 1;
     }),
     NBTITEM("NBTItem", () -> {

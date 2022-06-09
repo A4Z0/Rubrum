@@ -1,6 +1,8 @@
 package com.a4z0.rubrum.api.nbt;
 
 import com.a4z0.rubrum.enums.Version;
+import org.apache.commons.lang.SerializationException;
+import org.apache.commons.lang.SerializationUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
@@ -73,6 +75,18 @@ public enum NBTUtils {
             }
         }
 
+        if(NBT.ordinal() == 7) {
+            try {
+                Object Param = SerializationUtils.deserialize((byte[]) Params.get(0));
+
+                if(Param.getClass().equals(long[].class)) {
+                    Params.set(0, Param);
+                    NBT = NBTLONGARRAY;
+                }
+
+            } catch (SerializationException ignored) {}
+        }
+
         switch(NBT.ordinal()) {
             case 0: {
                 return new NBTEnd();
@@ -128,7 +142,7 @@ public enum NBTUtils {
     }
 
     public Object O(@NotNull Object... Parameters) {
-        Constructor<?> Constructor = (B == null ? NBTUtils.NBTBYTE.B : B).getDeclaredConstructors()[(this.ordinal() == 12 && B != null) ? 2 : 0];
+        Constructor<?> Constructor = (B == null ? NBTUtils.NBTBYTEARRAY.B : B).getDeclaredConstructors()[(this.ordinal() == 12 && B != null) ? 2 : 0];
         Constructor.setAccessible(true);
 
         try {
@@ -146,7 +160,7 @@ public enum NBTUtils {
                         Field = Instance.getClass().getDeclaredField(Fieldname);
                         Field.setAccessible(true);
 
-                        Field.set(Instance, Parameters[0]);
+                        Field.set(Instance, (B == null) ? SerializationUtils.serialize((long[]) Parameters[0]) : Parameters[0]);
 
                         break;
                     }catch (NoSuchFieldException ignored) {}
