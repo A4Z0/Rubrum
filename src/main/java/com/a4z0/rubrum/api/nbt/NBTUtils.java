@@ -18,7 +18,7 @@ public enum NBTUtils {
     NBTDOUBLE("NBTTagDouble", new Object[]{0d}, new String[]{"data", "w"}),
     NBTBYTEARRAY("NBTTagByteArray", new Object[]{new Byte[]{}}, new String[]{"data", "c"}),
     NBTSTRING("NBTTagString", new Object[]{""}, new String[]{"data", "A"}),
-    NBTLIST("NBTTagList", new Object[]{(new ArrayList<>()), (byte) 0}, new String[]{"data", "c", "list", "w"}),
+    NBTLIST("NBTTagList", new Object[]{(new ArrayList<>()), (byte) 0}, new String[]{"list", "c"}, new String[]{"type", "w"}),
     NBTCOMPOUND("NBTTagCompound", new Object[]{(new HashMap<>())}, new String[]{"map", "x"}),
     NBTINTARRAY("NBTTagIntArray", new Object[]{(new int[]{})}, new String[]{"data", "c"}),
     NBTLONGARRAY("NBTTagLongArray", new Object[]{(new long[]{})}, new String[]{"data", "c"});
@@ -32,7 +32,7 @@ public enum NBTUtils {
         this.D.addAll(Arrays.asList(D));
 
         try {
-            this.B = Class.forName((Version.B().D() ? "net.minecraft.nbt." : "net.minecraft.server.") + B);
+            this.B = Class.forName((Version.B().D() ? "net.minecraft.nbt." : "net.minecraft.server." + Version.BUKKIT_VERSION + ".") + B);
         }catch (ClassNotFoundException e) {
             this.B = null;
         }
@@ -52,6 +52,8 @@ public enum NBTUtils {
                     Field.setAccessible(true);
 
                     Params.add(Field.get(NBTBase));
+
+                    break;
                 }catch (NoSuchFieldException | IllegalAccessException ignored) {}
             }
         }
@@ -65,6 +67,8 @@ public enum NBTUtils {
                     Field.setAccessible(true);
 
                     Params.add(Field.get(NBTBase));
+
+                    break;
                 }catch (NoSuchFieldException | IllegalAccessException ignored) {}
             }
         }
@@ -124,7 +128,7 @@ public enum NBTUtils {
     }
 
     public Object O(@NotNull Object... Parameters) {
-        Constructor<?> Constructor = B.getDeclaredConstructors()[this.ordinal() == 12 ? 2 : 0];
+        Constructor<?> Constructor = (B == null ? NBTUtils.NBTBYTE.B : B).getDeclaredConstructors()[(this.ordinal() == 12 && B != null) ? 2 : 0];
         Constructor.setAccessible(true);
 
         try {
@@ -134,33 +138,33 @@ public enum NBTUtils {
 
             Object Instance = Constructor.newInstance();
 
-            if(this.D.size() > 0) {
+            if(this.D.size() > 0 && Parameters.length > 0) {
                 for(String Fieldname : this.D.get(0)) {
                     Field Field;
 
                     try {
                         Field = Instance.getClass().getDeclaredField(Fieldname);
                         Field.setAccessible(true);
-                    }catch (NoSuchFieldException ignored) {
-                        continue;
-                    }
 
-                    Field.set(Instance, Parameters[0]);
+                        Field.set(Instance, Parameters[0]);
+
+                        break;
+                    }catch (NoSuchFieldException ignored) {}
                 }
             }
 
-            if(this.D.size() > 1) {
+            if(this.D.size() > 1 && Parameters.length > 1) {
                 for(String Fieldname : this.D.get(1)) {
                     Field Field;
 
                     try {
                         Field = Instance.getClass().getDeclaredField(Fieldname);
                         Field.setAccessible(true);
-                    }catch (NoSuchFieldException ignored) {
-                        continue;
-                    }
 
-                    Field.set(Instance, Parameters[1]);
+                        Field.set(Instance, Parameters[1]);
+
+                        break;
+                    }catch (NoSuchFieldException ignored) {}
                 }
             }
 
