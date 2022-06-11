@@ -9,7 +9,6 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
@@ -20,23 +19,18 @@ public enum Task {
         NBTCompound NBT = new NBTCompound();
 
         NBT.set("End", new NBTEnd());
-        NBT.setByte("Byte", (byte) 1);
-        NBT.setShort("Short", (short) 1.00);
-        NBT.setInt("Int", 1);
-        NBT.setLong("Long", 1L);
-        NBT.setFloat("Float", 1f);
-        NBT.setDouble("Double", 1d);
-        NBT.setByteArray("ByteArray", new byte[]{1});
-        NBT.setString("String", "One");
-        NBT.setList("List", new ArrayList<>());
-        NBT.setCompound("Compound", new NBTCompound());
-        NBT.setIntArray("IntArray", new int[]{1});
-        NBT.setLongArray("LongArray", new long[1]);
-
-        NBTItem A = new NBTItem(new ItemStack(Material.IRON_SWORD));
-        A.setTag(NBT);
-
-        System.out.println(new NBTItem(A.getItem()));
+        NBT.set("Byte", new NBTByte());
+        NBT.set("Short", new NBTShort());
+        NBT.set("Int", new NBTInt());
+        NBT.set("Long", new NBTLong());
+        NBT.set("Float", new NBTFloat());
+        NBT.set("Double", new NBTDouble());
+        NBT.set("ByteArray", new NBTByteArray());
+        NBT.set("String", new NBTString());
+        NBT.set("List", new NBTList());
+        NBT.set("Compound", new NBTCompound());
+        NBT.set("IntArray", new NBTIntArray());
+        NBT.set("LongArray", new NBTLongArray());
 
         return 1;
     }),
@@ -86,7 +80,7 @@ public enum Task {
         List.set(1, IL);
         List.set(0, IB);
 
-        if(Version.B().M(Version.V1_14_R1)) {
+        if(Minecraft.V1_14_R1.isEqualOrOlder(Minecraft.getCurrentVersion())) {
             IH.setCompound("tag", D.clone());
             IH.setByte("Count", (byte) 1);
             IC.setCompound("tag", D.clone());
@@ -110,7 +104,7 @@ public enum Task {
     }),
     NBTCHUNK("NBTChunk", () -> {
 
-        if(!Version.B().M(Version.V1_16_R3)) return 2;
+        if(!Minecraft.V1_16_R3.isEqualOrOlder(Minecraft.getCurrentVersion())) return 2;
 
         World A = Bukkit.getWorlds().get(0);
         NBTChunk NBT = new NBTChunk(A.getChunkAt(A.getSpawnLocation()));
@@ -121,7 +115,7 @@ public enum Task {
     }),
     NBTBLOCK("NBTBlock", () -> {
 
-        if(!Version.B().M(Version.V1_16_R3)) return 2;
+        if(!Minecraft.V1_16_R3.isEqualOrOlder(Minecraft.getCurrentVersion())) return 2;
 
         World A = Bukkit.getWorlds().get(0);
         NBTBlock NBT = new NBTBlock(A.getBlockAt(A.getSpawnLocation()));
@@ -129,7 +123,7 @@ public enum Task {
         NBT.setTag(NBT);
 
         NBTChunk Chunk = new NBTChunk(NBT.getBlock().getChunk());
-        Chunk.setCompound("blocks", null);
+        Chunk.remove("blocks");
         Chunk.setTag(Chunk);
 
         return 1;
@@ -151,7 +145,7 @@ public enum Task {
         NBT.setString("Text1", "Hello, World!");
         NBT.setTag(NBT);
 
-        if(Version.B().M(Version.V1_14_R1)) {
+        if(Minecraft.V1_14_R1.isEqualOrOlder(Minecraft.getCurrentVersion())) {
             NBTCompound Data = NBT.getPersistentDataContainer();
             Data.setString("Data", "Hello, World!");
             Data.setTag(Data);

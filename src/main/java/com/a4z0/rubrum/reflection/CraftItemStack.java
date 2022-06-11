@@ -1,6 +1,6 @@
 package com.a4z0.rubrum.reflection;
 
-import com.a4z0.rubrum.enums.Version;
+import com.a4z0.rubrum.enums.Minecraft;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +12,7 @@ public class CraftItemStack {
 
     static {
         try {
-            A = Class.forName("org.bukkit.craftbukkit." + Version.BUKKIT_VERSION + ".inventory.CraftItemStack");
+            A = Class.forName("org.bukkit.craftbukkit." + Minecraft.PACKAGE_VERSION + ".inventory.CraftItemStack");
         } catch (ClassNotFoundException e) {
             throw new IllegalArgumentException("Could not find CraftItemStack class");
         }
@@ -40,7 +40,7 @@ public class CraftItemStack {
 
     public static Object getNBT(@NotNull Object Item) {
         try {
-            return Item.getClass().getMethod(Version.B().D() ? "s" : "getTag").invoke(Item);
+            return Item.getClass().getMethod(Minecraft.getCurrentVersion().isDrasticallyChanged() ? "s" : "getTag").invoke(Item);
         } catch (Error | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalArgumentException("Error getting NBTTagCompound from a NMS ItemStack object");
         }
@@ -55,7 +55,7 @@ public class CraftItemStack {
 
     public static Object setNBT(@NotNull Object Item, @NotNull Object NBT) {
         try {
-            Item.getClass().getMethod(Version.B().D() ? "c" : "setTag", NBT.getClass()).invoke(Item, NBT);
+            Item.getClass().getMethod(Minecraft.getCurrentVersion().isDrasticallyChanged() ? "c" : "setTag", NBT.getClass()).invoke(Item, NBT);
 
             return Item;
         } catch (Error | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {

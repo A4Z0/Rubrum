@@ -13,7 +13,7 @@ public class NBTBlock extends NBTCompound {
     protected final NBTChunk B;
 
     /**
-    * Construct a {@link NBTBlock} with the given params.
+    * Construct a {@link NBTBlock}.
     *
     * @param Block {@link Block} to be read.
     */

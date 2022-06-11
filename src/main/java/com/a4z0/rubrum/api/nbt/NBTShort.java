@@ -11,28 +11,41 @@ import org.jetbrains.annotations.NotNull;
 public class NBTShort extends NBTBase<Short> {
 
     /**
-    * Construct a {@link NBTShort} with the given params.
+    * Construct a {@link NBTShort}.
+    */
+
+    public NBTShort() {
+        this((short) 0);
+    }
+
+    /**
+    * Construct a {@link NBTShort}.
     *
     * @param Short short to be stored.
     */
 
     public NBTShort(short Short) {
-        this.Data = Short;
+        super(Short);
     }
 
     /**
-    * Construct a {@link NBTShort} with the given params.
+    * Construct a {@link NBTShort}.
     *
     * @param Short short to be stored.
     */
 
-    public NBTShort(Short Short) {
-        this.Data = Short;
+    public NBTShort(@NotNull Short Short) {
+        super(Short);
     }
 
     @Override
-    protected final byte getTypeID() {
+    public final byte getTypeID() {
         return 2;
+    }
+
+    @Override
+    public @NotNull NBTShort clone() {
+        return new NBTShort(this.Data);
     }
 
     /**

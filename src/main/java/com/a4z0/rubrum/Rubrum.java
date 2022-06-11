@@ -1,6 +1,6 @@
 package com.a4z0.rubrum;
 
-import com.a4z0.rubrum.enums.Version;
+import com.a4z0.rubrum.enums.Minecraft;
 import com.a4z0.rubrum.enums.Task;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -8,7 +8,7 @@ public final class Rubrum extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        if(!Version.S()) {
+        if(!Minecraft.isCurrentVersionSupported()) {
             this.getLogger().info("Failed to start, running version isn't supported");
             this.getServer().getPluginManager().disablePlugin(this);
 

@@ -1,6 +1,6 @@
 package com.a4z0.rubrum.api.nbt;
 
-import com.a4z0.rubrum.enums.Version;
+import com.a4z0.rubrum.enums.Minecraft;
 import com.a4z0.rubrum.reflection.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
@@ -51,7 +51,7 @@ public class NBTEntity extends NBTCompound {
 
     public NBTPersistentDataContainer getPersistentDataContainer() {
 
-        if(!Version.B().M(Version.V1_14_R1))
+        if(!Minecraft.V1_14_R1.isEqualOrOlder(Minecraft.getCurrentVersion()))
             throw new IllegalArgumentException("Feature available from version 1.14+");
 
         if(this.B == null)

@@ -1,8 +1,8 @@
 package com.a4z0.rubrum.api.nbt;
 
-import com.a4z0.rubrum.enums.Version;
-import org.apache.commons.lang.SerializationException;
-import org.apache.commons.lang.SerializationUtils;
+import com.a4z0.rubrum.enums.Minecraft;
+import org.apache.commons.lang3.SerializationException;
+import org.apache.commons.lang3.SerializationUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
@@ -34,7 +34,7 @@ public enum NBTUtils {
         this.D.addAll(Arrays.asList(D));
 
         try {
-            this.B = Class.forName((Version.B().D() ? "net.minecraft.nbt." : "net.minecraft.server." + Version.BUKKIT_VERSION + ".") + B);
+            this.B = Class.forName((Minecraft.getCurrentVersion().isDrasticallyChanged() ? "net.minecraft.nbt." : "net.minecraft.server." + Minecraft.PACKAGE_VERSION + ".") + B);
         }catch (ClassNotFoundException e) {
             this.B = null;
         }
@@ -125,7 +125,7 @@ public enum NBTUtils {
                 return new NBTList(Array, (byte) Params.get(1));
             }
             case 10: {
-                Map<String, Object> Map = new HashMap<>();
+                Map<String, NBTBase<?>> Map = new HashMap<>();
 
                 ((Map<String, Object>) Params.get(0)).forEach((A, B) -> Map.put(A, NBTUtils.B(B)));
 
@@ -146,7 +146,7 @@ public enum NBTUtils {
         Constructor.setAccessible(true);
 
         try {
-            if(Version.B().D()) {
+            if(Minecraft.getCurrentVersion().isDrasticallyChanged()) {
                 return Constructor.newInstance(Parameters.length > 0 ? Parameters : this.C);
             }
 

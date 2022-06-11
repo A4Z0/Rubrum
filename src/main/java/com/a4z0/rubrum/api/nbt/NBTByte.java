@@ -11,28 +11,41 @@ import org.jetbrains.annotations.NotNull;
 public class NBTByte extends NBTBase<Byte> {
 
     /**
-    * Construct a {@link NBTByte} with the given params.
+    * Construct a {@link NBTByte}.
+    */
+
+    public NBTByte() {
+        this((byte) 0);
+    }
+
+    /**
+    * Construct a {@link NBTByte}.
     *
     * @param Byte byte to be stored.
     */
 
     public NBTByte(byte Byte) {
-        this.Data = Byte;
+        super(Byte);
     }
 
     /**
-    * Construct a {@link NBTByte} with the given params.
+    * Construct a {@link NBTByte}.
     *
     * @param Byte byte to be stored.
     */
 
     public NBTByte(@NotNull Byte Byte) {
-        this.Data = Byte;
+        super(Byte);
     }
 
     @Override
-    protected final byte getTypeID() {
+    public final byte getTypeID() {
         return 1;
+    }
+
+    @Override
+    public @NotNull NBTByte clone() {
+        return new NBTByte(this.Data);
     }
 
     /**

@@ -1,7 +1,7 @@
 package com.a4z0.rubrum.reflection;
 
 import com.a4z0.rubrum.api.nbt.NBTUtils;
-import com.a4z0.rubrum.enums.Version;
+import com.a4z0.rubrum.enums.Minecraft;
 import org.bukkit.block.BlockState;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,7 +15,7 @@ public class CraftTileEntity {
 
     static {
         try {
-            A = Class.forName("org.bukkit.craftbukkit." + Version.BUKKIT_VERSION + ".CraftWorld");
+            A = Class.forName("org.bukkit.craftbukkit." + Minecraft.PACKAGE_VERSION + ".CraftWorld");
         } catch (ClassNotFoundException e) {
             throw new IllegalArgumentException("Could not find CraftWorld class");
         }
@@ -23,7 +23,7 @@ public class CraftTileEntity {
 
     static {
         try {
-            B = Class.forName(Version.B().D() ? "net.minecraft.core.BlockPosition" : "net.minecraft.server." + Version.BUKKIT_VERSION + ".BlockPosition");
+            B = Class.forName(Minecraft.getCurrentVersion().isDrasticallyChanged() ? "net.minecraft.core.BlockPosition" : "net.minecraft.server." + Minecraft.PACKAGE_VERSION + ".BlockPosition");
         }catch (ClassNotFoundException e) {
             throw new IllegalArgumentException("Could not find BlockPosition class");
         }
@@ -43,7 +43,7 @@ public class CraftTileEntity {
 
             Object TileEntity;
 
-            if(Version.B().D()) {
+            if(Minecraft.getCurrentVersion().isDrasticallyChanged()) {
                 TileEntity = N.getClass().getMethod("getBlockEntity", P.getClass(), boolean.class).invoke(N, P, false);
             }else {
                 TileEntity = N.getClass().getMethod("getTileEntity", P.getClass()).invoke(N, P);
@@ -106,13 +106,13 @@ public class CraftTileEntity {
         if(TileEntity == null) return;
 
         try {
-            if(Version.B().M(Version.V1_17_R1)) {
+            if(Minecraft.V1_17_R1.isEqualOrOlder(Minecraft.getCurrentVersion())) {
                 TileEntity.getClass().getMethod("a", NBT.getClass()).invoke(TileEntity, NBT);
-            }else if(Version.B().M(Version.V1_16_R1)) {
+            }else if(Minecraft.V1_16_R1.isEqualOrOlder(Minecraft.getCurrentVersion())) {
                 Object D = TileEntity.getClass().getMethod("getBlock").invoke(TileEntity);
                 TileEntity.getClass().getMethod("load", D.getClass(), NBT.getClass()).invoke(TileEntity, D, NBT);
             }else {
-                TileEntity.getClass().getMethod(Version.B().T() ? "load" : "a", NBT.getClass()).invoke(TileEntity, NBT);
+                TileEntity.getClass().getMethod(Minecraft.getCurrentVersion().isTwoHanded() ? "load" : "a", NBT.getClass()).invoke(TileEntity, NBT);
             }
 
         }catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {

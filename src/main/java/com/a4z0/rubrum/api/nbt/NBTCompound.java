@@ -1,6 +1,6 @@
 package com.a4z0.rubrum.api.nbt;
 
-import org.apache.commons.lang.SerializationUtils;
+import org.apache.commons.lang3.SerializationUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -19,36 +19,31 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public NBTCompound() {
-        this.Data = new HashMap<>();
+        this(new HashMap<>());
     }
 
     /**
-    * Construct a {@link NBTCompound} with the given params.
+    * Construct a {@link NBTCompound}.
     *
-    * @param Map a serialized {@link NBTCompound}.
+    * @param Map map to be stored.
     */
 
-    public NBTCompound(@NotNull Map<String, Object> Map) {
-
-        Map<String, NBTBase<?>> Data = new HashMap<>();
-
-        Map.forEach((A, B) -> Data.put(A, (NBTBase<?>) B));
-
-        this.Data = Data;
+    public NBTCompound(@NotNull Map<String, NBTBase<?>> Map) {
+        super(Map);
     }
 
     /**
-    * Construct a {@link NBTCompound} with the given params.
+    * Construct a {@link NBTCompound}.
     *
     * @param NBTCompound an {@link NBTCompound} to be cloned.
     */
 
     public NBTCompound(@NotNull NBTCompound NBTCompound) {
-        this.Data = new HashMap<>(NBTCompound.Data);
+        super(NBTCompound.Data);
     }
 
     @Override
-    protected Object getComponent() {
+    protected @NotNull Object getComponent() {
 
         Map<String, Object> Map = new HashMap<>();
 
@@ -66,7 +61,7 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     */
 
     public void setTag(@NotNull NBTCompound NBTCompound) {
-        this.Data = NBTCompound.Data;
+        this.Data.clear(); this.Data.putAll(NBTCompound.Data);
     }
 
     /**
@@ -367,8 +362,8 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     * @param NBTCompound the value associated with the key.
     */
 
-    public void setCompound(@NotNull String Key, NBTCompound NBTCompound) {
-        this.set(Key, NBTCompound != null ? new NBTCompound(NBTCompound) : null);
+    public void setCompound(@NotNull String Key, @NotNull NBTCompound NBTCompound) {
+        this.set(Key, NBTCompound);
     }
 
     /**
@@ -446,16 +441,14 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     }
 
     /**
-    * @return a {@link Map} representing this {@link NBTCompound}.
+    * Remove the value associated with the key in this {@link NBTCompound}.
+    *
+    * @param Key key associated with the value to be removed.
     */
 
-    public @NotNull Map<String, Object> serialize() {
-        return new HashMap<>(this.Data);
+    public void remove(@NotNull String Key) {
+        this.Data.remove(Key);
     }
-
-    /**
-    * @return a clone of this {@link NBTCompound}.
-    */
 
     @Override
     public @NotNull NBTCompound clone() {
@@ -463,7 +456,7 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
     }
 
     @Override
-    protected final byte getTypeID() {
+    public final byte getTypeID() {
         return 10;
     }
 
@@ -476,10 +469,10 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
 
         StringBuilder Builder = new StringBuilder();
 
-        this.Data.forEach((K, V) -> {
-            String[] Data = V.toString().split(V.getClass().getSimpleName() + ": ");
+        this.Data.forEach((Key, NBTBase) -> {
+            String[] Data = NBTBase.toString().split(NBTBase.getClass().getSimpleName() + ": ");
 
-            Builder.append(K).append(": ").append(Data[1], 0, Data[1].length()).append(", ");
+            Builder.append(Key).append(": ").append(Data[1], 0, Data[1].length()).append(", ");
         });
 
         return this.getClass().getSimpleName() + ": {" + (Builder.length() > 0 ? Builder.substring(0, Builder.length() -2) : "") + "}";

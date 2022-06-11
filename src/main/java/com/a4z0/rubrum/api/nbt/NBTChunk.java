@@ -1,6 +1,6 @@
 package com.a4z0.rubrum.api.nbt;
 
-import com.a4z0.rubrum.enums.Version;
+import com.a4z0.rubrum.enums.Minecraft;
 import org.bukkit.Chunk;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +21,7 @@ public class NBTChunk extends NBTCompound {
 
     public NBTChunk(@NotNull Chunk Chunk) {
 
-        if(!Version.B().M(Version.V1_16_R3)) {
+        if(!Minecraft.V1_16_R3.isEqualOrOlder(Minecraft.getCurrentVersion())) {
             throw new IllegalArgumentException("Feature available from version 1.16.4+");
         }
 

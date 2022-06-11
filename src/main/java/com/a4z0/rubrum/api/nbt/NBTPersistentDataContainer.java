@@ -13,7 +13,7 @@ public class NBTPersistentDataContainer extends NBTCompound {
     protected final PersistentDataContainer A;
 
     /**
-    * Construct a {@link NBTPersistentDataContainer} with the given params.
+    * Construct a {@link NBTPersistentDataContainer}.
     *
     * @param PersistentDataContainer {@link PersistentDataContainer} to be read.
     */

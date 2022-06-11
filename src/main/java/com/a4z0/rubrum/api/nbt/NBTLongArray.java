@@ -1,5 +1,7 @@
 package com.a4z0.rubrum.api.nbt;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 
 /**
@@ -11,18 +13,31 @@ import java.util.Arrays;
 public class NBTLongArray extends NBTBase<long[]> {
 
     /**
-    * Construct a {@link NBTLongArray} with the given params.
+    * Construct a {@link NBTLongArray}.
+    */
+
+    public NBTLongArray() {
+        this(new long[]{});
+    }
+
+    /**
+    * Construct a {@link NBTLongArray}.
     *
     * @param LongArray long array to be stored.
     */
 
     public NBTLongArray(long[] LongArray) {
-        this.Data = LongArray;
+        super(LongArray);
     }
 
     @Override
-    protected final byte getTypeID() {
+    public final byte getTypeID() {
         return 12;
+    }
+
+    @Override
+    public @NotNull NBTLongArray clone() {
+        return new NBTLongArray(this.Data);
     }
 
     /**
@@ -30,7 +45,7 @@ public class NBTLongArray extends NBTBase<long[]> {
     */
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return this.getClass().getSimpleName() + ": " + Arrays.toString(Data);
     }
 }

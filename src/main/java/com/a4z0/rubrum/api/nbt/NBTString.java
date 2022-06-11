@@ -11,18 +11,31 @@ import org.jetbrains.annotations.NotNull;
 public class NBTString extends NBTBase<String> {
 
     /**
-    * Construct a {@link NBTString} with the given params.
+    * Construct a {@link NBTString}.
+    */
+
+    public NBTString() {
+        this("");
+    }
+
+    /**
+    * Construct a {@link NBTString}.
     *
     * @param String string to be stored.
     */
 
     public NBTString(@NotNull String String) {
-        this.Data = String;
+        super(String);
     }
 
     @Override
-    protected final byte getTypeID() {
+    public final byte getTypeID() {
         return 8;
+    }
+
+    @Override
+    public @NotNull NBTString clone() {
+        return new NBTString(this.Data);
     }
 
     /**

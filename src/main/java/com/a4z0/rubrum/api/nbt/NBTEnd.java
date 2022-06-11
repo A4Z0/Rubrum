@@ -15,17 +15,22 @@ public class NBTEnd extends NBTBase<String> {
     */
 
     public NBTEnd() {
-        this.Data = "End";
+        super("END");
     }
 
     @Override
-    protected Object getComponent() {
+    protected @NotNull Object getComponent() {
         return NBTUtils.NBTEND.O();
     }
 
     @Override
-    protected byte getTypeID() {
+    public byte getTypeID() {
         return 0;
+    }
+
+    @Override
+    public @NotNull NBTEnd clone() {
+        return new NBTEnd();
     }
 
     /**

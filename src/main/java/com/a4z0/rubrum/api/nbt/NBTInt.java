@@ -11,28 +11,41 @@ import org.jetbrains.annotations.NotNull;
 public class NBTInt extends NBTBase<Integer> {
 
     /**
-    * Construct a {@link NBTInt} with the given params.
+    * Construct a {@link NBTInt}.
+    */
+
+    public NBTInt() {
+        this(0);
+    }
+
+    /**
+    * Construct a {@link NBTInt}.
     *
     * @param Int int to be stored.
     */
 
     public NBTInt(int Int) {
-        this.Data = Int;
+        super(Int);
     }
 
     /**
-    * Construct a {@link NBTInt} with the given params.
+    * Construct a {@link NBTInt}.
     *
     * @param Integer integer to be stored.
     */
 
     public NBTInt(@NotNull Integer Integer) {
-        this.Data = Integer;
+        super(Integer);
     }
 
     @Override
-    protected final byte getTypeID() {
+    public final byte getTypeID() {
         return 3;
+    }
+
+    @Override
+    public @NotNull NBTInt clone() {
+        return new NBTInt(this.Data);
     }
 
     /**

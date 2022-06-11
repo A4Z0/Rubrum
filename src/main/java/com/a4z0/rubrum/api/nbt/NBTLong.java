@@ -11,28 +11,41 @@ import org.jetbrains.annotations.NotNull;
 public class NBTLong extends NBTBase<Long> {
 
     /**
-    * Construct a {@link NBTLong} with the given params.
+    * Construct a {@link NBTLong}.
+    */
+
+    public NBTLong() {
+        this(0L);
+    }
+
+    /**
+    * Construct a {@link NBTLong}.
     *
     * @param Long long to be stored.
     */
 
     public NBTLong(long Long) {
-        this.Data = Long;
+        super(Long);
     }
 
     /**
-    * Construct a {@link NBTLong} with the given params.
+    * Construct a {@link NBTLong}.
     *
     * @param Long long to be stored.
     */
 
     public NBTLong(@NotNull Long Long) {
-        this.Data = Long;
+        super(Long);
     }
 
     @Override
-    protected final byte getTypeID() {
+    public final byte getTypeID() {
         return 4;
+    }
+
+    @Override
+    public @NotNull NBTLong clone() {
+        return new NBTLong(this.Data);
     }
 
     /**

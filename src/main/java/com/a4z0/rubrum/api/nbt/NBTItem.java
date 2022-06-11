@@ -15,7 +15,7 @@ public class NBTItem extends NBTCompound {
     private ItemStack B;
 
     /**
-    * Construct a {@link NBTItem} with the given params.
+    * Construct a {@link NBTItem}.
     *
     * @param Item {@link ItemStack} to be read.
     */

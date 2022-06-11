@@ -8,20 +8,12 @@ import org.jetbrains.annotations.NotNull;
 * @param <T> Class of data to be stored.
 */
 
-public abstract class NBTBase<T> {
+public abstract class NBTBase<T> implements Cloneable {
 
-    protected T Data;
+    protected final T Data;
 
     /**
     * Construct a {@link NBTBase}.
-    */
-
-    protected NBTBase() {
-        this.Data = null;
-    }
-
-    /**
-    * Construct a {@link NBTBase} with the given params.
     *
     * @param Data data to be stored.
     */
@@ -34,31 +26,29 @@ public abstract class NBTBase<T> {
     * @return an NBT component.
     */
 
-    protected Object getComponent() {
+    protected @NotNull Object getComponent() {
         return NBTUtils.D(this.getTypeID()).O(this.Data);
     }
 
     /**
-    * @return the type ID.
+    * @return the ID of this {@link NBTBase}.
     */
 
-    protected abstract byte getTypeID();
+    public abstract byte getTypeID();
 
     /**
-    * @return the hashcode.
+    * @return a clone of this {@link NBTBase}.
     */
 
     @Override
-    public int hashCode() {
-        return this.getTypeID();
-    }
+    public abstract @NotNull NBTBase<?> clone();
 
     /**
     * @return this {@link NBTBase} as a {@link String}.
     */
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return this.getClass().getSimpleName() + ": " + Data;
     }
 }

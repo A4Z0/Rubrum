@@ -1,7 +1,7 @@
 package com.a4z0.rubrum.reflection;
 
 import com.a4z0.rubrum.api.nbt.NBTUtils;
-import com.a4z0.rubrum.enums.Version;
+import com.a4z0.rubrum.enums.Minecraft;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +14,7 @@ public class CraftEntity {
 
     static {
         try {
-            A = Class.forName("org.bukkit.craftbukkit." + Version.BUKKIT_VERSION + ".entity.CraftEntity");
+            A = Class.forName("org.bukkit.craftbukkit." + Minecraft.PACKAGE_VERSION + ".entity.CraftEntity");
         } catch (ClassNotFoundException e) {
             throw new IllegalArgumentException("Could not find CraftEntity class");
         }
@@ -67,14 +67,13 @@ public class CraftEntity {
                     Method.setAccessible(true);
 
                     Method.invoke(Entity, NBT);
-                } catch (NoSuchMethodException ignored) {
-                    continue;
-                }
 
-                break;
+                    break;
+                } catch (NoSuchMethodException ignored) {}
             }
 
         } catch (InvocationTargetException | IllegalAccessException  e) {
+            e.printStackTrace();
             throw new IllegalArgumentException("Error setting NBT on a NMS Entity");
         }
     }

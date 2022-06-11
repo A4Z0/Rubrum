@@ -11,28 +11,41 @@ import org.jetbrains.annotations.NotNull;
 public class NBTDouble extends NBTBase<Double> {
 
     /**
-    * Construct a {@link NBTDouble} with the given params.
+    * Construct a {@link NBTDouble}.
+    */
+
+    public NBTDouble() {
+        this(0d);
+    }
+
+    /**
+    * Construct a {@link NBTDouble}.
     *
     * @param Double double to be stored.
     */
 
     public NBTDouble(double Double) {
-        this.Data = Double;
+        super(Double);
     }
 
     /**
-    * Construct a {@link NBTDouble} with the given params.
+    * Construct a {@link NBTDouble}.
     *
     * @param Double double to be stored.
     */
 
     public NBTDouble(@NotNull Double Double) {
-        this.Data = Double;
+        super(Double);
     }
 
     @Override
-    protected final byte getTypeID() {
+    public final byte getTypeID() {
         return 6;
+    }
+
+    @Override
+    public @NotNull NBTDouble clone() {
+        return new NBTDouble(this.Data);
     }
 
     /**

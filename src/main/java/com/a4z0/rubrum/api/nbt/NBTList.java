@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -15,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class NBTList extends NBTBase<List<NBTBase<?>>> {
 
-    protected byte Type;
+    protected final byte Type;
 
     /**
     * Construct a {@link NBTList}.
@@ -26,7 +25,7 @@ public class NBTList extends NBTBase<List<NBTBase<?>>> {
     }
 
     /**
-    * Construct a {@link NBTList} with the given params.
+    * Construct a {@link NBTList}.
     *
     * @param List list to be stored.
     */
@@ -36,7 +35,7 @@ public class NBTList extends NBTBase<List<NBTBase<?>>> {
     }
 
     /**
-    * Construct a {@link NBTList} with the given params.
+    * Construct a {@link NBTList}.
     *
     * @param Type type to be stored.
     */
@@ -46,25 +45,29 @@ public class NBTList extends NBTBase<List<NBTBase<?>>> {
     }
 
     /**
-    * Construct a {@link NBTList} with the given params.
+    * Construct a {@link NBTList}.
     *
     * @param List list to be stored.
     * @param Type type to be stored.
     */
 
     public NBTList(List<NBTBase<?>> List, byte Type) {
-        this.Data = List;
-        this.Type = Type;
+        super(List); this.Type = Type;
     }
 
     @Override
-    protected Object getComponent() {
-        return NBTUtils.NBTLIST.O(this.Data.stream().filter(Objects::nonNull).map(NBTBase::getComponent).collect(Collectors.toList()), this.Type);
+    protected @NotNull Object getComponent() {
+        return NBTUtils.NBTLIST.O(this.Data.stream().map(NBTBase::getComponent).collect(Collectors.toList()), this.Type);
     }
 
     @Override
-    protected final byte getTypeID() {
+    public final byte getTypeID() {
         return 9;
+    }
+
+    @Override
+    public @NotNull NBTList clone() {
+        return new NBTList(this.Data, this.Type);
     }
 
     /**
@@ -76,8 +79,8 @@ public class NBTList extends NBTBase<List<NBTBase<?>>> {
 
         StringBuilder Builder = new StringBuilder();
 
-        this.Data.forEach(V -> {
-            String[] Data = V.toString().split(V.getClass().getSimpleName() + ": ");
+        this.Data.forEach(NBTBase -> {
+            String[] Data = NBTBase.toString().split(NBTBase.getClass().getSimpleName() + ": ");
 
             Builder.append(Data[1], 0, Data[1].length()).append(", ");
         });

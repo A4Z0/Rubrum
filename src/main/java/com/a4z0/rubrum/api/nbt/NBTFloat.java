@@ -11,28 +11,41 @@ import org.jetbrains.annotations.NotNull;
 public class NBTFloat extends NBTBase<Float> {
 
     /**
-    * Construct a {@link NBTFloat} with the given params.
+    * Construct a {@link NBTFloat}.
+    */
+
+    public NBTFloat() {
+        this(0f);
+    }
+
+    /**
+    * Construct a {@link NBTFloat}.
     *
     * @param Float float to be stored.
     */
 
     public NBTFloat(float Float) {
-        this.Data = Float;
+        super(Float);
     }
 
     /**
-    * Construct a {@link NBTFloat} with the given params.
+    * Construct a {@link NBTFloat}.
     *
     * @param Float float to be stored.
     */
 
     public NBTFloat(@NotNull Float Float) {
-        this.Data = Float;
+        super(Float);
     }
 
     @Override
-    protected final byte getTypeID() {
+    public final byte getTypeID() {
         return 5;
+    }
+
+    @Override
+    public @NotNull NBTFloat clone() {
+        return new NBTFloat(this.Data);
     }
 
     /**
