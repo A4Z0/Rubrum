@@ -1,5 +1,7 @@
 package com.a4z0.rubrum.api.nbt;
 
+import com.a4z0.rubrum.annotations.Available;
+import com.a4z0.rubrum.enums.Minecraft;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -10,7 +12,7 @@ import java.util.Arrays;
 * Stores data with class {@link Long} Array.
 */
 
-public class NBTLongArray extends NBTBase<long[]> {
+@Available(Version = Minecraft.V1_12_R1) public class NBTLongArray extends NBTBase<long[]> {
 
     /**
     * Construct a {@link NBTLongArray}.
@@ -30,10 +32,18 @@ public class NBTLongArray extends NBTBase<long[]> {
         super(LongArray);
     }
 
+    /**
+    * @return the ID of this {@link NBTLongArray}.
+    */
+
     @Override
     public final byte getTypeID() {
         return 12;
     }
+
+    /**
+    * @return a clone of this {@link NBTLongArray}.
+    */
 
     @Override
     public @NotNull NBTLongArray clone() {

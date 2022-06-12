@@ -38,10 +38,18 @@ public class NBTDouble extends NBTBase<Double> {
         super(Double);
     }
 
+    /**
+    * @return the ID of this {@link NBTDouble}.
+    */
+
     @Override
     public final byte getTypeID() {
         return 6;
     }
+
+    /**
+    * @return a clone of this {@link NBTDouble}.
+    */
 
     @Override
     public @NotNull NBTDouble clone() {

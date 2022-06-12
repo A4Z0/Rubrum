@@ -57,13 +57,21 @@ public class NBTList extends NBTBase<List<NBTBase<?>>> {
 
     @Override
     protected @NotNull Object getComponent() {
-        return NBTUtils.NBTLIST.O(this.Data.stream().map(NBTBase::getComponent).collect(Collectors.toList()), this.Type);
+        return NBTUtils.NBTTagList.getNBTObject(this.Data.stream().map(NBTBase::getComponent).collect(Collectors.toList()), this.Type);
     }
+
+    /**
+    * @return the ID of this {@link NBTList}.
+    */
 
     @Override
     public final byte getTypeID() {
         return 9;
     }
+
+    /**
+    * @return a clone of this {@link NBTList}.
+    */
 
     @Override
     public @NotNull NBTList clone() {

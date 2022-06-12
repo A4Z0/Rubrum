@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 
 public class CraftEntity {
 
@@ -42,7 +43,7 @@ public class CraftEntity {
 
     public static @NotNull Object getNBT(@NotNull Object Entity) {
         try {
-            Object NBT = NBTUtils.NBTCOMPOUND.O();
+            Object NBT = NBTUtils.NBTTagCompound.getNBTObject(new HashMap<>());
 
             Method Method = Entity.getClass().getDeclaredMethod("b", NBT.getClass());
             Method.setAccessible(true);

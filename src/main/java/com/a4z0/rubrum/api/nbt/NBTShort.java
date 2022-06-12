@@ -38,10 +38,18 @@ public class NBTShort extends NBTBase<Short> {
         super(Short);
     }
 
+    /**
+    * @return the ID of this {@link NBTShort}.
+    */
+
     @Override
     public final byte getTypeID() {
         return 2;
     }
+
+    /**
+    * @return a clone of this {@link NBTShort}.
+    */
 
     @Override
     public @NotNull NBTShort clone() {

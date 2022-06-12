@@ -30,10 +30,18 @@ public class NBTIntArray extends NBTBase<int[]> {
         super(IntArray);
     }
 
+    /**
+    * @return the ID of this {@link NBTIntArray}.
+    */
+
     @Override
     public final byte getTypeID() {
         return 11;
     }
+
+    /**
+    * @return a clone of this {@link NBTIntArray}.
+    */
 
     @Override
     public @NotNull NBTIntArray clone() {

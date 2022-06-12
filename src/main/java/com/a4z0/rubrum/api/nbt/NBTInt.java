@@ -38,10 +38,18 @@ public class NBTInt extends NBTBase<Integer> {
         super(Integer);
     }
 
+    /**
+    * @return the ID of this {@link NBTInt}.
+    */
+
     @Override
     public final byte getTypeID() {
         return 3;
     }
+
+    /**
+    * @return a clone of this {@link NBTInt}.
+    */
 
     @Override
     public @NotNull NBTInt clone() {

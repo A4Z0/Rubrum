@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 
 public class CraftTileEntity {
 
@@ -66,7 +67,7 @@ public class CraftTileEntity {
 
         try {
 
-            Object NBT = NBTUtils.NBTCOMPOUND.O();
+            Object NBT = NBTUtils.NBTTagCompound.getNBTObject(new HashMap<>());
 
             for(String Fieldname : new String[]{"save", "m", "b"}) {
                 try {

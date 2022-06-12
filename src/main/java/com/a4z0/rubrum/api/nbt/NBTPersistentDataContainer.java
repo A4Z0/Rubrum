@@ -21,7 +21,7 @@ public class NBTPersistentDataContainer extends NBTCompound {
     protected NBTPersistentDataContainer(@NotNull PersistentDataContainer PersistentDataContainer) {
         this.A = PersistentDataContainer;
 
-        super.setTag((NBTCompound) NBTUtils.B(CraftPersistentDataContainer.getNBT(this.A)));
+        super.setTag((NBTCompound) NBTUtils.getNBTBase(CraftPersistentDataContainer.getNBT(this.A)));
     }
 
     /**

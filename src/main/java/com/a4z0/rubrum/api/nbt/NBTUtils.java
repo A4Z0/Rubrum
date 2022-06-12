@@ -1,5 +1,7 @@
 package com.a4z0.rubrum.api.nbt;
 
+import com.a4z0.rubrum.annotations.Available;
+import com.a4z0.rubrum.annotations.Fields;
 import com.a4z0.rubrum.enums.Minecraft;
 import org.apache.commons.lang3.SerializationException;
 import org.apache.commons.lang3.SerializationUtils;
@@ -11,196 +13,231 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public enum NBTUtils {
-    NBTEND("NBTTagEnd", new Object[]{}, new String[]{}),
-    NBTBYTE("NBTTagByte", new Object[]{(byte) 0}, new String[]{"data", "x"}),
-    NBTSHORT("NBTTagShort", new Object[]{(short) 0}, new String[]{"data", "c"}),
-    NBTINT("NBTTagInt", new Object[]{0}, new String[]{"data", "c"}),
-    NBTLONG("NBTTagLong", new Object[]{0L}, new String[]{"data", "c"}),
-    NBTFLOAT("NBTTagFloat", new Object[]{0f}, new String[]{"data", "w"}),
-    NBTDOUBLE("NBTTagDouble", new Object[]{0d}, new String[]{"data", "w"}),
-    NBTBYTEARRAY("NBTTagByteArray", new Object[]{new Byte[]{}}, new String[]{"data", "c"}),
-    NBTSTRING("NBTTagString", new Object[]{""}, new String[]{"data", "A"}),
-    NBTLIST("NBTTagList", new Object[]{(new ArrayList<>()), (byte) 0}, new String[]{"list", "c"}, new String[]{"type", "w"}),
-    NBTCOMPOUND("NBTTagCompound", new Object[]{(new HashMap<>())}, new String[]{"map", "x"}),
-    NBTINTARRAY("NBTTagIntArray", new Object[]{(new int[]{})}, new String[]{"data", "c"}),
-    NBTLONGARRAY("NBTTagLongArray", new Object[]{(new long[]{})}, new String[]{"data", "c"});
+    NBTTagEnd(NBTEnd.class),
 
-    private Class<?> B;
-    private final Object[] C;
-    private final List<String[]> D = new ArrayList<>();
+    @Fields(A = {"data", "x"})
+    NBTTagByte(NBTByte.class),
 
-    NBTUtils(@NotNull String B, @NotNull Object[] C, @NotNull String[]... D) {
-        this.C = C;
-        this.D.addAll(Arrays.asList(D));
+    @Fields(A = {"data", "c"})
+    NBTTagShort(NBTShort.class),
 
+    @Fields(A = {"data", "c"})
+    NBTTagInt(NBTInt.class),
+
+    @Fields(A = {"data", "c"})
+    NBTTagLong(NBTLong.class),
+
+    @Fields(A = {"data", "w"})
+    NBTTagFloat(NBTFloat.class),
+
+    @Fields(A = {"data", "w"})
+    NBTTagDouble(NBTDouble.class),
+
+    @Fields(A = {"data", "c"})
+    NBTTagByteArray(NBTByteArray.class),
+
+    @Fields(A = {"data", "A"})
+    NBTTagString(NBTString.class),
+
+    @Fields(A = {"list", "c"}, B = {"type", "w"})
+    NBTTagList(NBTList.class),
+
+    @Fields(A = {"map", "x"})
+    NBTTagCompound(NBTCompound.class),
+
+    @Fields(A = {"data", "c"})
+    NBTTagIntArray(NBTIntArray.class),
+
+    @Fields(A = {"data", "c"})
+    NBTTagLongArray(NBTLongArray.class);
+
+    private final Class<? extends NBTBase<?>> NBTClass;
+
+    /**
+    * Construct a {@link NBTUtils}.
+    *
+    * @param Class a {@link NBTBase} class.
+    */
+
+    NBTUtils(@NotNull Class<? extends NBTBase<?>> Class) {
+        this.NBTClass = Class;
+    }
+
+    /**
+    * @return the NMS class of this NBT.
+    */
+
+    private @NotNull Class<?> getNMSClass() {
         try {
-            this.B = Class.forName((Minecraft.getCurrentVersion().isDrasticallyChanged() ? "net.minecraft.nbt." : "net.minecraft.server." + Minecraft.PACKAGE_VERSION + ".") + B);
+            return Class.forName((Minecraft.getCurrentVersion().isDrasticallyChanged() ? "net.minecraft.nbt." : "net.minecraft.server." + Minecraft.PACKAGE_VERSION + ".") + this.name());
         }catch (ClassNotFoundException e) {
-            this.B = null;
+            throw new NullPointerException("Could not find this class");
         }
     }
 
-    public static @NotNull NBTBase<?> B(@NotNull Object NBTBase) {
-        NBTUtils NBT = NBTUtils.N(NBTBase.getClass().getSimpleName());
+    /**
+    * @param NBTObject a NMS NBT Object.
+    *
+    * @return the fields of this NBTObject.
+    */
 
-        List<Object> Params = new ArrayList<>();
+    private @NotNull Field[] getFields(@NotNull Object NBTObject) {
+        List<Field> Fields = new ArrayList<>();
 
-        if(NBT.D.size() > 0) {
-            for(String Fieldname : NBT.D.get(0)) {
-                Field Field;
-
-                try {
-                    Field = NBTBase.getClass().getDeclaredField(Fieldname);
-                    Field.setAccessible(true);
-
-                    Params.add(Field.get(NBTBase));
-
-                    break;
-                }catch (NoSuchFieldException | IllegalAccessException ignored) {}
-            }
-        }
-
-        if(NBT.D.size() > 1) {
-            for(String Fieldname : NBT.D.get(1)) {
-                Field Field;
-
-                try {
-                    Field = NBTBase.getClass().getDeclaredField(Fieldname);
-                    Field.setAccessible(true);
-
-                    Params.add(Field.get(NBTBase));
-
-                    break;
-                }catch (NoSuchFieldException | IllegalAccessException ignored) {}
-            }
-        }
-
-        if(NBT.ordinal() == 7) {
-            try {
-                Object Param = SerializationUtils.deserialize((byte[]) Params.get(0));
-
-                if(Param.getClass().equals(long[].class)) {
-                    Params.set(0, Param);
-                    NBT = NBTLONGARRAY;
-                }
-
-            } catch (SerializationException ignored) {}
-        }
-
-        switch(NBT.ordinal()) {
-            case 0: {
-                return new NBTEnd();
-            }
-            case 1: {
-                return new NBTByte((byte) Params.get(0));
-            }
-            case 2: {
-                return new NBTShort((short) Params.get(0));
-            }
-            case 3: {
-                return new NBTInt((int) Params.get(0));
-            }
-            case 4: {
-                return new NBTLong((long) Params.get(0));
-            }
-            case 5: {
-                return new NBTFloat((float) Params.get(0));
-            }
-            case 6: {
-                return new NBTDouble((double) Params.get(0));
-            }
-            case 7: {
-                return new NBTByteArray((byte[]) Params.get(0));
-            }
-            case 8: {
-                return new NBTString((String) Params.get(0));
-            }
-            case 9: {
-                ArrayList<NBTBase<?>> Array = new ArrayList<>();
-
-                for(Object NMS : (ArrayList<Object>) Params.get(0)) {
-                    Array.add(NBTUtils.B(NMS));
-                }
-
-                return new NBTList(Array, (byte) Params.get(1));
-            }
-            case 10: {
-                Map<String, NBTBase<?>> Map = new HashMap<>();
-
-                ((Map<String, Object>) Params.get(0)).forEach((A, B) -> Map.put(A, NBTUtils.B(B)));
-
-                return new NBTCompound(Map);
-            }
-            case 11: {
-                return new NBTIntArray((int[]) Params.get(0));
-            }
-            case 12: {
-                return new NBTLongArray((long[]) Params.get(0));
-            }
-            default: throw new IllegalArgumentException("Unable to create NBTBase");
-        }
-    }
-
-    public Object O(@NotNull Object... Parameters) {
-        Constructor<?> Constructor = (B == null ? NBTUtils.NBTBYTEARRAY.B : B).getDeclaredConstructors()[(this.ordinal() == 12 && B != null) ? 2 : 0];
-        Constructor.setAccessible(true);
+        Fields Annotation;
 
         try {
-            if(Minecraft.getCurrentVersion().isDrasticallyChanged()) {
-                return Constructor.newInstance(Parameters.length > 0 ? Parameters : this.C);
+            Annotation = this.getClass().getDeclaredField(this.name()).getAnnotation(Fields.class);
+        }catch (NoSuchFieldException e) {
+            throw new NullPointerException("Could not find this Field");
+        }
+
+        if(Annotation != null) {
+            for(String Fieldname : Annotation.A()) {
+                try {
+                    Fields.add(NBTObject.getClass().getDeclaredField(Fieldname));
+                }catch (NoSuchFieldException ignored) {}
             }
 
-            Object Instance = Constructor.newInstance();
+            for(String Fieldname : Annotation.B()) {
+                try {
+                    Fields.add(NBTObject.getClass().getDeclaredField(Fieldname));
+                }catch (NoSuchFieldException ignored) {}
+            }
+        }
 
-            if(this.D.size() > 0 && Parameters.length > 0) {
-                for(String Fieldname : this.D.get(0)) {
-                    Field Field;
+        Fields.forEach(Field -> Field.setAccessible(true));
 
-                    try {
-                        Field = Instance.getClass().getDeclaredField(Fieldname);
-                        Field.setAccessible(true);
+        return Fields.toArray(new Field[0]);
+    }
 
-                        Field.set(Instance, (B == null) ? SerializationUtils.serialize((long[]) Parameters[0]) : Parameters[0]);
+    /**
+    * @param Args Arguments needed to create the Object.
+    *
+    * @return a NMS NBT Object.
+    */
 
-                        break;
-                    }catch (NoSuchFieldException ignored) {}
-                }
+    public @NotNull Object getNBTObject(@NotNull Object... Args) {
+        Constructor<?> NBTConstructor;
+
+        if(this.isAvailable()) {
+            NBTConstructor = this.getNMSClass().getDeclaredConstructors()[this.ordinal() == 12 ? 2 : 0];
+        }else{
+            NBTConstructor = NBTTagByteArray.getNMSClass().getDeclaredConstructors()[0];
+        }
+
+        if(!this.isAvailable() && Args[0].getClass().equals(long[].class)) {
+            Args[0] = SerializationUtils.serialize((long[]) Args[0]);
+        }
+
+        NBTConstructor.setAccessible(true);
+
+        try {
+            Object NBTObject;
+
+            if(NBTConstructor.getParameterCount() > 0) {
+                NBTObject = NBTConstructor.newInstance(Args);
+            }else{
+                NBTObject = NBTConstructor.newInstance();
             }
 
-            if(this.D.size() > 1 && Parameters.length > 1) {
-                for(String Fieldname : this.D.get(1)) {
-                    Field Field;
+            Field[] Fields = this.getFields(NBTObject);
 
-                    try {
-                        Field = Instance.getClass().getDeclaredField(Fieldname);
-                        Field.setAccessible(true);
-
-                        Field.set(Instance, Parameters[1]);
-
-                        break;
-                    }catch (NoSuchFieldException ignored) {}
-                }
+            if(Fields.length > 0) {
+                Fields[0].set(NBTObject, Args[0]);
             }
 
-            return Instance;
-        }catch (Error | IllegalAccessException | InstantiationException | InvocationTargetException e) {
-            throw new IllegalArgumentException("Could not create this NMS object");
+            if(Fields.length > 1) {
+                Fields[1].set(NBTObject, Args[1]);
+            }
+
+            return NBTObject;
+        }catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new NullPointerException("Could not create desired class.");
         }
     }
 
-    public static @NotNull NBTUtils D(byte D) {
-        for(NBTUtils NBT : NBTUtils.values()) {
-            if(NBT.ordinal() == D) return NBT;
+    public static @NotNull NBTBase<?> getNBTBase(@NotNull Object NBTObject) {
+        NBTUtils NBTTag = NBTUtils.valueOf(NBTObject.getClass().getSimpleName());
+
+        Object[] Values = new Object[2];
+
+        Field[] Fields = NBTTag.getFields(NBTObject);
+
+        try {
+            if(Fields.length > 0) {
+                Values[0] = Fields[0].get(NBTObject);
+            }
+
+            if(Fields.length > 1){
+                Values[1] = Fields[1].get(NBTObject);
+            }
+        }catch (IllegalAccessException e) {
+            throw new NullPointerException("Unable to access these fields");
         }
 
-        throw new NullPointerException();
+        if(NBTTag.equals(NBTTagByteArray)) {
+            Object Object;
+
+            try {
+                Object = SerializationUtils.deserialize((byte[]) Values[0]);
+
+                if(Object.getClass().equals(long[].class)) {
+                    Values[0] = Object;
+                    NBTTag = NBTTagLongArray;
+                }
+
+            }catch (NullPointerException | SerializationException ignored) {}
+        }else if(NBTTag.equals(NBTTagList)) {
+            List<NBTBase<?>> List = new ArrayList<>();
+
+            ((List<Object>) Values[0]).forEach(Object -> List.add(NBTUtils.getNBTBase(Object)));
+
+            Values[0] = List;
+        }else if(NBTTag.equals(NBTTagCompound)) {
+            Map<String, NBTBase<?>> Map = new HashMap<>();
+
+            ((Map<String, Object>) Values[0]).forEach((Key, Object) -> Map.put(Key, NBTUtils.getNBTBase(Object)));
+
+            Values[0] = Map;
+        }
+
+        try {
+            if(NBTTag.ordinal() > 0 && NBTTag.ordinal() != 9) {
+                return (NBTBase<?>) NBTTag.NBTClass.getConstructors()[1].newInstance(Values[0]);
+            } else if (NBTTag.ordinal() == 9) {
+                return (NBTBase<?>) NBTTag.NBTClass.getConstructors()[0].newInstance(Values[0], Values[1]);
+            } else {
+                return (NBTBase<?>) NBTTag.NBTClass.getConstructors()[0].newInstance();
+            }
+        }catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new NullPointerException("Could not create an instance of this object");
+        }
     }
 
-    public static @NotNull NBTUtils N(@NotNull String N) {
-        for(NBTUtils NBT : NBTUtils.values()) {
-            if(NBT.B.getSimpleName().equals(N)) return NBT;
+    /**
+    * @param ID a {@link NBTBase} ID.
+    *
+    * @return a NBTTag.
+    */
+
+    public static @NotNull NBTUtils getNBTTag(byte ID) {
+        for(NBTUtils NBTTag : NBTUtils.values()) {
+            if(NBTTag.ordinal() == ID) return NBTTag;
         }
 
-        throw new NullPointerException();
+        throw new NullPointerException("This shouldn't be null");
+    }
+
+    /**
+    * @return true if this NBT is available in the current version.
+    */
+
+    private boolean isAvailable() {
+        if(this.NBTClass.isAnnotationPresent(Available.class)) {
+            return this.NBTClass.getAnnotation(Available.class).Version().isEqualOrOlder(Minecraft.getCurrentVersion());
+        }
+
+        return true;
     }
 }

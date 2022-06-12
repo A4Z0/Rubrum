@@ -51,7 +51,7 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
            if(B != null) Map.put(A, B.getComponent());
         });
 
-        return NBTUtils.NBTCOMPOUND.O(Map);
+        return NBTUtils.NBTTagCompound.getNBTObject(Map);
     }
 
     /**
@@ -450,14 +450,22 @@ public class NBTCompound extends NBTBase<Map<String, NBTBase<?>>> implements Clo
         this.Data.remove(Key);
     }
 
-    @Override
-    public @NotNull NBTCompound clone() {
-        return new NBTCompound(this);
-    }
+    /**
+    * @return the ID of this {@link NBTCompound}.
+    */
 
     @Override
     public final byte getTypeID() {
         return 10;
+    }
+
+    /**
+    * @return a clone of this {@link NBTCompound}.
+    */
+
+    @Override
+    public @NotNull NBTCompound clone() {
+        return new NBTCompound(this);
     }
 
     /**

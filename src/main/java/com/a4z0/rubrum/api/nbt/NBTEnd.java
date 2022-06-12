@@ -20,7 +20,7 @@ public class NBTEnd extends NBTBase<String> {
 
     @Override
     protected @NotNull Object getComponent() {
-        return NBTUtils.NBTEND.O();
+        return NBTUtils.NBTTagEnd.getNBTObject();
     }
 
     @Override

@@ -28,10 +28,18 @@ public class NBTString extends NBTBase<String> {
         super(String);
     }
 
+    /**
+    * @return the ID of this {@link NBTString}.
+    */
+
     @Override
     public final byte getTypeID() {
         return 8;
     }
+
+    /**
+    * @return a clone of this {@link NBTString}.
+    */
 
     @Override
     public @NotNull NBTString clone() {

@@ -27,7 +27,7 @@ public class NBTTileEntity extends NBTCompound {
         this.A = BlockState;
 
         if(CraftTileEntity.getNBT(CraftTileEntity.getNMS(this.A)) != null) {
-            super.setTag((NBTCompound) NBTUtils.B(CraftTileEntity.getNBT(CraftTileEntity.getNMS(this.A))));
+            super.setTag((NBTCompound) NBTUtils.getNBTBase(CraftTileEntity.getNBT(CraftTileEntity.getNMS(this.A))));
         }
     }
 

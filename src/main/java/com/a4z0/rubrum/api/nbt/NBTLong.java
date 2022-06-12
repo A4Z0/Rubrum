@@ -38,10 +38,18 @@ public class NBTLong extends NBTBase<Long> {
         super(Long);
     }
 
+    /**
+    * @return the ID of this {@link NBTLong}.
+    */
+
     @Override
     public final byte getTypeID() {
         return 4;
     }
+
+    /**
+    * @return a clone of this {@link NBTLong}.
+    */
 
     @Override
     public @NotNull NBTLong clone() {

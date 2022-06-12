@@ -38,10 +38,18 @@ public class NBTFloat extends NBTBase<Float> {
         super(Float);
     }
 
+    /**
+    * @return the ID of this {@link NBTFloat}.
+    */
+
     @Override
     public final byte getTypeID() {
         return 5;
     }
+
+    /**
+    * @return a clone of this {@link NBTFloat}.
+    */
 
     @Override
     public @NotNull NBTFloat clone() {

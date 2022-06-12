@@ -23,7 +23,7 @@ public class NBTEntity extends NBTCompound {
     public NBTEntity(@NotNull Entity Entity) {
         this.A = Entity;
 
-        super.setTag((NBTCompound) NBTUtils.B(CraftEntity.getNBT(CraftEntity.getNMS(this.A))));
+        super.setTag((NBTCompound) NBTUtils.getNBTBase(CraftEntity.getNBT(CraftEntity.getNMS(this.A))));
     }
 
     /**

@@ -23,11 +23,11 @@ public abstract class NBTBase<T> implements Cloneable {
     }
 
     /**
-    * @return an NBT component.
+    * @return an NBTObject.
     */
 
     protected @NotNull Object getComponent() {
-        return NBTUtils.D(this.getTypeID()).O(this.Data);
+        return NBTUtils.getNBTTag(this.getTypeID()).getNBTObject(this.Data);
     }
 
     /**

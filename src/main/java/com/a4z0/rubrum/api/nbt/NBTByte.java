@@ -38,10 +38,18 @@ public class NBTByte extends NBTBase<Byte> {
         super(Byte);
     }
 
+    /**
+    * @return the ID of this {@link NBTByte}.
+    */
+
     @Override
     public final byte getTypeID() {
         return 1;
     }
+
+    /**
+    * @return a clone of this {@link NBTByte}.
+    */
 
     @Override
     public @NotNull NBTByte clone() {
