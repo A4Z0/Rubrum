@@ -1,7 +1,7 @@
 package com.a4z0.rubrum.api.nbt;
 
 import com.a4z0.rubrum.annotations.Available;
-import com.a4z0.rubrum.annotations.Fields;
+import com.a4z0.rubrum.annotations.Camp;
 import com.a4z0.rubrum.enums.Minecraft;
 import org.apache.commons.lang3.SerializationException;
 import org.apache.commons.lang3.SerializationUtils;
@@ -15,43 +15,44 @@ import java.util.*;
 public enum NBTUtils {
     NBTTagEnd(NBTEnd.class),
 
-    @Fields(A = {"data", "x"})
-    NBTTagByte(NBTByte.class),
+    @Camp(Data = {"data", "x"}, Version = Minecraft.V1_16_R1)
+    NBTTagByte(NBTByte.class, byte.class),
 
-    @Fields(A = {"data", "c"})
-    NBTTagShort(NBTShort.class),
+    @Camp(Data = {"data", "c"}, Version = Minecraft.V1_16_R1)
+    NBTTagShort(NBTShort.class, short.class),
 
-    @Fields(A = {"data", "c"})
-    NBTTagInt(NBTInt.class),
+    @Camp(Data = {"data", "c"}, Version = Minecraft.V1_16_R1)
+    NBTTagInt(NBTInt.class, int.class),
 
-    @Fields(A = {"data", "c"})
-    NBTTagLong(NBTLong.class),
+    @Camp(Data = {"data", "c"}, Version = Minecraft.V1_16_R1)
+    NBTTagLong(NBTLong.class, long.class),
 
-    @Fields(A = {"data", "w"})
-    NBTTagFloat(NBTFloat.class),
+    @Camp(Data = {"data", "w"}, Version = Minecraft.V1_16_R1)
+    NBTTagFloat(NBTFloat.class, float.class),
 
-    @Fields(A = {"data", "w"})
-    NBTTagDouble(NBTDouble.class),
+    @Camp(Data = {"data", "w"}, Version = Minecraft.V1_16_R1)
+    NBTTagDouble(NBTDouble.class, double.class),
 
-    @Fields(A = {"data", "c"})
-    NBTTagByteArray(NBTByteArray.class),
+    @Camp(Data = {"data", "c"}, Version = Minecraft.V1_16_R1)
+    NBTTagByteArray(NBTByteArray.class, byte[].class),
 
-    @Fields(A = {"data", "A"})
-    NBTTagString(NBTString.class),
+    @Camp(Data = {"data", "A"}, Version = Minecraft.V1_16_R1)
+    NBTTagString(NBTString.class, String.class),
 
-    @Fields(A = {"list", "c"}, B = {"type", "w"})
+    @Camp(Data = {"list", "c"}, Type = {"type", "w"}, Version = Minecraft.V1_16_R1)
     NBTTagList(NBTList.class),
 
-    @Fields(A = {"map", "x"})
+    @Camp(Data = {"map", "x"}, Version = Minecraft.V1_16_R1)
     NBTTagCompound(NBTCompound.class),
 
-    @Fields(A = {"data", "c"})
-    NBTTagIntArray(NBTIntArray.class),
+    @Camp(Data = {"data", "c"}, Version = Minecraft.V1_16_R1)
+    NBTTagIntArray(NBTIntArray.class, int[].class),
 
-    @Fields(A = {"data", "c"})
-    NBTTagLongArray(NBTLongArray.class);
+    @Camp(Data = {"b", "c"}, Version = Minecraft.V1_16_R1)
+    NBTTagLongArray(NBTLongArray.class, long[].class);
 
     private final Class<? extends NBTBase<?>> NBTClass;
+    private final Class<?>[] Parameters;
 
     /**
     * Construct a {@link NBTUtils}.
@@ -59,8 +60,9 @@ public enum NBTUtils {
     * @param Class a {@link NBTBase} class.
     */
 
-    NBTUtils(@NotNull Class<? extends NBTBase<?>> Class) {
+    NBTUtils(@NotNull Class<? extends NBTBase<?>> Class, @NotNull Class<?>... Parameters) {
         this.NBTClass = Class;
+        this.Parameters = Parameters;
     }
 
     /**
@@ -84,26 +86,24 @@ public enum NBTUtils {
     private @NotNull Field[] getFields(@NotNull Object NBTObject) {
         List<Field> Fields = new ArrayList<>();
 
-        Fields Annotation;
+        Camp Annotation;
 
         try {
-            Annotation = this.getClass().getDeclaredField(this.name()).getAnnotation(Fields.class);
+            Annotation = this.getClass().getDeclaredField(this.name()).getAnnotation(Camp.class);
         }catch (NoSuchFieldException e) {
             throw new NullPointerException("Could not find this Field");
         }
 
         if(Annotation != null) {
-            for(String Fieldname : Annotation.A()) {
-                try {
-                    Fields.add(NBTObject.getClass().getDeclaredField(Fieldname));
-                }catch (NoSuchFieldException ignored) {}
-            }
+            try {
+                if(Annotation.Data().length > 1) {
+                    Fields.add(NBTObject.getClass().getDeclaredField(Annotation.Version().isEqualOrOlder(Minecraft.getCurrentVersion()) ? Annotation.Data()[1] : Annotation.Data()[0]));
+                }
 
-            for(String Fieldname : Annotation.B()) {
-                try {
-                    Fields.add(NBTObject.getClass().getDeclaredField(Fieldname));
-                }catch (NoSuchFieldException ignored) {}
-            }
+                if(Annotation.Type().length > 1) {
+                    Fields.add(NBTObject.getClass().getDeclaredField(Annotation.Version().isEqualOrOlder(Minecraft.getCurrentVersion()) ? Annotation.Type()[1] : Annotation.Type()[0]));
+                }
+            }catch (NoSuchFieldException ignored) {}
         }
 
         Fields.forEach(Field -> Field.setAccessible(true));
@@ -120,10 +120,14 @@ public enum NBTUtils {
     public @NotNull Object getNBTObject(@NotNull Object... Args) {
         Constructor<?> NBTConstructor;
 
-        if(this.isAvailable()) {
-            NBTConstructor = this.getNMSClass().getDeclaredConstructors()[this.ordinal() == 12 ? 2 : 0];
-        }else{
-            NBTConstructor = NBTTagByteArray.getNMSClass().getDeclaredConstructors()[0];
+        try {
+            if (this.isAvailable()) {
+                NBTConstructor = this.getNMSClass().getDeclaredConstructor(this.Parameters);
+            } else {
+                NBTConstructor = NBTTagByteArray.getNMSClass().getDeclaredConstructor(NBTTagByteArray.Parameters);
+            }
+        }catch (NoSuchMethodException e) {
+            throw new NullPointerException("Could not find the desired constructor");
         }
 
         if(!this.isAvailable() && Args[0].getClass().equals(long[].class)) {

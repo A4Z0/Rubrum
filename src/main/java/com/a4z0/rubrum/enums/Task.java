@@ -1,6 +1,8 @@
 package com.a4z0.rubrum.enums;
 
+import com.a4z0.rubrum.annotations.Available;
 import com.a4z0.rubrum.api.nbt.*;
+import com.a4z0.rubrum.interfaces.Callback;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -9,46 +11,45 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 
 public enum Task {
-    NBTCOMPOUND("NBTCompound", () -> {
+    NBTUTILS("NBTUtils", () -> {
+        for(Object NBTObject : Task.getNBTObjects()) {
+            NBTUtils.getNBTBase(NBTObject);
+        }
 
+        return null;
+    }),
+    NBTCOMPOUND("NBTCompound", () -> {
         NBTCompound NBT = new NBTCompound();
 
-        NBT.set("End", new NBTEnd());
-        NBT.set("Byte", new NBTByte());
-        NBT.set("Short", new NBTShort());
-        NBT.set("Int", new NBTInt());
-        NBT.set("Long", new NBTLong());
-        NBT.set("Float", new NBTFloat());
-        NBT.set("Double", new NBTDouble());
-        NBT.set("ByteArray", new NBTByteArray());
-        NBT.set("String", new NBTString());
-        NBT.set("List", new NBTList());
-        NBT.set("Compound", new NBTCompound());
-        NBT.set("IntArray", new NBTIntArray());
-        NBT.set("LongArray", new NBTLongArray());
+        for(int i = 0; i < Task.getNBTs().length; i++) {
+            NBT.set(String.valueOf(i), Task.getNBTs()[i]);
+        }
 
-        return 1;
+        return null;
     }),
     NBTITEM("NBTItem", () -> {
-
         NBTItem NBT = new NBTItem(new ItemStack(Material.IRON_SWORD));
-        NBT.setString("Data", "Hello, World!");
+
+        for(int i = 0; i < Task.getNBTs().length; i++) {
+            NBT.set(String.valueOf(i), Task.getNBTs()[i]);
+        }
 
         NBT.setTag(NBT);
 
-        return 1;
+        return null;
     }),
-    NBTENTITY("NBTEntity", () -> {
+    NBTEntity("NBTEntity", () -> {
+        World World = Bukkit.getWorlds().get(0);
+        ArmorStand ArmorStand = World.spawn(World.getSpawnLocation(), ArmorStand.class);
 
-        World A = Bukkit.getWorlds().get(0);
-        ArmorStand B = A.spawn(A.getSpawnLocation(), ArmorStand.class);
-
-        NBTEntity NBT = new NBTEntity(B);
+        NBTEntity NBT = new NBTEntity(ArmorStand);
 
         List<NBTBase<?>> List = null;
 
@@ -60,7 +61,7 @@ public enum Task {
             List = NBT.getList("ArmorItems");
         }
 
-        if(List == null) return null;
+        if(List == null) throw new IllegalArgumentException("This shouldn't have happened");
 
         NBTCompound IH = new NBTCompound();
         NBTCompound IC = new NBTCompound();
@@ -98,27 +99,25 @@ public enum Task {
         NBT.setBoolean("Invisible", true);
         NBT.setTag(NBT);
 
-        B.remove();
+        ArmorStand.remove();
 
-        return 1;
+        return null;
     }),
+
+    @Available(Version = Minecraft.V1_16_R3)
     NBTCHUNK("NBTChunk", () -> {
-
-        if(!Minecraft.V1_16_R3.isEqualOrOlder(Minecraft.getCurrentVersion())) return 2;
-
-        World A = Bukkit.getWorlds().get(0);
-        NBTChunk NBT = new NBTChunk(A.getChunkAt(A.getSpawnLocation()));
+        World World = Bukkit.getWorlds().get(0);
+        NBTChunk NBT = new NBTChunk(World.getChunkAt(World.getSpawnLocation()));
         NBT.setString("Data", "Hello, World!");
         NBT.setTag(NBT);
 
-        return 1;
+        return null;
     }),
-    NBTBLOCK("NBTBlock", () -> {
 
-        if(!Minecraft.V1_16_R3.isEqualOrOlder(Minecraft.getCurrentVersion())) return 2;
-
-        World A = Bukkit.getWorlds().get(0);
-        NBTBlock NBT = new NBTBlock(A.getBlockAt(A.getSpawnLocation()));
+    @Available(Version = Minecraft.V1_16_R3)
+    NBTBlock("NBTBlock", () -> {
+        World World = Bukkit.getWorlds().get(0);
+        NBTBlock NBT = new NBTBlock(World.getBlockAt(World.getSpawnLocation()));
         NBT.setString("Data", "Hello, World!");
         NBT.setTag(NBT);
 
@@ -126,21 +125,21 @@ public enum Task {
         Chunk.remove("blocks");
         Chunk.setTag(Chunk);
 
-        return 1;
+        return null;
     }),
-    NBTTILEENTITY("NBTTileEntity", () -> {
 
-        World A = Bukkit.getWorlds().get(0);
-        Block O = A.getHighestBlockAt(A.getSpawnLocation());
-        Material M = O.getType();
+    NBTTILEENTITY("NBTTileEntity", () -> {
+        World World = Bukkit.getWorlds().get(0);
+        Block Block = World.getHighestBlockAt(World.getSpawnLocation());
+        Material Blocktype = Block.getType();
 
         try {
-            O.setType(Objects.requireNonNull(Material.getMaterial("SIGN")));
+            Block.setType(Objects.requireNonNull(Material.getMaterial("SIGN")));
         }catch (NullPointerException e) {
-            O.setType(Objects.requireNonNull(Material.getMaterial("OAK_SIGN")));
+            Block.setType(Objects.requireNonNull(Material.getMaterial("OAK_SIGN")));
         }
 
-        NBTTileEntity NBT = new NBTTileEntity(O.getState());
+        NBTTileEntity NBT = new NBTTileEntity(Block.getState());
 
         NBT.setString("Text1", "Hello, World!");
         NBT.setTag(NBT);
@@ -151,44 +150,103 @@ public enum Task {
             Data.setTag(Data);
         }
 
-        O.setType(M);
+        Block.setType(Blocktype);
 
-        return 1;
+        return null;
     });
 
-    private final String A;
-    private final Callable<Integer> B;
+    private final String Taskname;
+    private final Callable<Void> Work;
 
     /**
-    * Construct a {@link Task} with the given params.
+    * Construct a {@link Task}.
     *
-    * @param A Task's name.
-    * @param B Task's callabe.
+    * @param Taskname Task name.
+    * @param Work Task work.
     */
 
-    Task(@NotNull String A, @NotNull Callable<Integer> B) {
-        this.A = A;
-        this.B = B;
+    Task(@NotNull String Taskname, @NotNull Callable<Void> Work) {
+        this.Taskname = Taskname;
+        this.Work = Work;
     }
 
     /**
-    * @return the {@link Task} name.
+    * @return true if this {@link Task} is available in the current version.
     */
 
-    public @NotNull String N() {
-        return this.A;
-    }
-
-    /**
-    * @return a value based on {@link Task} execution.
-    */
-
-    public int T() {
+    private boolean isAvailable() {
         try {
-            return this.B.call();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
+            if(Task.class.getDeclaredField(this.name()).isAnnotationPresent(Available.class)) {
+                return Task.class.getDeclaredField(this.name()).getAnnotation(Available.class).Version().isEqualOrOlder(Minecraft.getCurrentVersion());
+            }
+        }catch (NoSuchFieldException e) {
+            throw new NullPointerException("Could not find this field");
+        }
+
+        return true;
+    }
+
+    /**
+    * @return a list of already defined NBTs.
+    */
+
+    private static @NotNull NBTBase<?>[] getNBTs() {
+        return new NBTBase[]{
+            new NBTEnd(),
+            new NBTByte(),
+            new NBTShort(),
+            new NBTInt(),
+            new NBTLong(),
+            new NBTFloat(),
+            new NBTDouble(),
+            new NBTByteArray(),
+            new NBTString(),
+            new NBTList(),
+            new NBTCompound(),
+            new NBTIntArray(),
+            new NBTLongArray()
+        };
+    }
+
+    /**
+    * @return a list of already defined NBTObjects.
+    */
+
+    private static @NotNull Object[] getNBTObjects() {
+        return new Object[]{
+                NBTUtils.NBTTagEnd.getNBTObject(),
+                NBTUtils.NBTTagByte.getNBTObject((byte) 1),
+                NBTUtils.NBTTagShort.getNBTObject((short) 1),
+                NBTUtils.NBTTagInt.getNBTObject(1),
+                NBTUtils.NBTTagLong.getNBTObject(1L),
+                NBTUtils.NBTTagFloat.getNBTObject(1f),
+                NBTUtils.NBTTagDouble.getNBTObject(1d),
+                NBTUtils.NBTTagByteArray.getNBTObject(new byte[]{}),
+                NBTUtils.NBTTagString.getNBTObject(""),
+                NBTUtils.NBTTagList.getNBTObject(new ArrayList<>(), (byte) 10),
+                NBTUtils.NBTTagCompound.getNBTObject(new HashMap<>()),
+                NBTUtils.NBTTagIntArray.getNBTObject(new int[]{}),
+                NBTUtils.NBTTagLongArray.getNBTObject(new long[]{}),
+        };
+    }
+
+    /**
+    * Tests all available tasks.
+    *
+    * @param Success Executed when successful.
+    * @param Unsuccess Executed when unsuccessful.
+    */
+
+    public static void Try(@NotNull Callback Success, @NotNull Callback Unsuccess) {
+        for(Task Task : Task.values()) {
+            if(!Task.isAvailable()) continue;
+
+            try {
+                Task.Work.call(); Success.Call(Task.Taskname);
+            }catch (Exception e) {
+                e.printStackTrace();
+                Unsuccess.Call(Task.Taskname); break;
+            }
         }
     }
 }

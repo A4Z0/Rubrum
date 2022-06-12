@@ -18,23 +18,9 @@ public final class Rubrum extends JavaPlugin {
         this.getLogger().info("Starting scan tasks...");
         this.getLogger().info("");
 
-        for(Task Task : Task.values()) {
-            switch(Task.T()) {
-                case 0: {
-                    this.getLogger().warning("Task -> (" + Task.N() + ") Error.");
-                    this.getServer().getPluginManager().disablePlugin(this);
-
-                    return;
-                }
-                case 1: {
-                    this.getLogger().info("Task -> (" + Task.N() + ") Ok!");
-                    break;
-                }
-                case 2: {
-                    break;
-                }
-            }
-        }
+        Task.Try((Objects) -> this.getLogger().info("Task -> (" + Objects[0] + ") Ok!"), (Objects) -> {
+            this.getLogger().warning("Task -> (" + Objects[0] + ") Error."); this.getServer().getPluginManager().disablePlugin(this);
+        });
 
         this.getLogger().info("");
         this.getLogger().info("Successfully started!");
