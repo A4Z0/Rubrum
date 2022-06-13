@@ -4,7 +4,7 @@
 
     <groupId>com.a4z0.rubrum</groupId>
     <artifactId>Rubrum</artifactId>
-    <version>2.6.1</version>
+    <version>2.6.2</version>
     <packaging>jar</packaging>
 
     <name>Rubrum</name>
@@ -55,6 +55,10 @@
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -69,6 +73,11 @@
                     <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.github.A4Z0</groupId>
+            <artifactId>Alumina</artifactId>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
