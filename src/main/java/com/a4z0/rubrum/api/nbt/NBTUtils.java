@@ -1,7 +1,7 @@
 package com.a4z0.rubrum.api.nbt;
 
 import com.a4z0.rubrum.annotations.Since;
-import com.a4z0.rubrum.annotations.NBTField;
+import com.a4z0.rubrum.annotations.Camp;
 import com.a4z0.rubrum.enums.Minecraft;
 import org.apache.commons.lang3.SerializationException;
 import org.apache.commons.lang3.SerializationUtils;
@@ -15,40 +15,40 @@ import java.util.*;
 public enum NBTUtils {
     NBTTagEnd(NBTEnd.class),
 
-    @NBTField(Data = {"data", "x"})
+    @Camp(Data = {"data", "x"}, Version = Minecraft.V1_16_R1)
     NBTTagByte(NBTByte.class, byte.class),
 
-    @NBTField(Data = {"data", "c"})
+    @Camp(Data = {"data", "c"}, Version = Minecraft.V1_16_R1)
     NBTTagShort(NBTShort.class, short.class),
 
-    @NBTField(Data = {"data", "c"})
+    @Camp(Data = {"data", "c"}, Version = Minecraft.V1_16_R1)
     NBTTagInt(NBTInt.class, int.class),
 
-    @NBTField(Data = {"data", "c"})
+    @Camp(Data = {"data", "c"}, Version = Minecraft.V1_16_R1)
     NBTTagLong(NBTLong.class, long.class),
 
-    @NBTField(Data = {"data", "w"})
+    @Camp(Data = {"data", "w"}, Version = Minecraft.V1_16_R1)
     NBTTagFloat(NBTFloat.class, float.class),
 
-    @NBTField(Data = {"data", "w"})
+    @Camp(Data = {"data", "w"}, Version = Minecraft.V1_16_R1)
     NBTTagDouble(NBTDouble.class, double.class),
 
-    @NBTField(Data = {"data", "c"})
+    @Camp(Data = {"data", "c"}, Version = Minecraft.V1_16_R1)
     NBTTagByteArray(NBTByteArray.class, byte[].class),
 
-    @NBTField(Data = {"data", "A"})
+    @Camp(Data = {"data", "A"}, Version = Minecraft.V1_16_R1)
     NBTTagString(NBTString.class, String.class),
 
-    @NBTField(Data = {"list", "c"}, Type = {"type", "w"})
+    @Camp(Data = {"list", "c"}, Type = {"type", "w"}, Version = Minecraft.V1_16_R1)
     NBTTagList(NBTList.class),
 
-    @NBTField(Data = {"map", "x"})
+    @Camp(Data = {"map", "x"}, Version = Minecraft.V1_16_R1)
     NBTTagCompound(NBTCompound.class),
 
-    @NBTField(Data = {"data", "c"})
+    @Camp(Data = {"data", "c"}, Version = Minecraft.V1_16_R1)
     NBTTagIntArray(NBTIntArray.class, int[].class),
 
-    @NBTField(Data = {"b", "c"})
+    @Camp(Data = {"b", "c"}, Version = Minecraft.V1_16_R1)
     NBTTagLongArray(NBTLongArray.class, long[].class);
 
     private final Class<? extends NBTBase<?>> NBTClass;
@@ -86,10 +86,10 @@ public enum NBTUtils {
     private @NotNull Field[] getFields(@NotNull Object NBTObject) {
         List<Field> Fields = new ArrayList<>();
 
-        NBTField Annotation;
+        Camp Annotation;
 
         try {
-            Annotation = this.getClass().getDeclaredField(this.name()).getAnnotation(NBTField.class);
+            Annotation = this.getClass().getDeclaredField(this.name()).getAnnotation(Camp.class);
         }catch (NoSuchFieldException e) {
             throw new NullPointerException("Could not find this Field");
         }
