@@ -1,4 +1,4 @@
-# Rubrum [1.8 - 1.18]
+# Rubrum [1.8 - 1.19]
 Assistance in modifying NBTs in multiple versions.
 
 <div>

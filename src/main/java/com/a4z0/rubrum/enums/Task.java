@@ -1,6 +1,6 @@
 package com.a4z0.rubrum.enums;
 
-import com.a4z0.rubrum.annotations.Available;
+import com.a4z0.rubrum.annotations.Since;
 import com.a4z0.rubrum.api.nbt.*;
 import com.a4z0.rubrum.interfaces.Callback;
 import org.bukkit.Bukkit;
@@ -104,7 +104,7 @@ public enum Task {
         return null;
     }),
 
-    @Available(Version = Minecraft.V1_16_R3)
+    @Since(Version = Minecraft.V1_16_R3)
     NBTCHUNK("NBTChunk", () -> {
         World World = Bukkit.getWorlds().get(0);
         NBTChunk NBT = new NBTChunk(World.getChunkAt(World.getSpawnLocation()));
@@ -114,7 +114,7 @@ public enum Task {
         return null;
     }),
 
-    @Available(Version = Minecraft.V1_16_R3)
+    @Since(Version = Minecraft.V1_16_R3)
     NBTBlock("NBTBlock", () -> {
         World World = Bukkit.getWorlds().get(0);
         NBTBlock NBT = new NBTBlock(World.getBlockAt(World.getSpawnLocation()));
@@ -176,8 +176,8 @@ public enum Task {
 
     private boolean isAvailable() {
         try {
-            if(Task.class.getDeclaredField(this.name()).isAnnotationPresent(Available.class)) {
-                return Task.class.getDeclaredField(this.name()).getAnnotation(Available.class).Version().isEqualOrOlder(Minecraft.getCurrentVersion());
+            if(Task.class.getDeclaredField(this.name()).isAnnotationPresent(Since.class)) {
+                return Task.class.getDeclaredField(this.name()).getAnnotation(Since.class).Version().isEqualOrOlder(Minecraft.getCurrentVersion());
             }
         }catch (NoSuchFieldException e) {
             throw new NullPointerException("Could not find this field");
@@ -235,18 +235,21 @@ public enum Task {
     *
     * @param Success Executed when successful.
     * @param Unsuccess Executed when unsuccessful.
+    *
+    * @return true if all goes well.
     */
 
-    public static void Try(@NotNull Callback Success, @NotNull Callback Unsuccess) {
+    public static boolean Try(@NotNull Callback Success, @NotNull Callback Unsuccess) {
         for(Task Task : Task.values()) {
             if(!Task.isAvailable()) continue;
 
             try {
                 Task.Work.call(); Success.Call(Task.Taskname);
             }catch (Exception e) {
-                e.printStackTrace();
-                Unsuccess.Call(Task.Taskname); break;
+                Unsuccess.Call(Task.Taskname); return false;
             }
         }
+
+        return true;
     }
 }

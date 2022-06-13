@@ -1,6 +1,6 @@
 package com.a4z0.rubrum.api.nbt;
 
-import com.a4z0.rubrum.annotations.Available;
+import com.a4z0.rubrum.annotations.Since;
 import com.a4z0.rubrum.annotations.Camp;
 import com.a4z0.rubrum.enums.Minecraft;
 import org.apache.commons.lang3.SerializationException;
@@ -161,6 +161,12 @@ public enum NBTUtils {
         }
     }
 
+    /**
+    * @param NBTObject a NMS NBT Object.
+    *
+    * @return the NBTObject as an {@link NBTBase}.
+    */
+
     public static @NotNull NBTBase<?> getNBTBase(@NotNull Object NBTObject) {
         NBTUtils NBTTag = NBTUtils.valueOf(NBTObject.getClass().getSimpleName());
 
@@ -238,8 +244,8 @@ public enum NBTUtils {
     */
 
     private boolean isAvailable() {
-        if(this.NBTClass.isAnnotationPresent(Available.class)) {
-            return this.NBTClass.getAnnotation(Available.class).Version().isEqualOrOlder(Minecraft.getCurrentVersion());
+        if(this.NBTClass.isAnnotationPresent(Since.class)) {
+            return this.NBTClass.getAnnotation(Since.class).Version().isEqualOrOlder(Minecraft.getCurrentVersion());
         }
 
         return true;
