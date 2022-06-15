@@ -9,12 +9,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
-* Guides to the fields that must be used.
+* Representation of reflected fields from an NBTObject.
 */
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Camp {
+public @interface NBTField {
 
     /**
     * @return the names of the Data fields.
@@ -32,5 +32,5 @@ public @interface Camp {
     * @return the version that the names should be changed.
     */
 
-    @NotNull Minecraft Version() default Minecraft.V1_18_R1;
+    @NotNull Minecraft Version() default Minecraft.V1_16_R1;
 }
