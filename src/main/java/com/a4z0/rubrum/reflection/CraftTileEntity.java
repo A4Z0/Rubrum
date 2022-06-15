@@ -1,6 +1,6 @@
 package com.a4z0.rubrum.reflection;
 
-import com.a4z0.alumina.api.version.Minecraft;
+import com.a4z0.rubrum.enums.Minecraft;
 import com.a4z0.rubrum.api.nbt.NBTUtils;
 import org.bukkit.block.BlockState;
 import org.jetbrains.annotations.NotNull;
