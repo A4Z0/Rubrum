@@ -1,6 +1,6 @@
 package com.a4z0.rubrum.api.nbt;
 
-import com.a4z0.rubrum.enums.Minecraft;
+import com.a4z0.alumina.api.version.Minecraft;
 import com.a4z0.rubrum.reflection.CraftTileEntity;
 import org.bukkit.block.BlockState;
 import org.bukkit.persistence.PersistentDataContainer;
