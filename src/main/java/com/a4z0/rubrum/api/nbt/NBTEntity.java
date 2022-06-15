@@ -1,6 +1,6 @@
 package com.a4z0.rubrum.api.nbt;
 
-import com.a4z0.alumina.api.version.Minecraft;
+import com.a4z0.rubrum.enums.Minecraft;
 import com.a4z0.rubrum.reflection.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;

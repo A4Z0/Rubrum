@@ -1,6 +1,6 @@
 package com.a4z0.rubrum.reflection;
 
-import com.a4z0.alumina.api.version.Minecraft;
+import com.a4z0.rubrum.enums.Minecraft;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 

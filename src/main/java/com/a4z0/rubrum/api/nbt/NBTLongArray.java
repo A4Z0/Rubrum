@@ -1,7 +1,7 @@
 package com.a4z0.rubrum.api.nbt;
 
-import com.a4z0.alumina.api.annotations.Since;
-import com.a4z0.alumina.api.version.Minecraft;
+import com.a4z0.rubrum.annotations.Since;
+import com.a4z0.rubrum.enums.Minecraft;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
