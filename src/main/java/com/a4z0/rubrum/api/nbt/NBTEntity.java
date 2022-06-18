@@ -69,7 +69,7 @@ public class NBTEntity extends NBTCompound {
 
     public NBTPersistentDataContainer getPersistentDataContainer() {
 
-        if(!Minecraft.V1_14_R1.isEqualOrOlder(Minecraft.getCurrentVersion()))
+        if(!Minecraft.V1_14_R1.isEqualOrNewer(Minecraft.getCurrentVersion()))
             throw new IllegalArgumentException("Feature available from version 1.14+");
 
         if(this.B == null)

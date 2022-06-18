@@ -26,7 +26,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class CraftItemStack {
 
-    public static final Class<?> A;
+    private static final Class<?> A;
 
     static {
         try {

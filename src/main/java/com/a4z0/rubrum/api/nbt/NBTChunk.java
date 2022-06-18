@@ -39,7 +39,7 @@ public class NBTChunk extends NBTCompound {
 
     public NBTChunk(@NotNull Chunk Chunk) {
 
-        if(!Minecraft.V1_16_R3.isEqualOrOlder(Minecraft.getCurrentVersion())) {
+        if(!Minecraft.V1_16_R3.isEqualOrNewer(Minecraft.getCurrentVersion())) {
             throw new IllegalArgumentException("Feature available from version 1.16.4+");
         }
 

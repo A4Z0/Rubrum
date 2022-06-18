@@ -50,9 +50,21 @@ import org.jetbrains.annotations.NotNull;
 
 public enum Minecraft {
 
-    NOT_SUPPORTED,
+    /*
+    * Used when the version is unknown.
+    */
+
+    UNKNOWN,
+
+    /*
+    * Older version supported.
+    */
 
     V1_8_R3,
+
+    /*
+    * Versions that can be used two hands.
+    */
 
     V1_9_R1,
     V1_9_R2,
@@ -63,6 +75,10 @@ public enum Minecraft {
     V1_13_R2,
     V1_14_R1,
     V1_15_R1,
+
+    /*
+    * Versions that have been drastically modified.
+    */
 
     V1_16_R1,
     V1_16_R2,
@@ -77,7 +93,7 @@ public enum Minecraft {
     */
 
     public boolean isTwoHanded() {
-        return Minecraft.V1_9_R1.isEqualOrOlder(this);
+        return Minecraft.V1_9_R1.isEqualOrNewer(this);
     }
 
     /**
@@ -85,16 +101,16 @@ public enum Minecraft {
     */
 
     public boolean isDrasticallyChanged() {
-        return Minecraft.V1_16_R1.isEqualOrOlder(this);
+        return Minecraft.V1_16_R1.isEqualOrNewer(this);
     }
 
     /**
     * @param Version a {@link Minecraft} version.
     *
-    * @return true if the given version is equal or older than this one.
+    * @return true if the given version is equal or newer than this one.
     */
 
-    public boolean isEqualOrOlder(@NotNull Minecraft Version) {
+    public boolean isEqualOrNewer(@NotNull Minecraft Version) {
         return Version.ordinal() >= this.ordinal();
     }
 
@@ -130,6 +146,6 @@ public enum Minecraft {
             if(PACKAGE_VERSION.contains(Version.name().substring(1))) return Version;
         }
 
-        return NOT_SUPPORTED;
+        return UNKNOWN;
     }
 }

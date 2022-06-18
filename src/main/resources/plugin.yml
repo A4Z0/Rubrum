@@ -2,7 +2,7 @@ name: Rubrum
 version: '${project.version}'
 website: 'https://github.com/A4Z0/Rubrum'
 description: Assistance in modifying NBTs in multiple versions.
-authors: [ A4Z0 ]
+author: A4Z0
 
 main: com.a4z0.rubrum.Rubrum
 load: POSTWORLD

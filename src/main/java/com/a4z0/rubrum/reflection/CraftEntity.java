@@ -29,7 +29,7 @@ import java.util.HashMap;
 
 public class CraftEntity {
 
-    public static final Class<?> A;
+    private static final Class<?> A;
 
     static {
         try {

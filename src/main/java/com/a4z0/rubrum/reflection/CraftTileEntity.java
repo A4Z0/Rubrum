@@ -29,8 +29,8 @@ import java.util.HashMap;
 
 public class CraftTileEntity {
 
-    public static final Class<?> A;
-    public static final Class<?> B;
+    private static final Class<?> A;
+    private static final Class<?> B;
 
     static {
         try {
@@ -125,9 +125,9 @@ public class CraftTileEntity {
         if(TileEntity == null) return;
 
         try {
-            if(Minecraft.V1_17_R1.isEqualOrOlder(Minecraft.getCurrentVersion())) {
+            if(Minecraft.V1_17_R1.isEqualOrNewer(Minecraft.getCurrentVersion())) {
                 TileEntity.getClass().getMethod("a", NBT.getClass()).invoke(TileEntity, NBT);
-            }else if(Minecraft.V1_16_R1.isEqualOrOlder(Minecraft.getCurrentVersion())) {
+            }else if(Minecraft.V1_16_R1.isEqualOrNewer(Minecraft.getCurrentVersion())) {
                 Object D = TileEntity.getClass().getMethod("getBlock").invoke(TileEntity);
                 TileEntity.getClass().getMethod("load", D.getClass(), NBT.getClass()).invoke(TileEntity, D, NBT);
             }else {

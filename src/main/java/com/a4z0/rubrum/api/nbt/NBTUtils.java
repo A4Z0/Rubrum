@@ -30,6 +30,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+/**
+* Contain all types of NBTs.
+*/
+
 public enum NBTUtils {
     NBTTagEnd(NBTEnd.class),
 
@@ -115,11 +119,11 @@ public enum NBTUtils {
         if(Annotation != null) {
             try {
                 if(Annotation.Data().length > 1) {
-                    Fields.add(NBTObject.getClass().getDeclaredField(Annotation.Version().isEqualOrOlder(Minecraft.getCurrentVersion()) ? Annotation.Data()[1] : Annotation.Data()[0]));
+                    Fields.add(NBTObject.getClass().getDeclaredField(Annotation.Version().isEqualOrNewer(Minecraft.getCurrentVersion()) ? Annotation.Data()[1] : Annotation.Data()[0]));
                 }
 
                 if(Annotation.Type().length > 1) {
-                    Fields.add(NBTObject.getClass().getDeclaredField(Annotation.Version().isEqualOrOlder(Minecraft.getCurrentVersion()) ? Annotation.Type()[1] : Annotation.Type()[0]));
+                    Fields.add(NBTObject.getClass().getDeclaredField(Annotation.Version().isEqualOrNewer(Minecraft.getCurrentVersion()) ? Annotation.Type()[1] : Annotation.Type()[0]));
                 }
             }catch (NoSuchFieldException ignored) {}
         }
@@ -263,7 +267,7 @@ public enum NBTUtils {
 
     private boolean isAvailable() {
         if(this.NBTClass.isAnnotationPresent(Since.class)) {
-            return this.NBTClass.getAnnotation(Since.class).Version().isEqualOrOlder(Minecraft.getCurrentVersion());
+            return this.NBTClass.getAnnotation(Since.class).Version().isEqualOrNewer(Minecraft.getCurrentVersion());
         }
 
         return true;

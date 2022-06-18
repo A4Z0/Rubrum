@@ -20,7 +20,6 @@ package com.a4z0.rubrum.enums;
 
 import com.a4z0.rubrum.annotations.Since;
 import com.a4z0.rubrum.api.nbt.*;
-import com.a4z0.rubrum.interfaces.Callback;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -34,6 +33,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
+
+/**
+* Contains all of Rubrum tasks.
+*/
 
 public enum Task {
     NBTUTILS("NBTUtils", () -> {
@@ -63,7 +66,7 @@ public enum Task {
 
         return null;
     }),
-    NBTEntity("NBTEntity", () -> {
+    NBTENTITY("NBTEntity", () -> {
         World World = Bukkit.getWorlds().get(0);
         ArmorStand ArmorStand = World.spawn(World.getSpawnLocation(), ArmorStand.class);
 
@@ -99,7 +102,7 @@ public enum Task {
         List.set(1, IL);
         List.set(0, IB);
 
-        if(Minecraft.V1_14_R1.isEqualOrOlder(Minecraft.getCurrentVersion())) {
+        if(Minecraft.V1_14_R1.isEqualOrNewer(Minecraft.getCurrentVersion())) {
             IH.setCompound("tag", D.clone());
             IH.setByte("Count", (byte) 1);
             IC.setCompound("tag", D.clone());
@@ -133,7 +136,7 @@ public enum Task {
     }),
 
     @Since(Version = Minecraft.V1_16_R3)
-    NBTBlock("NBTBlock", () -> {
+    NBTBLOCK("NBTBlock", () -> {
         World World = Bukkit.getWorlds().get(0);
         NBTBlock NBT = new NBTBlock(World.getBlockAt(World.getSpawnLocation()));
         NBT.setString("Data", "Hello, World!");
@@ -162,7 +165,7 @@ public enum Task {
         NBT.setString("Text1", "Hello, World!");
         NBT.setTag(NBT);
 
-        if(Minecraft.V1_14_R1.isEqualOrOlder(Minecraft.getCurrentVersion())) {
+        if(Minecraft.V1_14_R1.isEqualOrNewer(Minecraft.getCurrentVersion())) {
             NBTCompound Data = NBT.getPersistentDataContainer();
             Data.setString("Data", "Hello, World!");
             Data.setTag(Data);
@@ -189,16 +192,40 @@ public enum Task {
     }
 
     /**
+    * @return the task name.
+    */
+
+    public @NotNull String getTaskname() {
+        return this.Taskname;
+    }
+
+    /**
     * @return true if this {@link Task} is available in the current version.
     */
 
     private boolean isAvailable() {
         try {
             if(Task.class.getDeclaredField(this.name()).isAnnotationPresent(Since.class)) {
-                return Task.class.getDeclaredField(this.name()).getAnnotation(Since.class).Version().isEqualOrOlder(Minecraft.getCurrentVersion());
+                return Task.class.getDeclaredField(this.name()).getAnnotation(Since.class).Version().isEqualOrNewer(Minecraft.getCurrentVersion());
             }
         }catch (NoSuchFieldException e) {
             throw new NullPointerException("Could not find this field");
+        }
+
+        return true;
+    }
+
+    /**
+    * @return true if the test succeeds.
+    */
+
+    public boolean test() {
+        if(!this.isAvailable()) return true;
+
+        try {
+            this.Work.call();
+        }catch (Exception e) {
+            return false;
         }
 
         return true;
@@ -246,28 +273,5 @@ public enum Task {
                 NBTUtils.NBTTagIntArray.getNBTObject(new int[]{}),
                 NBTUtils.NBTTagLongArray.getNBTObject(new long[]{}),
         };
-    }
-
-    /**
-    * Tests all available tasks.
-    *
-    * @param Success Executed when successful.
-    * @param Unsuccess Executed when unsuccessful.
-    *
-    * @return true if all goes well.
-    */
-
-    public static boolean Try(@NotNull Callback Success, @NotNull Callback Unsuccess) {
-        for(Task Task : Task.values()) {
-            if(!Task.isAvailable()) continue;
-
-            try {
-                Task.Work.call(); Success.Call(Task.Taskname);
-            }catch (Exception e) {
-                Unsuccess.Call(Task.Taskname); return false;
-            }
-        }
-
-        return true;
     }
 }
