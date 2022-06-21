@@ -80,6 +80,7 @@ public enum NBTUtils {
     * Construct a {@link NBTUtils}.
     *
     * @param Class a {@link NBTBase} class.
+    * @param Parameters NBTObject constructor parameters.
     */
 
     NBTUtils(@NotNull Class<? extends NBTBase<?>> Class, @NotNull Class<?>... Parameters) {
@@ -258,7 +259,7 @@ public enum NBTUtils {
             if(NBTTag.ordinal() == ID) return NBTTag;
         }
 
-        throw new NullPointerException("This shouldn't be null");
+        throw new NullPointerException("You can't demand an NBT that doesn't exist.");
     }
 
     /**
