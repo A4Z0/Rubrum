@@ -8,6 +8,8 @@
     <packaging>jar</packaging>
 
     <name>Rubrum</name>
+    <url>https://github.com/A4Z0/Rubrum</url>
+    <description>Assistance in modifying NBTs in multiple versions.</description>
 
     <properties>
         <java.version>1.8</java.version>
