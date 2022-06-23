@@ -79,6 +79,37 @@ public class NBTList extends NBTBase<List<NBTBase<?>>> {
     }
 
     /**
+    * Append the given {@link NBTBase} to the end of the list.
+    *
+    * @param NBTBase NTBBase to be attached.
+    */
+
+    public void add(NBTBase<?> NBTBase) {
+        this.Data.add(NBTBase);
+    }
+
+    /**
+    * Adds the given {@link NBTBase} to the indicated index.
+    *
+    * @param Index Index that the {@link NBTBase} will be attached to.
+    * @param NBTBase NTBBase to be attached.
+    */
+
+    public void set(int Index, NBTBase<?> NBTBase) {
+        this.Data.set(Index, NBTBase);
+    }
+
+    /**
+    * @param Index {@link NBTBase} index to return.
+    *
+    * @return an {@link NBTBase} based on the given index.
+    */
+
+    public NBTBase<?> get(int Index) {
+        return this.Data.get(Index);
+    }
+
+    /**
     * @return the ID of this {@link NBTList}.
     */
 
