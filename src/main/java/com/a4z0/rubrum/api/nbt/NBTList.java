@@ -84,7 +84,7 @@ public class NBTList extends NBTBase<List<NBTBase<?>>> {
     * @param NBTBase NTBBase to be attached.
     */
 
-    public void add(NBTBase<?> NBTBase) {
+    public void add(@NotNull NBTBase<?> NBTBase) {
         this.Data.add(NBTBase);
     }
 
@@ -95,7 +95,7 @@ public class NBTList extends NBTBase<List<NBTBase<?>>> {
     * @param NBTBase NTBBase to be attached.
     */
 
-    public void set(int Index, NBTBase<?> NBTBase) {
+    public void set(int Index, @NotNull NBTBase<?> NBTBase) {
         this.Data.set(Index, NBTBase);
     }
 
@@ -106,6 +106,10 @@ public class NBTList extends NBTBase<List<NBTBase<?>>> {
     */
 
     public NBTBase<?> get(int Index) {
+
+        if(this.Data.size() < Index)
+            throw new ArrayIndexOutOfBoundsException("NBTList out of bounds [" + Index + "]");
+
         return this.Data.get(Index);
     }
 
