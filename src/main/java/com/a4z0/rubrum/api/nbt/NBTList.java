@@ -48,7 +48,7 @@ public class NBTList extends NBTBase<List<NBTBase<?>>> {
     * @param List list to be stored.
     */
 
-    public NBTList(List<NBTBase<?>> List) {
+    public NBTList(@NotNull List<NBTBase<?>> List) {
         this(List, (byte) 0);
     }
 
@@ -69,7 +69,7 @@ public class NBTList extends NBTBase<List<NBTBase<?>>> {
     * @param Type type to be stored.
     */
 
-    public NBTList(List<NBTBase<?>> List, byte Type) {
+    public NBTList(@NotNull List<NBTBase<?>> List, byte Type) {
         super(List); this.Type = Type;
     }
 
